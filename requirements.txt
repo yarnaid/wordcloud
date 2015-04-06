@@ -1,3 +1,6 @@
+django-bootstrap3
+django_compressor
+django-debug-toolbar
 dj-database-url
 django-toolbelt
 django>=1.7
