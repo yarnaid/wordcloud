@@ -1,0 +1,5 @@
+{% extends 'wordcloud/hints.html' %}
+
+{% block breadcrumbs %}
+    {{ block.super }} » <a href="{{ hint.get_absolute_url }}">{{ hint.title }}</a>
+{% endblock %}
