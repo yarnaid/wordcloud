@@ -1,7 +1,7 @@
 django-grappelli
 # django-livereload
 # livereload
-# -e git://github.com/ojii/django-sekizai.git#egg=sekizai
+-e git://github.com/ojii/django-sekizai.git#egg=sekizai
 django-jquery
 django-bootstrap3
 django_compressor
