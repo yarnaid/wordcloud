@@ -33,12 +33,17 @@ INTERNAL_IPS = ['*', '0.0.0.0', '127.0.0.1']
 INSTALLED_APPS = (
     'grappelli.dashboard',
     'grappelli',
+    'filebrowser',
+    # 'admin_tools',
+    # 'admin_tools.theming',
+    # 'admin_tools.menu',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'reversion',
     # 'livereload',
     'sekizai',
     'wordcloud',
@@ -115,6 +120,14 @@ STATIC_ROOT = 'staticfiles'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = 'media'
 
+FILEBROWSER_STRICT_PIL = True
+
+# FILEBROWSER_MEDIA_ROOT = MEDIA_ROOT
+# FILEBROWSER_STATIC_ROOT = MEDIA_ROOT
+# FILEBROWSER_STATIC_URL = STATIC_URL
+# URL_FILEBROWSER_MEDIA = STATIC_URL + 'filebrowser/'
+# PATH_FILEBROWSER_MEDIA = STATIC_ROOT + 'filebrowser/'
+
 # Static asset configuration
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'wordcloud/../static'),
@@ -131,3 +144,5 @@ SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 TITLE = 'Dixit Explicit Cloud'
 USE_THOUSAND_SEPARATOR = True
+
+GRAPPELLI_INDEX_DASHBOARD = 'wordcloud.dashboard.CustomIndexDashboard'
