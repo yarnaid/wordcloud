@@ -1,6 +1,5 @@
 <!DOCTYPE html>
-
-{% load bootstrap3 staticfiles sekizai_tags %}
+{% load bootstrap3 staticfiles sekizai_tags i18n %}
 
 <html>
 <head lang="en">
@@ -8,10 +7,12 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="author" content="yarnaid">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Dixit Explicit Cloud</title>
+    <title>{% trans 'Dixit Explicit Cloud' %}</title>
 
-    {% render_block 'css' %}
     {% render_block 'js' %}
+    {% block js %}{% endblock %}
+    {% render_block 'css' %}
+    {% block css %}{% endblock %}
 
 </head>
 <body>
@@ -23,7 +24,7 @@
 <div class="container" id="header">
     <div class="page-header">
         {% block page_header %}
-        <h1>Header</h1>
+            <h1>Header</h1>
         {% endblock %}
     </div>
 </div>
@@ -42,39 +43,51 @@
 <div class="container" id="page">
     {% block page %}
 
-        {% block left_menu %}
-            <div class="col-md-2">
-                <div class="panel panel-default">
-                    <div class="panel-heading">Panel</div>
+        <div class="col-md-2">
+            <div class="panel panel-default">
+                {% block left_menu %}
+                    <div class="panel-heading">
+                        {% block menu_heading %}
+                            Panel
+                        {% endblock %}
+                    </div>
                     <div class="panel-body">
                         <div id="sidebar">
-                            <ul class="nav list-group">
-                                <li>
-                                    <a class="list-group-item" href="#"><i class="icon-home icon-1x"></i>Sidebar Item 1</a>
-                                </li>
-                                <li>
-                                    <a class="list-group-item" href="#"><i class="icon-home icon-1x"></i>Sidebar Item 2</a>
-                                </li>
-                                <li>
-                                    <a class="list-group-item" href="#"><i class="icon-home icon-1x"></i>Sidebar Item 3</a>
-                                </li>
-                            </ul>
+                            {% block menu_body %}
+                                <ul class="nav list-group">
+                                    <li>
+                                        <a class="list-group-item active" href="/cloud">CLICK ME TO SEE CLOUD!</a>
+                                    </li>
+                                    <li>
+                                        <a class="list-group-item" href="#"><i class="icon-home icon-1x"></i>Sidebar
+                                            Item 1</a>
+                                    </li>
+                                    <li>
+                                        <a class="list-group-item" href="#"><i class="icon-home icon-1x"></i>Sidebar
+                                            Item 2</a>
+                                    </li>
+                                    <li>
+                                        <a class="list-group-item" href="#"><i class="icon-home icon-1x"></i>Sidebar
+                                            Item 3</a>
+                                    </li>
+                                </ul>
+                            {% endblock %}
                         </div>
-
-
-
                     </div>
-                </div>
+                {% endblock %}
             </div>
-            <div class="col-md-9">
+        </div>
+        <div class="col-md-9">
+            {% block content %}
                 {% include 'wordcloud/lorem.html' %}
-            </div>
-        {% endblock %}
+            {% endblock %}
+        </div>
 
     {% endblock %}
-    </div>
+</div>
 </div>
 
+<div class="wrap"><div class="empty"></div></div>
 <footer class="footer" id="footer">
     <hr/>
     <div class="container text-center">
@@ -89,11 +102,11 @@
 
 {% addtoblock 'css' %}
     {% bootstrap_css %}
-    <link rel="stylesheet" href="{% static 'wordcloud/spacelab.css' %}"/>
-    <link rel="stylesheet" href="{% static 'wordcloud/base.css' %}"/>
+    <link rel="stylesheet" href="{% static 'css/spacelab.css' %}"/>
+    <link rel="stylesheet" href="{% static 'css/base.css' %}"/>
 {% endaddtoblock %}
 
 {% addtoblock 'js' %}
-    <script type="text/javascript" src="{% static 'js/jquery.js' %}" />
+    <script type="text/javascript" src="{% static 'js/jquery.js' %}"/>
     {% bootstrap_javascript %}
 {% endaddtoblock %}

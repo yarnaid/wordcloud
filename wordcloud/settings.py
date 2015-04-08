@@ -2,19 +2,20 @@
 Django settings for wordcloud project.
 
 For more information on this file, see
-https://docs.djangoproject.com/en/1.7/topics/settings/
+https://docs.djangoproject.com/en/1.8/topics/settings/
 
 For the full list of settings and their values, see
-https://docs.djangoproject.com/en/1.7/ref/settings/
+https://docs.djangoproject.com/en/1.8/ref/settings/
 """
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
+from django.utils.translation import ugettext_lazy as _
 import os
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
 
 # Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/1.7/howto/deployment/checklist/
+# See https://docs.djangoproject.com/en/1.8/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 't@dpxuj8i5&uh+&v#(z7+&x@$g#-^7%tk-$@ker9rc8_t#z#ph'
@@ -50,6 +51,7 @@ INSTALLED_APPS = (
     'debug_toolbar',
     'jquery',
     'bootstrap3',
+    'cloud',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -88,7 +90,7 @@ WSGI_APPLICATION = 'wordcloud.wsgi.application'
 
 
 # Database
-# https://docs.djangoproject.com/en/1.7/ref/settings/#databases
+# https://docs.djangoproject.com/en/1.8/ref/settings/#databases
 
 DATABASES = {
     'default': {
@@ -98,9 +100,16 @@ DATABASES = {
 }
 
 # Internationalization
-# https://docs.djangoproject.com/en/1.7/topics/i18n/
+# https://docs.djangoproject.com/en/1.8/topics/i18n/
 
 LANGUAGE_CODE = 'en-us'
+
+LANGUAGES = (
+  ('en', _('English')),
+  ('fr', _('French')),
+  ('de', _('German')),
+  ('ru', _('Russian')),
+)
 
 TIME_ZONE = 'UTC'
 
@@ -112,7 +121,7 @@ USE_TZ = True
 
 
 # Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/1.7/howto/static-files/
+# https://docs.djangoproject.com/en/1.8/howto/static-files/
 
 STATIC_URL = '/static/'
 STATIC_ROOT = 'staticfiles'
@@ -141,8 +150,6 @@ if DEBUG is False:
 # Honor the 'X-Forwarded-Proto' header for request.is_secure()
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
-
-TITLE = 'Dixit Explicit Cloud'
 USE_THOUSAND_SEPARATOR = True
-
 GRAPPELLI_INDEX_DASHBOARD = 'wordcloud.dashboard.CustomIndexDashboard'
+TITLE = _('Dixit Explicit Cloud')
