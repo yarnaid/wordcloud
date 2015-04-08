@@ -1,0 +1,70 @@
+.node {
+  cursor: pointer;
+  /*stroke: #3182bd;*/
+  /*stroke-width: 1.5px;*/
+}
+
+.overcode {
+  fill: rgba(102, 0, 153, 0.5);
+}
+
+.code {
+  fill: rgba(150, 131, 236, 0.5);
+}
+
+circle-text {
+  fill: #660099;
+}
+
+/*.link {
+  fill: none;
+  stroke: #9ecae1;
+  stroke-width: 1.5px;
+}*/
+
+.link {
+  stroke: #ccc;
+}
+
+body {
+  background: white;
+  font-family: 'Open Sans', sans-serif;
+}
+
+h1 {
+  color: #660099;
+}
+
+div#svg {
+    min-height: 1000px;
+}
+
+svg {
+  border: 2px solid;
+  border-radius: 25px;
+  background: #DFF2FF;
+}
+
+div.tooltip {
+  position: absolute;
+  text-align: center;
+  /*width: 60px;*/
+  /*height: 6em;*/
+  padding: 2px;
+  font-family: 'Open Sans', sans-serif;
+  font: 14px;
+  background: lightsteelblue;
+  border: 0px;
+  border-radius: 8px;
+  pointer-events: none;
+  opacity: 0.8;
+}
+
+table > caption {
+  color: black;
+}
+
+.table-striped>tbody>tr:nth-child(odd)>td, 
+.table-striped>tbody>tr:nth-child(odd)>th {
+   background-color: #C4D3E6;
+ }

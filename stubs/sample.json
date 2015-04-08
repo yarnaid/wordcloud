@@ -1,0 +1,310 @@
+{
+  "clusters": {
+    "BENEFICES PRODUIT": {
+      "effecif": 37,
+      "repondants": 0.34579439252336447,
+      "title": "BENEFICES PRODUIT",
+      "question": "BENEFICES PRODUIT",
+      "cluster": "BENEFICES PRODUIT",
+      "total": 0.24666666666666667,
+      "id": 15
+    },
+    "RELATIF A LA PUB": {
+      "effecif": 40,
+      "repondants": 0.37383177570093457,
+      "title": "RELATIF A LA PUB",
+      "question": "RELATIF A LA PUB",
+      "cluster": "RELATIF A LA PUB",
+      "total": 0.26666666666666666,
+      "id": 29
+    },
+    "PERSONNAGES": {
+      "effecif": 8,
+      "repondants": 0.07476635514018691,
+      "title": "PERSONNAGES",
+      "question": "PERSONNAGES",
+      "cluster": "PERSONNAGES",
+      "total": 0.05333333333333334,
+      "id": 2
+    },
+    "LE DEMAQUILLAGE": {
+      "effecif": 7,
+      "repondants": 0.06542056074766354,
+      "title": "LE DEMAQUILLAGE",
+      "question": "LE DEMAQUILLAGE",
+      "cluster": "LE DEMAQUILLAGE",
+      "total": 0.04666666666666667,
+      "id": 5
+    },
+    "SENSATIONS": {
+      "effecif": 8,
+      "repondants": 0.07476635514018691,
+      "title": "SENSATIONS",
+      "question": "SENSATIONS",
+      "cluster": "SENSATIONS",
+      "total": 0.05333333333333334,
+      "id": 25
+    },
+    "DIVERS PUB": {
+      "effecif": 27,
+      "repondants": 0.2523364485981308,
+      "title": "DIVERS PUB",
+      "question": "DIVERS PUB",
+      "cluster": "DIVERS PUB",
+      "total": 0.18,
+      "id": 9
+    }
+  },
+  "nodes": [
+    {
+      "cluster": "PERSONNAGES",
+      "code": 100,
+      "repondants": 0.07476635514018691,
+      "title": "La femme",
+      "total": 0.05333333333333334,
+      "effecif": 8,
+      "question": "La femme",
+      "id": 3
+    },
+    {
+      "cluster": "LE DEMAQUILLAGE",
+      "code": 200,
+      "repondants": 0.028037383177570093,
+      "title": "Le démaquillage",
+      "total": 0.02,
+      "effecif": 3,
+      "question": "Le démaquillage / le nettoyage",
+      "id": 6
+    },
+    {
+      "cluster": "LE DEMAQUILLAGE",
+      "code": 201,
+      "repondants": 0.037383177570093455,
+      "title": "le résultat",
+      "total": 0.02666666666666667,
+      "effecif": 4,
+      "question": "Les effets du produit / le résultat",
+      "id": 7
+    },
+    {
+      "cluster": "DIVERS PUB",
+      "code": 300,
+      "repondants": 0.12149532710280374,
+      "title": "La musique",
+      "total": 0.08666666666666667,
+      "effecif": 13,
+      "question": "La musique",
+      "id": 10
+    },
+    {
+      "cluster": "DIVERS PUB",
+      "code": 301,
+      "repondants": 0.056074766355140186,
+      "title": "Les couleurs",
+      "total": 0.04,
+      "effecif": 6,
+      "question": "Les couleurs",
+      "id": 11
+    },
+    {
+      "cluster": "DIVERS PUB",
+      "code": 302,
+      "repondants": 0.08411214953271028,
+      "title": "La présentation ",
+      "total": 0.06,
+      "effecif": 9,
+      "question": "La présentation du produit / explications / informations",
+      "id": 12
+    },
+    {
+      "cluster": "DIVERS PUB",
+      "code": 303,
+      "repondants": 0.028037383177570093,
+      "title": "La voix off",
+      "total": 0.02,
+      "effecif": 3,
+      "question": "La voix off",
+      "id": 13
+    },
+    {
+      "cluster": "BENEFICES PRODUIT",
+      "code": 400,
+      "repondants": 0.04672897196261682,
+      "title": "3 en 1",
+      "total": 0.03333333333333333,
+      "effecif": 5,
+      "question": "Produit  3 en 1",
+      "id": 16
+    },
+    {
+      "cluster": "BENEFICES PRODUIT",
+      "code": 401,
+      "repondants": 0.12149532710280374,
+      "title": "tout en 1",
+      "total": 0.08666666666666667,
+      "effecif": 13,
+      "question": "Produit tout en 1",
+      "id": 17
+    },
+    {
+      "cluster": "BENEFICES PRODUIT",
+      "code": 402,
+      "repondants": 0.037383177570093455,
+      "title": "Efficace",
+      "total": 0.02666666666666667,
+      "effecif": 4,
+      "question": "Efficace / efficacité",
+      "id": 18
+    },
+    {
+      "cluster": "BENEFICES PRODUIT",
+      "code": 403,
+      "repondants": 0.07476635514018691,
+      "title": "Démaquille",
+      "total": 0.05333333333333334,
+      "effecif": 8,
+      "question": "Démaquille",
+      "id": 19
+    },
+    {
+      "cluster": "BENEFICES PRODUIT",
+      "code": 404,
+      "repondants": 0.028037383177570093,
+      "title": "Nettoie ",
+      "total": 0.02,
+      "effecif": 3,
+      "question": "Nettoie la peau",
+      "id": 20
+    },
+    {
+      "cluster": "BENEFICES PRODUIT",
+      "code": 405,
+      "repondants": 0.056074766355140186,
+      "title": "Rapide",
+      "total": 0.04,
+      "effecif": 6,
+      "question": "Rapide",
+      "id": 21
+    },
+    {
+      "cluster": "BENEFICES PRODUIT",
+      "code": 406,
+      "repondants": 0.08411214953271028,
+      "title": "Simple",
+      "total": 0.06,
+      "effecif": 9,
+      "question": "Simple / facile / pratique à utiliser",
+      "id": 22
+    },
+    {
+      "cluster": "BENEFICES PRODUIT",
+      "code": 407,
+      "repondants": 0.07476635514018691,
+      "title": "autres références",
+      "total": 0.05333333333333334,
+      "effecif": 8,
+      "question": "Aime le produit (toutes autres références positives",
+      "id": 23
+    },
+    {
+      "cluster": "SENSATIONS",
+      "code": 500,
+      "repondants": 0.056074766355140186,
+      "title": "La douceur",
+      "total": 0.04,
+      "effecif": 6,
+      "question": "La douceur / douce",
+      "id": 26
+    },
+    {
+      "cluster": "SENSATIONS",
+      "code": 501,
+      "repondants": 0.028037383177570093,
+      "title": "Pureté",
+      "total": 0.02,
+      "effecif": 3,
+      "question": "Pureté",
+      "id": 27
+    },
+    {
+      "cluster": "RELATIF A LA PUB",
+      "code": 700,
+      "repondants": 0.04672897196261682,
+      "title": "Claire",
+      "total": 0.03333333333333333,
+      "effecif": 5,
+      "question": "Claire / facile a comprendre",
+      "id": 30
+    },
+    {
+      "cluster": "RELATIF A LA PUB",
+      "code": 701,
+      "repondants": 0.037383177570093455,
+      "title": "Simple",
+      "total": 0.02666666666666667,
+      "effecif": 4,
+      "question": "Simple / simplicité",
+      "id": 31
+    },
+    {
+      "cluster": "RELATIF A LA PUB",
+      "code": 702,
+      "repondants": 0.056074766355140186,
+      "title": "Humour",
+      "total": 0.04,
+      "effecif": 6,
+      "question": "Humour",
+      "id": 32
+    },
+    {
+      "cluster": "RELATIF A LA PUB",
+      "code": 703,
+      "repondants": 0.037383177570093455,
+      "title": "La durée ",
+      "total": 0.02666666666666667,
+      "effecif": 4,
+      "question": "Aime la durée de la pub",
+      "id": 33
+    },
+    {
+      "cluster": "RELATIF A LA PUB",
+      "code": 704,
+      "repondants": 0.12149532710280374,
+      "title": "Tout ",
+      "total": 0.08666666666666667,
+      "effecif": 13,
+      "question": "Tout / l'ensemble de la pub",
+      "id": 34
+    },
+    {
+      "cluster": "RELATIF A LA PUB",
+      "code": 705,
+      "repondants": 0.12149532710280374,
+      "title": "autres références",
+      "total": 0.08666666666666667,
+      "effecif": 13,
+      "question": "Aime la pub (toutes autres références positives)",
+      "id": 35
+    },
+    {
+      "cluster": "RELATIF A LA PUB",
+      "code": 599,
+      "repondants": 0.04672897196261682,
+      "title": "Autres",
+      "total": 0.03333333333333333,
+      "effecif": 5,
+      "question": "Autres",
+      "id": 37
+    },
+    {
+      "cluster": "RELATIF A LA PUB",
+      "code": 600,
+      "repondants": 0,
+      "title": "Rien",
+      "total": 0,
+      "effecif": 0,
+      "question": "Rien / N.S.P",
+      "id": 38
+    }
+  ]
+}
