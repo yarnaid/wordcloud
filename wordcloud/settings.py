@@ -22,6 +22,7 @@ SECRET_KEY = 't@dpxuj8i5&uh+&v#(z7+&x@$g#-^7%tk-$@ker9rc8_t#z#ph'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
+DEBUG_PANEL = False
 
 TEMPLATE_DEBUG = True
 
@@ -48,14 +49,13 @@ INSTALLED_APPS = (
     # 'livereload',
     'sekizai',
     'wordcloud',
-    'debug_toolbar',
     'jquery',
     'bootstrap3',
     'cloud',
 )
 
+
 MIDDLEWARE_CLASSES = (
-    'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -66,6 +66,10 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     # 'livereload.middleware.LiveReloadScript',
 )
+
+if DEBUG_PANEL:
+    INSTALLED_APPS = INSTALLED_APPS + ('debug_toolbar',)
+    MIDDLEWARE_CLASSES = ('debug_toolbar.middleware.DebugToolbarMiddleware',) + MIDDLEWARE_CLASSES
 
 TEMPLATES = [
     {
@@ -130,12 +134,6 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = 'media'
 
 FILEBROWSER_STRICT_PIL = True
-
-# FILEBROWSER_MEDIA_ROOT = MEDIA_ROOT
-# FILEBROWSER_STATIC_ROOT = MEDIA_ROOT
-# FILEBROWSER_STATIC_URL = STATIC_URL
-# URL_FILEBROWSER_MEDIA = STATIC_URL + 'filebrowser/'
-# PATH_FILEBROWSER_MEDIA = STATIC_ROOT + 'filebrowser/'
 
 # Static asset configuration
 STATICFILES_DIRS = (

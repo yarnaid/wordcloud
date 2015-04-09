@@ -19,7 +19,6 @@
         var start = function() {
             var tmp;
             $.ajax({url:window.location.href, success: function(j) {
-                console.log(j);
                 data_loaded(null, j);
             }});
         };

@@ -1,6 +1,65 @@
-{% load i18n %}
-
-<h3>{% trans 'Color' %}</h3>
+{% load i18n sekizai_tags staticfiles %}
 
 
-<h3>{% trans 'Question' %}</h3>
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <a href="#colors-controls" data-toggle="collapse" aria-expanded="false" aria-controls="colors-controls">
+            <h3 class="panel-title text-center">Colors</h3>
+        </a>
+    </div>
+    <div id="colors-controls" class="panel-body collapse">
+        <div>
+            <div class="input-group title-color">
+                <span class="input-group-addon">Titles:</span>
+                <input type="text" value="" class="form-control" />
+                <span class="input-group-addon"><i></i></span>
+            </div>
+            <div class="input-group code-color">
+                <span class="input-group-addon">Codes:</span>
+                <input type="text" value="" class="form-control" />
+                <span class="input-group-addon"><i></i></span>
+            </div>
+            <div class="input-group overcode-color">
+                <span class="input-group-addon">Overcodes:</span>
+                <input type="text" value="" class="form-control" />
+                <span class="input-group-addon"><i></i></span>
+            </div>
+            <div class="input-group background-color">
+                <span class="input-group-addon">Background:</span>
+                <input type="text" value="" class="form-control" />
+                <span class="input-group-addon"><i></i></span>
+            </div>
+            <div>
+                <button id="randomize-colors">Randomize colors</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <a href="#question-controls" data-toggle="collapse" aria-expanded="false" aria-controls="question-controls">
+            <h3 class="panel-title text-center">Question</h3>
+        </a>
+    </div>
+    <div id="question-controls" class="panel-body collapse">
+        <form role="form">
+            <div class="radio">
+                <label>
+                    <input type="radio" name="optradio" checked="">Likes</label>
+            </div>
+            <div class="radio">
+            </div>
+            <div class="radio disabled">
+                <label style="color:grey;">
+                    <input type="radio" name="optradio" disabled>Dislikes</label>
+            </div>
+        </form>
+    </div>
+</div>
+
+{% block js %}
+    {% addtoblock 'js' %}
+        <script type="text/javascript" src="{% static 'js/menu.js' %}"></script>
+    {% endaddtoblock %}
+{% endblock %}
+
