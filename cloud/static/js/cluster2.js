@@ -282,9 +282,10 @@ Cluster.prototype.tooltip_html = function(d) {
 Cluster.prototype.show_verbatims = function(d) {
     if (d.overcode)
         return;
-    $.post('/ajax_get_answers?id=' + d.code, function(answer) {
+    $.ajax({method: 'post', url: window.location.href, data: {verbatim: true, id: d.code}, success: function(answer) {
         var a = answer;
         bootbox.dialog({
+            backdrop: false,
             message: '<table id="table-methods-table" data-height="299">' +
                 '<thead>' +
                 '<tr>' +
@@ -303,9 +304,10 @@ Cluster.prototype.show_verbatims = function(d) {
             }
         });
         var $table = $('#table-methods-table').bootstrapTable({
-            data: answer.result
+            data: answer
         });
-    });
+        //$('.modal-dialog').css('z-axis', '15000');
+    }});
 };
 
 Cluster.prototype.update = function() {};
