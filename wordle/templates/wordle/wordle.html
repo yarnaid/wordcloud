@@ -1,0 +1,26 @@
+{% extends 'wordcloud/base.html' %}
+{% load sekizai_tags static %}
+
+{% block page_header %}
+<h1>Wordle</h1>
+{% endblock %}
+
+{% block content %}
+<div id="svg"></div>
+{% endblock %}
+
+
+{% block js %}
+    {% addtoblock 'js' %}
+        <script type="text/javascript" src="{% static 'js/d3.js' %}"></script>
+        <script type="text/javascript" src="{% static 'wordle/js/d3.layout.cloud.js' %}"></script>
+        <script type="text/javascript" src="{% static 'wordle/js/wordle.js' %}"></script>
+        <script type="text/javascript" src="{% static 'wordle/js/svg.js' %}"></script>
+    {% endaddtoblock %}
+{% endblock %}
+
+{% block css %}
+    {% addtoblock 'css' %}
+        <link rel="stylesheet" href="{% static 'wordle/css/wordle.css' %}"/>
+    {% endaddtoblock %}
+{% endblock %}

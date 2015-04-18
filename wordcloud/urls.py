@@ -15,9 +15,13 @@ urlpatterns = patterns('',
     (r'^admin/filebrowser/', include(site.urls)),
     (r'^grappelli/', include('grappelli.urls')), # grappelli URLS
     url(r'^admin/', include(admin.site.urls)),
+
+
     url(r'^cloud/', include('cloud.urls')),
+    url(r'^wordle/', include('wordle.urls')),
 
     url(r'^$', TemplateView.as_view(template_name='wordcloud/base.html')),
+
 ) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) +\
               static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

@@ -52,6 +52,7 @@ INSTALLED_APPS = (
     'jquery',
     'bootstrap3',
     'cloud',
+    'wordle',
 )
 
 
@@ -151,3 +152,7 @@ SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 USE_THOUSAND_SEPARATOR = True
 GRAPPELLI_INDEX_DASHBOARD = 'wordcloud.dashboard.CustomIndexDashboard'
 TITLE = _('Dixit Explicit Cloud')
+
+STUB = 'stubs'
+SAMPLE_NAME = 'sample.json'
+LEX_NAME = 'lex.json'
