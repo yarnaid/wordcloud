@@ -12,7 +12,7 @@
   fill: rgba(150, 131, 236, 0.5);
 }
 
-circle-text {
+.circle-text {
   fill: #660099;
 }
 
@@ -36,7 +36,7 @@ h1 {
 }
 
 div#svg {
-    min-height: 1000px;
+    min-height: 100px;
 }
 
 svg {

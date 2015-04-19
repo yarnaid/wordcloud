@@ -1,5 +1,5 @@
 {% extends 'wordcloud/base.html' %}
-{% load sekizai_tags static %}
+{% load sekizai_tags static dixit_downloader %}
 
 {% block page_header %}
 <h1>Wordle</h1>
@@ -7,6 +7,9 @@
 
 {% block content %}
 <div id="svg"></div>
+    <div class="col-md-6 pull-right">
+    {% downloader %}
+    </div>
 {% endblock %}
 
 
@@ -24,3 +27,4 @@
         <link rel="stylesheet" href="{% static 'wordle/css/wordle.css' %}"/>
     {% endaddtoblock %}
 {% endblock %}
+

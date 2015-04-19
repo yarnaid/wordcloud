@@ -53,6 +53,7 @@ INSTALLED_APPS = (
     'bootstrap3',
     'cloud',
     'wordle',
+    'dixit_exporter',
 )
 
 

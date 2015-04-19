@@ -1,5 +1,5 @@
 {% extends 'wordcloud/base.html' %}
-{% load sekizai_tags staticfiles i18n %}
+{% load sekizai_tags staticfiles i18n dixit_downloader %}
 
 
 {% block page_header %}
@@ -16,6 +16,9 @@
 
 {% block content %}
     <div id="svg"></div>
+        <div class="col-md-6 pull-right">
+    {% downloader %}
+    </div>
     <script type="text/javascript" src="{% static 'cloud/js/svg.js' %}"></script>
 {% endblock %}
 

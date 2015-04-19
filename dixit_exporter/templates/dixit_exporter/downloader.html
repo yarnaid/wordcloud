@@ -1,0 +1,16 @@
+{% load sekizai_tags i18n staticfiles %}
+<form action="" id="save_form">
+    {% csrf_token %}
+    <div class="input-group" role="group">
+        <span class="input-group-addon">{% trans "Download" %} {{ extra_text }} {% trans "as" %}</span>
+        <input onclick="saveSvgAsPng(document.getElementsByTagName('svg')[0], 'diagram.png', {scale: 2})" type="button" class="btn btn-default" download="" value="PNG"/>
+    </div>
+</form>
+<canvas style="display:none"></canvas>
+
+{% block js %}
+    {% addtoblock 'js' %}
+        <script type="text/javascript" src="{% static 'dixit_exporter/js/downloader.js' %}"></script>
+        <script type="text/javascript" src="{% static 'dixit_exporter/js/saveSvgAsPng.js' %}"></script>
+    {% endaddtoblock %}
+{% endblock %}

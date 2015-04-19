@@ -22,7 +22,7 @@ var Wordle = function(_parent_id, _data, _event_handler) {
     this.height = this.height - this.margin.top - this.margin.bottom;
 
     self.layout = d3.layout.cloud();
-    self.scale = d3.scale.linear().range([5, 50]);
+    self.scale = d3.scale.linear().range([5, 40]);
     self.radius = function(node, key) {
         key = key || 'effecif';
         return self.scale(node[key]);
@@ -44,6 +44,7 @@ Wordle.prototype.init = function() {
 
     self.svg = d3.select(self.parent_id)
         .append('svg')
+        .attr('encoding', 'UTF-8')
         .attr('width', this.width)
         .attr('height', this.height)
         // .attr('pointer-events', 'all')

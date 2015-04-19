@@ -12,7 +12,6 @@ $(function() {
     function data_loaded(err, _data) {
         if (!err) {
             data = _data;
-            console.log(data);
             init();
         } else {
             console.log(err);

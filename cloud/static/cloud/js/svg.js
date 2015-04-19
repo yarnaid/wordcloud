@@ -16,7 +16,6 @@ $(function() {
     };
 
     var path = window.location.href
-    console.log(path);
     var start = function() {
         var tmp;
         $.ajax({
