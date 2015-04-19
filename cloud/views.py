@@ -4,6 +4,7 @@ from django.views.generic import TemplateView
 from django.utils.translation import ugettext as _
 from django.conf import settings
 import os
+import helpers
 
 # Create your views here.
 stub = settings.STUB
@@ -26,9 +27,15 @@ class CloudView(TemplateView):
                 data = self.get_verbatim(code_id)
             else:
                 data = {'message': _('error!')}
-            response = HttpResponse(json.dumps(data), content_type='application/json')
+            if request.POST.get('csv', 'false') != 'true':
+                response = HttpResponse(json.dumps(data), content_type='application/json')
+            else:
+                response = HttpResponse(content_type='text/csv')
         else:
             response = super(CloudView, self).get(request, *args, **kwargs)
+        if request.POST.get('csv') == 'true':
+                response['Content-Disposition'] = 'attachment; filename="cloud.csv"'
+                helpers.json2csv(response, data['nodes'])
         return response
 
 
