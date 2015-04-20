@@ -140,6 +140,7 @@
         context.drawImage(image, 0, 0);
 
         var a = document.createElement('a');
+          //$(a)[0].target = '_black';
         a.download = name;
         a.href = canvas.toDataURL('image/png');
         document.body.appendChild(a);

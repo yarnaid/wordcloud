@@ -3,7 +3,7 @@
     {% csrf_token %}
     <div class="input-group" role="group">
         <span class="input-group-addon">{% trans "Download" %} {{ extra_text }} {% trans "as" %}</span>
-        <input onclick="saveSvgAsPng(document.getElementsByTagName('svg')[0], 'diagram.png', {scale: 2})" type="button" class="btn btn-default" download="" value="PNG"/>
+        <input onclick="saveSvgAsPng(document.getElementsByTagName('svg')[0], 'diagram.png', {scale: 2})" type="button" class="btn btn-default" value="PNG"/>
         <input onclick="get_csv(window.location.href)" type="button" class="btn btn-default" download="" value="CSV" download/>
     </div>
 </form>

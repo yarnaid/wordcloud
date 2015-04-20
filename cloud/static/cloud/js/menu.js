@@ -40,6 +40,6 @@ $(function() {
         $(".circle-text").css('fill', getRandomColor());
         $(".code").css('fill', getRandomColor());
         $(".overcode").css('fill', getRandomColor());
-        $('svg').css('background', getRandomColor());
+        $('svg').css('background', 'none');
     })
 });

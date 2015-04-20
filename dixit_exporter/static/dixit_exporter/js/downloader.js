@@ -22,9 +22,6 @@ var get_csv = function (path) {
         url: path,
         data: {all: true, csv: true},
         success: function (j) {
-            //data_loaded(null, j);
-            //window.open(j);
-            //window.location.href = j.url;
             open_csv(j);
         },
         method: 'post'
