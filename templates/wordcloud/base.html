@@ -37,10 +37,17 @@
 </div>
 
 <div class="container" id="header">
-    <div class="page-header">
+    <div class="page-header col-md-12">
+        <div class="col-md-2 pull-right">
+            <a href="/">
+                <img class="img-responsive" src="{% static 'img/logo.png' %}" alt=""/>
+            </a>
+        </div>
+        <div class="col-md-8 ">
         {% block page_header %}
             <h1>Header</h1>
         {% endblock %}
+        </div>
     </div>
 </div>
 
