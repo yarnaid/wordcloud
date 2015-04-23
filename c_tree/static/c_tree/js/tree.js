@@ -61,9 +61,12 @@ Tree.prototype.init = function() {
         .append('svg:g')
         .call(self.zoom.on('zoom', zoom))
         .append('svg:g')
-        .attr('transform', 'translate(' + 0 + ',' + 0 + ')');
+        .attr('transform', 'translate(' + self.margin.left + ',' + self.margin.top + ')');
 
     self.process_data();
+    var root = self.display_data;
+    root.x0 = self.height / 2.;
+    root.y0 = 0;
     self.update(self.display_data);
 };
 
@@ -87,7 +90,9 @@ Tree.prototype.process_data = function() {
         node['name'] = node.title;
     })
     var nodes = _.union(book, clusters, self.data.nodes);
-    self.scale.domain([self.min_r, d3.max(nodes, function(d) {return d['effecif'];})]);
+    self.scale.domain([self.min_r, d3.max(nodes, function(d) {
+        return d['effecif'];
+    })]);
 
 
     var dataMap = nodes.reduce(function(map, node) {
@@ -125,7 +130,7 @@ Tree.prototype.process_data = function() {
 
 Tree.prototype.update = function(source) {
     var self = this;
-    var nodes = self.tree.nodes(source);
+    var nodes = self.tree.nodes(source).reverse();
     var links = self.tree.links(nodes);
 
     var max_depth = 3;
@@ -140,23 +145,47 @@ Tree.prototype.update = function(source) {
             return d.id || (d.id = ++(self.i));
         });
 
+    function click(d) {
+        if (d.children) {
+            d._children = d.children;
+            d.children = null;
+        } else {
+            d.children = d._children;
+            d._children = null;
+        }
+        self.update(d);
+    }
+
     var nodeEnter = node.enter().append('g')
         .attr('class', 'node')
-        .attr('transform', function(d){return 'translate(' + d.y + ',' + d.x + ')'});
+        .attr('transform', function(d) {
+            return 'translate(' + d.y + ',' + d.x + ')'
+        })
+        .on('click', click);
 
     nodeEnter.append('circle')
-        .attr('r', function(d){return Math.max(self.radius(d), self.min_r) || self.min_r;})
+        .attr('r', function(d) {
+            return Math.max(self.radius(d), self.min_r) || self.min_r;
+        })
         .style('fill', '#fff');
 
     nodeEnter.append('text')
-        .attr('x', function(d) {return d.children || d._children ? -self.radius(d) -self.t_offset : self.radius(d) + self.t_offset;})
+        .attr('x', function(d) {
+            return d.children || d._children ? -self.radius(d) - self.t_offset : self.radius(d) + self.t_offset;
+        })
         .attr('dy', '.35em')
-        .attr('text-anchor', function(d) {return d.children || d._children ? 'end' : 'start';})
-        .text(function(d) {return d.name; })
+        .attr('text-anchor', function(d) {
+            return d.children || d._children ? 'end' : 'start';
+        })
+        .text(function(d) {
+            return d.name;
+        })
         .style('fill-opacity', 1);
 
     var link = self.svg.selectAll('path.link')
-        .data(links, function(d) {return d.target.id;});
+        .data(links, function(d) {
+            return d.target.id;
+        });
 
     link.enter().insert('path', 'g')
         .attr('class', 'link')
