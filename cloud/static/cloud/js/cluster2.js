@@ -69,6 +69,7 @@ Cluster.prototype.init = function() {
     this.svg = d3.select(this.parent_id).append('svg')
         .attr('width', this.width)
         .attr('height', this.height)
+        .style('background', '#DFF2FF')
         // .attr('pointer-events', 'all')
         .append('svg:g')
         .call(self.zoom.on('zoom', zoom))

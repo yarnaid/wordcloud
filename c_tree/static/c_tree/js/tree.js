@@ -16,6 +16,7 @@ var Tree = function(_parent_id, _data, _event_handler) {
     self.i = 0;
     self.min_r = 5;
     self.t_offset = 13;
+    self.duration = 400;
 
     this.width = $(this.parent_id).width() - this.margin.left - this.margin.right;
     this.height = $(this.parent_id).height();
@@ -65,13 +66,19 @@ Tree.prototype.init = function() {
 
     self.process_data();
     var root = self.display_data;
-    root.x0 = self.height / 2.;
+    root.x0 = self.height / 2. + self.margin.left;
     root.y0 = 0;
     self.update(self.display_data);
 };
 
 Tree.prototype.process_data = function() {
     var self = this;
+    var root = {
+        parent: null,
+        name: 'Job Name',
+        effecif: 1
+    };
+
 
     // TODO: do it for each book
     var book_name;
@@ -89,7 +96,7 @@ Tree.prototype.process_data = function() {
     self.data.nodes.map(function(node) {
         node['name'] = node.title;
     })
-    var nodes = _.union(book, clusters, self.data.nodes);
+    var nodes = _.union(book, clusters, self.data.nodes, root);
     self.scale.domain([self.min_r, d3.max(nodes, function(d) {
         return d['effecif'];
     })]);
@@ -116,14 +123,11 @@ Tree.prototype.process_data = function() {
         }
     });
 
-    var root = {
-        job_name: 'Job Name',
-        job_id: 0,
-        children: [{
-            name: 'book_1',
-            children: treeData
-        }]
-    };
+    root['children'] = [{
+        name: book_name,
+        children: treeData
+    }];
+    root.children[0]['parent'] = root.name;
 
     self.display_data = root;
 };
@@ -132,6 +136,7 @@ Tree.prototype.update = function(source) {
     var self = this;
     var nodes = self.tree.nodes(source).reverse();
     var links = self.tree.links(nodes);
+    console.log(nodes);
 
     var max_depth = 3;
     self.depth_scale.domain([0, (max_depth + 1) * 180]);
@@ -159,15 +164,15 @@ Tree.prototype.update = function(source) {
     var nodeEnter = node.enter().append('g')
         .attr('class', 'node')
         .attr('transform', function(d) {
-            return 'translate(' + d.y + ',' + d.x + ')'
+            return 'translate(' + source.y0 + ',' + source.x0 + ')'
         })
         .on('click', click);
 
     nodeEnter.append('circle')
-        .attr('r', function(d) {
-            return Math.max(self.radius(d), self.min_r) || self.min_r;
-        })
-        .style('fill', '#fff');
+        .attr('r', 1e-6)// function(d) {
+            // return Math.max(self.radius(d), self.min_r) || self.min_r;
+        // })
+        .style("fill", function(d) { return d._children ? "lightsteelblue" : "#fff"; });
 
     nodeEnter.append('text')
         .attr('x', function(d) {
@@ -180,7 +185,31 @@ Tree.prototype.update = function(source) {
         .text(function(d) {
             return d.name;
         })
-        .style('fill-opacity', 1);
+        .style('fill-opacity', 1e-6);
+
+    var nodeUpdate = node.transition()
+      .duration(self.duration)
+      .attr("transform", function(d) { return "translate(" + d.y + "," + d.x + ")"; });
+
+    nodeUpdate.select("circle")
+      .attr("r", function(d) {
+            return Math.max(self.radius(d), self.min_r) || self.min_r;
+        })
+      .style("fill", function(d) { return d._children ? "lightsteelblue" : "#fff"; });
+
+    nodeUpdate.select("text")
+      .style("fill-opacity", 1);
+
+    var nodeExit = node.exit().transition()
+      .duration(self.duration)
+      .attr("transform", function(d) { return "translate(" + source.y + "," + source.x + ")"; })
+      .remove();
+
+    nodeExit.select("circle")
+      .attr("r", 1e-6);
+
+    nodeExit.select("text")
+      .style("fill-opacity", 1e-6);
 
     var link = self.svg.selectAll('path.link')
         .data(links, function(d) {
@@ -189,5 +218,25 @@ Tree.prototype.update = function(source) {
 
     link.enter().insert('path', 'g')
         .attr('class', 'link')
-        .attr('d', self.diagonal);
+        .attr('d', function(d) {
+        var o = {x: source.x0, y: source.y0};
+        return self.diagonal({source: o, target: o});
+      });
+
+    link.transition()
+      .duration(self.duration)
+      .attr("d", self.diagonal);
+
+    link.exit().transition()
+      .duration(self.duration)
+      .attr('d', function(d) {
+        var o = {x: source.x, y: source.y};
+        return self.diagonal({source: o, target: o});
+      })
+      .remove();
+
+    nodes.forEach(function(d) {
+    d.x0 = d.x;
+    d.y0 = d.y;
+  });
 };

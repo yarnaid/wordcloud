@@ -1,5 +1,5 @@
 {% extends 'wordcloud/base.html' %}
-{% load sekizai_tags staticfiles %}
+{% load sekizai_tags staticfiles dixit_downloader %}
 
 {% block page_header %}
     <h2>Tree View</h2>
@@ -7,6 +7,7 @@
 
 {% block content %}
     <div id="svg"></div>
+    {% downloader %}
 {% endblock %}
 
 
