@@ -149,7 +149,7 @@ Tree.prototype.update = function(source) {
         .style('fill', '#fff');
 
     nodeEnter.append('text')
-        .attr('x', function(d) {return d.children || d._children ? -self.t_offset : self.t_offset;})
+        .attr('x', function(d) {return d.children || d._children ? -self.radius(d) -self.t_offset : self.radius(d) + self.t_offset;})
         .attr('dy', '.35em')
         .attr('text-anchor', function(d) {return d.children || d._children ? 'end' : 'start';})
         .text(function(d) {return d.name; })
