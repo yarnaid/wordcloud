@@ -73,30 +73,38 @@ Tree.prototype.init = function() {
 
 Tree.prototype.process_data = function() {
     var self = this;
+
+    $.map(self.data.nodes, function(v) {v.id = null;});
+
+    var job_name = 'Job Name';
     var root = {
         parent: null,
-        name: 'Job Name',
-        effecif: 1
+        name: job_name,
+        cluster: null,
+        effecif: self.min_r
     };
 
 
     // TODO: do it for each book
-    var book_name;
+    var book_name = 'book 1';
     var clusters = $.map(self.data.clusters, function(v, i) {
         v['name'] = i;
         v.cluster = book_name;
+        v.id = null;
         return [v];
     });
     var book = {
         name: book_name,
-        parent: null,
+        parent: root,
+        cluster: job_name,
+        effecif: self.min_r,
         children: clusters
     }
 
     self.data.nodes.map(function(node) {
         node['name'] = node.title;
     })
-    var nodes = _.union(book, clusters, self.data.nodes, root);
+    var nodes = _.union(root, book, clusters, self.data.nodes);
     self.scale.domain([self.min_r, d3.max(nodes, function(d) {
         return d['effecif'];
     })]);
@@ -125,9 +133,11 @@ Tree.prototype.process_data = function() {
 
     root['children'] = [{
         name: book_name,
+        effecif: self.min_r,
+        cluster: root.name,
+        parent: root,
         children: treeData
     }];
-    root.children[0]['parent'] = root.name;
 
     self.display_data = root;
 };
