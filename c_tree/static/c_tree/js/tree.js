@@ -134,7 +134,7 @@ Tree.prototype.process_data = function() {
 
 Tree.prototype.update = function(source) {
     var self = this;
-    var nodes = self.tree.nodes(source).reverse();
+    var nodes = self.tree.nodes(self.display_data).reverse();
     var links = self.tree.links(nodes);
     console.log(nodes);
 
