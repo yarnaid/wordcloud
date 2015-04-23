@@ -1,0 +1,25 @@
+{% extends 'wordcloud/base.html' %}
+{% load sekizai_tags staticfiles %}
+
+{% block page_header %}
+    <h2>Tree View</h2>
+{% endblock %}
+
+{% block content %}
+    <div id="svg"></div>
+{% endblock %}
+
+
+{% block css %}
+    {% addtoblock 'css' %}
+        <link rel="stylesheet" href="{% static 'c_tree/css/tree.css' %}"/>
+    {% endaddtoblock %}
+{% endblock %}
+
+{% block js %}
+    {% addtoblock 'js' %}
+        <script type="text/javascript" src="{% static 'js/d3.v3.min.js' %}"></script>
+        <script type="text/javascript" src="{% static 'c_tree/js/tree.js' %}"></script>
+        <script type="text/javascript" src="{% static 'c_tree/js/svg.js' %}"></script>
+    {% endaddtoblock %}
+{% endblock %}

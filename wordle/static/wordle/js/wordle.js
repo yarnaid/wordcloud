@@ -28,6 +28,7 @@ var Wordle = function(_parent_id, _data, _event_handler) {
         return self.scale(node[key]);
     };
 
+    self.zoom = d3.behavior.zoom();
     self.fill = d3.scale.category20();
 
     self.process_data();
@@ -38,8 +39,10 @@ Wordle.prototype.init = function() {
     var self = this;
 
     var zoom = function() {
+        var x = self.zoom.translate()[0] + self.width/2;
+        var y = self.zoom.translate()[1] + self.height/2;
         self.svg.attr('transform',
-            'translate(' + self.zoom.translate() + ') scale(' + self.zoom.scale() + ')');
+            'translate(' + [x, y] + ') scale(' + self.zoom.scale() + ')');
     };
 
     self.svg = d3.select(self.parent_id)
@@ -47,9 +50,9 @@ Wordle.prototype.init = function() {
         .attr('encoding', 'UTF-8')
         .attr('width', this.width)
         .attr('height', this.height)
-        // .attr('pointer-events', 'all')
-        //.append('svg:g')
-        //.call(self.zoom.on('zoom', zoom))
+        .attr('pointer-events', 'all')
+        .append('svg:g')
+        .call(self.zoom.on('zoom', zoom))
         .append('svg:g')
         .attr('transform', 'translate(' + self.width/2 + ',' + self.height/2 + ')');
 

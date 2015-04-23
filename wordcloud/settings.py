@@ -59,6 +59,7 @@ INSTALLED_APPS = (
     'cloud',
     'wordle',
     'dixit_exporter',
+    'c_tree',
 )
 
 

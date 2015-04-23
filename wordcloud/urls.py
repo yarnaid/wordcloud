@@ -19,6 +19,7 @@ urlpatterns = patterns('',
 
     url(r'^cloud/', include('cloud.urls')),
     url(r'^wordle/', include('wordle.urls')),
+    url(r'^tree/', include('c_tree.urls')),
 
     url(r'^$', TemplateView.as_view(template_name='wordcloud/base.html')),
 

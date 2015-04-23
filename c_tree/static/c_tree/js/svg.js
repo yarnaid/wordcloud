@@ -1,31 +1,32 @@
 'use strict';
 /**
- * Created by yarnaid on 18/04/2015.
+ * Created by yarnaid on 23/04/2015.
  */
-$(function() {
+
+$(function () {
     var data = {};
 
     function init() {
-        var cluster = new Wordle('#svg', data);
+        var tree = new Tree('#svg', data);
     };
-
     function data_loaded(err, _data) {
         if (!err) {
             data = _data;
             init();
         } else {
-            console.log(err);
+            console.log(err)
         }
     };
-
-    var start = function() {
+    function start() {
         $.ajax({
             url: window.location.href,
             data: {all: true},
-            success: function(j) {
-                data_loaded(null, j);
+            success: function(d) {
+                data_loaded(null, d);
             },
-            method: 'post'});
+            method: 'post'
+        });
     };
+
     start();
 });
