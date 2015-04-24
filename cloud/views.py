@@ -1,6 +1,8 @@
 import json
 from django.http import HttpResponse
 from django.views.generic import TemplateView
+from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
 from django.utils.translation import ugettext as _
 from django.conf import settings
 import os
@@ -14,6 +16,10 @@ lex_name = settings.LEX_NAME
 
 class CloudView(TemplateView):
     template_name = 'cloud/cloud.html'
+
+    @method_decorator(login_required)
+    def dispatch(self, *args, **kwargs):
+        return super(CloudView, self).dispatch(*args, **kwargs)
 
     def post(self, request, *args, **kwargs):
         if request.is_ajax():
