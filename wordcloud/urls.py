@@ -15,6 +15,7 @@ urlpatterns = patterns('',
     (r'^admin/filebrowser/', include(site.urls)),
     (r'^grappelli/', include('grappelli.urls')), # grappelli URLS
     url(r'^admin/', include(admin.site.urls)),
+    url('^accounts/', include('django.contrib.auth.urls')),
 
 
     url(r'^cloud/', include('cloud.urls')),
