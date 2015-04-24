@@ -146,7 +146,6 @@ Tree.prototype.update = function(source) {
     var self = this;
     var nodes = self.tree.nodes(self.display_data).reverse();
     var links = self.tree.links(nodes);
-    console.log(nodes);
 
     var max_depth = 3;
     self.depth_scale.domain([0, (max_depth + 1) * 180]);
