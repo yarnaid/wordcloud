@@ -82,7 +82,8 @@ Tree.prototype.process_data = function() {
         parent: null,
         name: job_name,
         cluster: null,
-        effecif: self.min_r
+        effecif: self.min_r,
+        overcode: true
     };
 
 
@@ -100,7 +101,8 @@ Tree.prototype.process_data = function() {
         parent: root,
         cluster: job_name,
         effecif: self.min_r,
-        children: clusters
+        children: clusters,
+        overcode: true
     }
 
     self.data.nodes.map(function(node) {
@@ -139,7 +141,8 @@ Tree.prototype.process_data = function() {
         effecif: self.min_r,
         cluster: root.name,
         parent: root,
-        children: treeData
+        children: treeData,
+        overcode: true
     }];
 
     self.display_data = root;
