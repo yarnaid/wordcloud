@@ -7,6 +7,7 @@ from django.utils.translation import ugettext as _
 from django.conf import settings
 import os
 import helpers
+from helpers.views import LoginMixin
 
 # Create your views here.
 stub = settings.STUB
@@ -14,12 +15,8 @@ sample_name = settings.SAMPLE_NAME
 lex_name = settings.LEX_NAME
 
 
-class CloudView(TemplateView):
+class CloudView(LoginMixin, TemplateView):
     template_name = 'cloud/cloud.html'
-
-    @method_decorator(login_required)
-    def dispatch(self, *args, **kwargs):
-        return super(CloudView, self).dispatch(*args, **kwargs)
 
     def post(self, request, *args, **kwargs):
         if request.is_ajax():

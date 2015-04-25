@@ -76,6 +76,7 @@ Wordle.prototype.init = function() {
         .rotate(function(d) { return ~~(Math.random() * 5) * 30 - 60; })
         // .rotate(function() { return ~~(Math.random() * 2) * 90; })
         .fontSize(function(d) { return d.size; })
+        .spiral('archimedean')
         .on('end', draw);
 
     self.update();

@@ -60,6 +60,7 @@ INSTALLED_APPS = (
     'wordle',
     'dixit_exporter',
     'c_tree',
+    'helpers',
 )
 
 
