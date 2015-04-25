@@ -49,6 +49,7 @@ var Tree = function(_parent_id, _data, _event_handler) {
 
 Tree.prototype.init = function() {
     var self = this;
+    self.helpers_init();
 
     var zoom = function() {
         self.svg.attr('transform', 'translate(' + self.zoom.translate() + ') scale(' + self.zoom.scale() + ')');
@@ -90,6 +91,7 @@ Tree.prototype.process_data = function() {
     var clusters = $.map(self.data.clusters, function(v, i) {
         v['name'] = i;
         v.cluster = book_name;
+        v.overcode = true;
         v.id = null;
         return [v];
     });
@@ -103,6 +105,7 @@ Tree.prototype.process_data = function() {
 
     self.data.nodes.map(function(node) {
         node['name'] = node.title;
+        node.overcode = false;
     })
     var nodes = _.union(root, book, clusters, self.data.nodes);
     self.scale.domain([self.min_r, d3.max(nodes, function(d) {
@@ -160,6 +163,9 @@ Tree.prototype.update = function(source) {
         });
 
     function click(d) {
+        if (!d.overcode) {
+            self.show_verbatims(d);
+        } else {
         if (d.children) {
             d._children = d.children;
             d.children = null;
@@ -169,11 +175,26 @@ Tree.prototype.update = function(source) {
         }
         self.update(d);
     }
+    }
 
     var nodeEnter = node.enter().append('g')
         .attr('class', 'node')
         .attr('transform', function(d) {
             return 'translate(' + source.y0 + ',' + source.x0 + ')'
+        })
+        .on("mouseover", function(d) {
+            self.tooltip_elem.transition()
+                .duration(self.duration)
+                .style("opacity", .95);
+            self.tooltip_elem.html(self.tooltip_html(d))
+                .style("left", (d3.event.pageX) + "px")
+                .style("top", (d3.event.pageY - 28) + "px");
+            // .style("cursor", function () {return !d.overcode ? "pointer" : "default";});
+        })
+        .on("mouseout", function(d) {
+            self.tooltip_elem.transition()
+                .duration(self.duration)
+                .style("opacity", 0);
         })
         .on('click', click);
 
@@ -249,3 +270,8 @@ Tree.prototype.update = function(source) {
     d.y0 = d.y;
   });
 };
+
+Tree.prototype.tooltip_html = tooltip_html;
+Tree.prototype.show_verbatims = show_verbatims;
+Tree.prototype.helpers_init = helpers_init;
+

@@ -17,3 +17,16 @@ svg {
     border: 2px solid;
     border-radius: 25px;
 }
+
+div.tooltip {
+  position: absolute;
+  text-align: center;
+  padding: 2px;
+  font-family: 'Open Sans', sans-serif;
+  font: 14px;
+  background: lightsteelblue;
+  border: 0px;
+  border-radius: 8px;
+  pointer-events: none;
+  opacity: 0.8;
+}

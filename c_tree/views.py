@@ -36,5 +36,8 @@ class TreeView(TemplateView):
         return response
 
     @staticmethod
-    def get_verbatim(id):
-        raise NotImplementedError
+    def get_verbatim(code_id):
+        path = os.path.join(settings.BASE_DIR, settings.STUB, settings.LEX_NAME)
+        with open(path, 'r') as f:
+            data = json.load(f)
+        return data[code_id]

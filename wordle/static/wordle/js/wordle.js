@@ -71,8 +71,10 @@ Wordle.prototype.init = function() {
     };
 
     self.layout.size([self.width, self.height])
+        .timeInterval(10)
         .words(self.words)
-        .rotate(function() { return ~~(Math.random() * 2) * 90; })
+        .rotate(function(d) { return ~~(Math.random() * 5) * 30 - 60; })
+        // .rotate(function() { return ~~(Math.random() * 2) * 90; })
         .fontSize(function(d) { return d.size; })
         .on('end', draw);
 

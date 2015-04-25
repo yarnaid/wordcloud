@@ -20,7 +20,6 @@ var Cluster = function(_parent_id, _data, _eventHandler, _fps) {
         left: 10
     };
 
-    this.percentage = d3.format('.1%');
 
     this.min_radius = 4.5;
 
@@ -28,10 +27,6 @@ var Cluster = function(_parent_id, _data, _eventHandler, _fps) {
     this.height = $(this.parent_id).height();
     this.height = Math.max(window.innerHeight, this.height);
     this.height = this.height - this.margin.top - this.margin.bottom;
-
-    this.tooltip_elem = d3.select('body').append('div')
-        .attr('class', 'tooltip')
-        .style('opacity', 0);
 
     this.radius = function(node, key) {
         key = key || 'effecif';
@@ -60,6 +55,7 @@ var Cluster = function(_parent_id, _data, _eventHandler, _fps) {
 
 Cluster.prototype.init = function() {
     var self = this;
+    self.helpers_init();
 
     var zoom = function() {
         self.svg.attr('transform',
@@ -248,68 +244,9 @@ Cluster.prototype.init = function() {
     this.update();
 };
 
-Cluster.prototype.tooltip_html = function(d) {
-    var self = this;
-    var code_html = '<tr>' +
-        '<td><strong>Code number:</strong></td>' +
-        '<td>' + d.code + '</td>' +
-        '</tr>';
-    var code = d.code ? code_html : '';
-    var res = '<table class="table table-striped table-hover table-condensed">' +
-        '<caption class="text-center"><h5><strong>' + d.title + '</strong></h5></caption>' +
-        '<tbody>' +
-        '<tr>' +
-        '<td><strong>Effectif:</strong></td>' +
-        '<td>' + d.radius + '</td>' +
-        '</tr>' +
-        '<tr>' +
-        '<td><strong>Code Title:</strong></td>' +
-        '<td>' + d.question + '</td>' +
-        '</tr>' +
-        code +
-        '<tr>' +
-        '<td><strong>Repondents:</strong></td>' +
-        '<td>' + self.percentage(d.repondants) + '</td>' +
-        '</tr>' +
-        '<tr>' +
-        '<td><strong>Total:</strong></td>' +
-        '<td>' + self.percentage(d.total) + '</td>' +
-        '</tr>' +
-        '</tbody>' +
-        '</table>';
-    return res;
-};
-
-Cluster.prototype.show_verbatims = function(d) {
-    if (d.overcode)
-        return;
-    $.ajax({method: 'post', url: window.location.href, data: {verbatim: true, id: d.code}, success: function(answer) {
-        var a = answer;
-        bootbox.dialog({
-            backdrop: false,
-            message: '<table id="table-methods-table" data-height="299">' +
-                '<thead>' +
-                '<tr>' +
-                '<th data-field="state" data-checkbox="true"></th>' +
-                '<th data-field="id">Responder ID</th>' +
-                '<th data-field="answer">Item Answer</th>' +
-                '</tr>' +
-                '</thead>' +
-                '</table>',
-            title: d.question,
-            buttons: {
-                success: {
-                    label: 'Ok',
-                    className: 'btn-default'
-                }
-            }
-        });
-        var $table = $('#table-methods-table').bootstrapTable({
-            data: answer
-        });
-        //$('.modal-dialog').css('z-axis', '15000');
-    }});
-};
+Cluster.prototype.tooltip_html = tooltip_html;
+Cluster.prototype.show_verbatims = show_verbatims;
+Cluster.prototype.helpers_init = helpers_init;
 
 Cluster.prototype.update = function() {};
 
