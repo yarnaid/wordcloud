@@ -1,3 +1,4 @@
+django-tables2
 crispy-forms-foundation
 django-crispy-forms
 feedparser

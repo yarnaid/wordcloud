@@ -1,0 +1,12 @@
+input[type=number], input[readonly=readonly] {
+    max-width: 50px;
+    min-width: 50px;
+}
+th {
+    max-width: 140px;
+}
+
+#id_fields_number {
+    width: auto;
+    max-width: 100px;
+}

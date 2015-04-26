@@ -27,9 +27,9 @@ SECRET_KEY = 't@dpxuj8i5&uh+&v#(z7+&x@$g#-^7%tk-$@ker9rc8_t#z#ph'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-DEBUG_PANEL = False
+DEBUG_PANEL = not False
 
-TEMPLATE_DEBUG = True
+TEMPLATE_DEBUG = DEBUG
 
 ALLOWED_HOSTS = ['*']
 INTERNAL_IPS = ['*', '0.0.0.0', '127.0.0.1']
@@ -63,7 +63,7 @@ INSTALLED_APPS = (
     'helpers',
     'pricing_tool',
     'crispy_forms',
-    'crispy_forms_foundation',
+    'django_tables2'
 )
 
 
@@ -168,5 +168,16 @@ TITLE = _('Dixit Explicit Cloud')
 STUB = 'stubs'
 SAMPLE_NAME = 'sample.json'
 LEX_NAME = 'lex.json'
+
+STUDY_TYPES = (
+    ('l', _('LEX')),
+    ('l9', _('LINK 9')),
+    ('l7', _('LINK 7')),
+    ('l12', _('LINK 12')),
+    ('ac', _('Adcheck')),
+    ('ah', _('Ad`hock')),
+)
+
+
 # Default layout to use with "crispy_forms"
-CRISPY_TEMPLATE_PACK = 'foundation-5'
+CRISPY_TEMPLATE_PACK = 'bootstrap3'

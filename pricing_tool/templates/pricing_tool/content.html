@@ -1,9 +1,56 @@
 {% extends 'wordcloud/base.html' %}
-{% load i18n crispy_forms_tags %}
+{% load i18n crispy_forms_tags django_tables2 sekizai_tags staticfiles %}
 
 {% block content %}
-{#    <form method="get">#}
-{#        {% csrf_token %}#}
-            {% crispy form form.helper %}
-{#    </form>#}
+    {% crispy form form.helper %}
+
+    <form>
+        {{ cell_form.management_form }}
+
+        <table id="cells_table" style="margin-left: -20px" class="table table-striped table-hover table-condensed"
+                {#               data-toggle="table"#}
+                >
+            <thead>
+            <tr>
+                {% for field in cell_form.empty_form %}
+                    <th class="col-xs-1">
+                        {{ field.label }}
+                    </th>
+                {% endfor %}
+            </tr>
+            </thead>
+            <tbody id="cells_table">
+            </tbody>
+        </table>
+    </form>
+    <table style="display:none;" id="form_template">
+    <tbody id="form_template_body">
+    <tr>
+        {% for field in cell_form.empty_form %}
+            <td>
+                <div style="max-width: 10px">
+                    {{ field.errors }}
+                    {{ field }}
+                </div>
+            </td>
+        {% endfor %}
+    </tr>
+    </tbody>
+</table>
+
+{% endblock %}
+
+
+{% block css %}
+    {% addtoblock 'css' %}
+        <link rel="stylesheet" href="{% static 'pricing_tool/css/table.css' %}"/>
+        <link rel="stylesheet" href="{% static 'css/bootstrap-table.min.css' %}"/>
+    {% endaddtoblock %}
+{% endblock %}
+
+{% block js %}
+    {% addtoblock 'js' %}
+        <script type="text/javascript" src="{% static 'js/bootstrap-table.min.js' %}"></script>
+        <script type="text/javascript" src="{% static 'pricing_tool/js/forms_control.js' %}"></script>
+    {% endaddtoblock %}
 {% endblock %}
