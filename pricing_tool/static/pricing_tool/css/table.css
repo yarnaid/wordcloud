@@ -4,6 +4,7 @@ input[type=number], input[readonly=readonly] {
 }
 th {
     max-width: 140px;
+    font-size: small;
 }
 
 #id_fields_number {

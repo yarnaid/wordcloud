@@ -21,7 +21,6 @@ study_types = (
 class HeaderForm(forms.Form):
     client_name = forms.CharField(max_length=300)
     study_type = forms.ChoiceField(choices=study_types)
-    new_coded_frame = forms.BooleanField(widget=forms.CheckboxInput, initial=True)
     fields_number = forms.IntegerField(min_value=1, initial=1)
 
     def __init__(self, *args, **kwargs):
@@ -36,7 +35,7 @@ class HeaderForm(forms.Form):
         self.helper.layout = Layout(
             Div(
                 Div('client_name', css_class='col-md-5'),
-                Div(Field('new_coded_frame'), css_class='col-md-4'),
+                # Div(Field('new_coded_frame'), css_class='col-md-4'),
                 css_class='row-fluid'
             ),
             Div(
@@ -52,6 +51,7 @@ class HeaderForm(forms.Form):
 
 class CellForm(forms.Form):
     language = forms.ChoiceField(choices=settings.LANGUAGES)
+    new_coded_frame = forms.BooleanField(widget=forms.CheckboxInput, initial=True)
     sample_size = forms.IntegerField(min_value=1, initial=1)
     story_questions = forms.IntegerField(min_value=1, initial=1)
     impressions_number = forms.IntegerField(min_value=1, initial=1)
@@ -61,7 +61,7 @@ class CellForm(forms.Form):
     )
     # qt1 = forms.IntegerField(min_value=0, initial=0)
     questionnaire_translation = forms.IntegerField(min_value=1, initial=1)
-    code_frame_translation = forms.IntegerField(min_value=1, initial=1)
+    code_frame_translation = forms.BooleanField(initial=True)
     verbatim_story_translation = forms.IntegerField(min_value=1, initial=1)
     verbatim_impression_translation = forms.IntegerField(min_value=1, initial=1)
     verbatim_brand_translation = forms.IntegerField(min_value=1, initial=1)
@@ -75,6 +75,7 @@ class CellForm(forms.Form):
         self.helper.layout = Layout(
             Div(
                 Div('language', css_class='col-xs-1'),
+                Div('new_coded_frame', css_class='col-xs-1'),
                 Div('sample_size', css_class='col-xs-1'),
                 Div('story_questions', css_class='col-xs-1'),
                 Div('impression_number', css_class='col-xs-1'),
