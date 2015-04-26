@@ -8,7 +8,7 @@ $(function () {
         // Note: Must use global replace here
         var html = $("#form_template_body").clone().html().replace(/__prefix__/g, i);
         $("#cells_table").append(html);
-        fn += 1;
+        ++fn;
     };
 
     var remove_row = function (i) {
@@ -19,21 +19,21 @@ $(function () {
         $('#cells_table tr')[i].hidden = false;
     };
 
-    var fn = 0;
-    var shown_fields = $("#id_fields_number").val();
+    var fn = parseInt(0);
+    var shown_fields = parseInt($("#id_fields_number").val());
 
     $("#id_fields_number").change(function () {
-        var quantity = $(this).val();
+        var quantity = parseInt($(this).val());
         $("[name=form-TOTAL_FORMS]").val(quantity);
 
         if (shown_fields < quantity) {
-            if (fn  <= shown_fields) {
+            if (fn - 1  < shown_fields) {
                 add_row(quantity);
             } else {
                 show_field(quantity);
             }
         } else {
-            remove_row(quantity);
+            remove_row(quantity + 1);
         }
         shown_fields = quantity;
     });
