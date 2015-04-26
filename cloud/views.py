@@ -7,7 +7,7 @@ from django.utils.translation import ugettext as _
 from django.conf import settings
 import os
 import helpers
-from helpers.views import LoginMixin
+from helpers.views import LoginMixin, CsrfCookieMixin
 
 # Create your views here.
 stub = settings.STUB
@@ -15,7 +15,7 @@ sample_name = settings.SAMPLE_NAME
 lex_name = settings.LEX_NAME
 
 
-class CloudView(LoginMixin, TemplateView):
+class CloudView(LoginMixin, CsrfCookieMixin, TemplateView):
     template_name = 'cloud/cloud.html'
 
     def post(self, request, *args, **kwargs):

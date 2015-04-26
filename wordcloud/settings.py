@@ -61,6 +61,9 @@ INSTALLED_APPS = (
     'dixit_exporter',
     'c_tree',
     'helpers',
+    'pricing_tool',
+    'crispy_forms',
+    'crispy_forms_foundation',
 )
 
 
@@ -120,8 +123,9 @@ LANGUAGE_CODE = 'en-us'
 LANGUAGES = (
   ('en', _('English')),
   ('fr', _('French')),
-  ('de', _('German')),
-  ('ru', _('Russian')),
+  # ('de', _('German')),
+  ('sp', _('Spanish')),
+  # ('ru', _('Russian')),
 )
 
 TIME_ZONE = 'UTC'
@@ -164,3 +168,5 @@ TITLE = _('Dixit Explicit Cloud')
 STUB = 'stubs'
 SAMPLE_NAME = 'sample.json'
 LEX_NAME = 'lex.json'
+# Default layout to use with "crispy_forms"
+CRISPY_TEMPLATE_PACK = 'foundation-5'

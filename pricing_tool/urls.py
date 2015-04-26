@@ -1,9 +1,8 @@
 __author__ = 'yarnaid'
 from django.conf.urls import url
-
-from views import TreeView
+from views import PricingView
 
 
 urlpatterns = (
-    url(r'^$', TreeView.as_view()),
+    url(r'^$', PricingView.as_view()),
 )

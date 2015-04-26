@@ -6,11 +6,11 @@ from django.conf import settings
 from django.http import HttpResponse
 from django.utils.translation import ugettext as _
 import helpers
-from helpers.views import LoginMixin
+from helpers.views import LoginMixin, CsrfCookieMixin
 # Create your views here.
 
 
-class WordleView(LoginMixin, TemplateView):
+class WordleView(LoginMixin, CsrfCookieMixin, TemplateView):
     template_name = 'wordle/wordle.html'
 
     def post(self, request, *args, **kwargs):

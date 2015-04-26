@@ -1,0 +1,9 @@
+{% extends 'wordcloud/base.html' %}
+{% load i18n crispy_forms_tags %}
+
+{% block content %}
+{#    <form method="get">#}
+{#        {% csrf_token %}#}
+            {% crispy form form.helper %}
+{#    </form>#}
+{% endblock %}

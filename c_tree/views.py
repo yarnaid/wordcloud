@@ -9,10 +9,10 @@ from django.conf import settings
 
 # Create your views here.
 import helpers
-from helpers.views import LoginMixin
+from helpers.views import LoginMixin, CsrfCookieMixin
 
 
-class TreeView(LoginMixin, TemplateView):
+class TreeView(LoginMixin, CsrfCookieMixin, TemplateView):
     template_name = 'c_tree/content.html'
 
     def post(self, request, *args, **kwargs):

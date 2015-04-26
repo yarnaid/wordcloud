@@ -1,3 +1,5 @@
+crispy-forms-foundation
+django-crispy-forms
 feedparser
 django-reversion
 Pillow
