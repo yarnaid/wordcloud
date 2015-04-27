@@ -1,3 +1,4 @@
+import json
 from django.shortcuts import render
 from django.views.generic import FormView, TemplateView
 from django.http import HttpResponse
@@ -11,11 +12,19 @@ from helpers.views import CsrfCookieMixin
 # Create your views here.
 
 point_price = 0.12
-point_time = 7.2
-q1_price = 0.95
-q2_price = 0.35
-q3_price = 0
-q4_price = 0.18
+point_time = 7.2 / 60. # to minutes
+new_code_frame_price = [
+    11.2,
+    4.2,
+    1.5,
+    1
+]
+existing_code_frame_price = [
+    8,
+    3,
+    1.5,
+    1
+]
 
 
 class PricingView(CsrfCookieMixin, TemplateView):
@@ -32,27 +41,40 @@ class PricingView(CsrfCookieMixin, TemplateView):
         header = HeaderForm(request.POST)
         header.is_valid()
         cells = CellFormSet(request.POST)
-        points = 0
-        print len(cells)
-        try:
-            for cell in cells:
-                print 'cell'
-                cell.is_valid()
-                print cell.cleaned_data
-                if cell.is_valid():
-                    if cell.cleaned_data['new_coded_frame']:
-                        points += 11.2
-                    else:
-                        points += 8
-                    price = 0
-                    time = 0
-                    ssize = cell.cleaned_data['sample_size']
-                    q1 = cell.cleaned_data['story_questions']
-                    q2 = cell.cleaned_data['impressions_number']
-                    q3 = cell.cleaned_data['brands_number']
-                    q4 = cell.cleaned_data['brands_number']
-                    points += (q1*q1_price + q2*q2_price + q4*q4_price) * ssize
-        except Exception as e:
-            print e
-        response = HttpResponse(points)
+        total_points = 0
+        res = list()
+        for cell in cells:
+            if cell.is_valid():
+                points = 0
+                cell_number = cell.prefix.split('-')[-1]
+                code_frame_price = []
+                if cell.cleaned_data['new_coded_frame']:
+                    code_frame_price = new_code_frame_price
+                else:
+                    code_frame_price = existing_code_frame_price
+                price = 0
+                time = 0
+                ssize = cell.cleaned_data['sample_size']
+                q1 = cell.cleaned_data['story_questions']
+                q2 = cell.cleaned_data['impressions_number']
+                q3 = cell.cleaned_data['one_word_number']
+                q4 = cell.cleaned_data['brands_number']
+                points += (q1 * code_frame_price[0] +
+                           q2 * code_frame_price[1] +
+                           q3 * code_frame_price[2] +
+                           q4 * code_frame_price[3]) * ssize
+                total_points += points
+                res.append({
+                    'cell_number': cell_number,
+                    'cell_points': points,
+                    'cell_price': points * point_price,
+                    'cell_time': points * point_time
+                })
+        res.append({
+            'cell_number': 'Total',
+            'cell_points': total_points,
+            'cell_price': total_points * point_price,
+            'cell_time': total_points * point_time
+        })
+        response = HttpResponse(json.dumps(res), content_type='application/json')
         return response

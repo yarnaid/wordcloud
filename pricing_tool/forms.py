@@ -55,17 +55,19 @@ class CellForm(forms.Form):
     sample_size = forms.IntegerField(min_value=0, initial=0)
     story_questions = forms.IntegerField(min_value=0, initial=0)
     impressions_number = forms.IntegerField(min_value=0, initial=0)
-    question3_number = forms.IntegerField(min_value=0, initial=0)
+    one_word_number = forms.IntegerField(min_value=0, initial=0)
     brands_number = forms.IntegerField(min_value=0, initial=0)
+
     # questions_number = forms.IntegerField(
     #     widget=forms.TextInput(attrs={'readonly': 'readonly'})
     # )
     # qt1 = forms.IntegerField(min_value=0, initial=0)
-    questionnaire_translation = forms.IntegerField(min_value=0, initial=0)
-    code_frame_translation = forms.BooleanField(initial=True)
-    verbatim_story_translation = forms.IntegerField(min_value=0, initial=0)
-    verbatim_impression_translation = forms.IntegerField(min_value=0, initial=0)
-    verbatim_brand_translation = forms.IntegerField(min_value=0, initial=0)
+
+    # questionnaire_translation = forms.IntegerField(min_value=0, initial=0)
+    # code_frame_translation = forms.BooleanField(initial=True)
+    # verbatim_story_translation = forms.IntegerField(min_value=0, initial=0)
+    # verbatim_impression_translation = forms.IntegerField(min_value=0, initial=0)
+    # verbatim_brand_translation = forms.IntegerField(min_value=0, initial=0)
 
     def __init__(self, *args, **kwargs):
         self.helper = FormHelper()
@@ -80,14 +82,14 @@ class CellForm(forms.Form):
                 Div('sample_size', css_class='col-xs-1'),
                 Div('story_questions', css_class='col-xs-1'),
                 Div('impression_number', css_class='col-xs-1'),
-                Div('question3_number', css_class='col-xs-1'),
+                Div('one_word_number', css_class='col-xs-1'),
                 Div('brands_number', css_class='col-xs-1'),
                 # Div('questions_number', css_class='col-xs-1'),
-                Div('questionnaire_translation', css_class='col-xs-1'),
-                Div('code_frame_translation', css_class='col-xs-1'),
-                Div('verbatim_story_translation', css_class='col-xs-1'),
-                Div('verbatim_impression_translation', css_class='col-xs-1'),
-                Div('verbatim_brand_translation', css_class='col-xs-1'),
+                # Div('questionnaire_translation', css_class='col-xs-1'),
+                # Div('code_frame_translation', css_class='col-xs-1'),
+                # Div('verbatim_story_translation', css_class='col-xs-1'),
+                # Div('verbatim_impression_translation', css_class='col-xs-1'),
+                # Div('verbatim_brand_translation', css_class='col-xs-1'),
                 css_class='row-fluid'
             )
         )

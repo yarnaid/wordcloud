@@ -4,6 +4,7 @@
  */
 
 $(function () {
+
     var add_row = function (i, j) {
         j = j || i;
         // Note: Must use global replace here
@@ -71,13 +72,17 @@ $(function () {
             url: window.location.href,
             data: $(this).serialize(),
             success: function (resp) {
-                //alert(resp);
-                price_table([
-                    {cell_number: 1, cell_points: 42},
-                    {cell_number: 2, cell_points: 420}
-                ]);
+                price_table(resp);
                 return;
             }
         });
     });
 });
+
+var price_formatter = function price_formatter(value) {
+    return value.toFixed(2) + ' <i class="glyphicon glyphicon-euro"></i>';
+};
+
+var time_formatter = function time_formatter(value) {
+    return value.toFixed(0) + ' minute(s) <i class="glyphicon glyphicon-time"></i>';
+};
