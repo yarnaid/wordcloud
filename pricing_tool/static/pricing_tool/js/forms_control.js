@@ -23,6 +23,25 @@ $(function () {
     var fn = parseInt(0);
     var shown_fields = parseInt($("#id_fields_number").val());
 
+    var price_table = function(cells) {
+        var $table = $('#price_table').clone().bootstrapTable({
+            data: cells
+        });
+        bootbox.dialog({
+            backdrop: false,
+            message: $table,
+            title: 'Price in Points',
+            buttons: {
+                success: {
+                    label: 'Ok',
+                    className: 'btn-default',
+                    callback: function(){$table.remove();}
+                }
+            },
+            onEscape: function() {$table.remove();}
+        });
+    };
+
     $("#id_fields_number").change(function () {
         var quantity = parseInt($(this).val());
 
@@ -52,7 +71,11 @@ $(function () {
             url: window.location.href,
             data: $(this).serialize(),
             success: function (resp) {
-                alert(resp);
+                //alert(resp);
+                price_table([
+                    {cell_number: 1, cell_points: 42},
+                    {cell_number: 2, cell_points: 420}
+                ]);
                 return;
             }
         });

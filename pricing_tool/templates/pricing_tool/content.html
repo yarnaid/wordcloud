@@ -7,6 +7,20 @@
 
 {% block content %}
 
+    {% block price_table %}
+<div class="hidden">
+    <table id="price_table">
+        <thead>
+            <tr>
+                <th data-field="cell_number">Cell</th>
+                <th data-field="cell_points" align="right">Points</th>
+            </tr>
+        </thead>
+    </table>
+</div>
+{% endblock %}
+
+
     <form id="pricing_form" method="post">
     {% csrf_token %}
         <div class="row-fluid">
@@ -67,6 +81,7 @@
 {% endblock %}
 
 
+
 {% block css %}
     {% addtoblock 'css' %}
         <link rel="stylesheet" href="{% static 'pricing_tool/css/table.css' %}"/>
@@ -78,5 +93,6 @@
     {% addtoblock 'js' %}
         <script type="text/javascript" src="{% static 'js/bootstrap-table.min.js' %}"></script>
         <script type="text/javascript" src="{% static 'pricing_tool/js/forms_control.js' %}"></script>
+        <script type="text/javascript" src="{% static 'js/bootbox.min.js' %}"></script>
     {% endaddtoblock %}
 {% endblock %}
