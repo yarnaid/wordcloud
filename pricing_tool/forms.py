@@ -27,20 +27,20 @@ class HeaderForm(forms.Form):
         self.helper = FormHelper()
         self.helper.form_id = 'id-headerForm'
         self.helper.form_class = 'form-horizontal'
-        # self.helper.form_class = 'form-inline'
-        # self.helper.field_template = 'bootstrap3/layout/inline_field.html'
-        self.helper.label_class = 'col-lg-4'
+        self.helper.label_class = 'col-lg-3'
         self.helper.field_class = 'col-lg-7'
+        # self.helper.form_method = 'post'
+        # self.helper.form_action = 'pricing_tool'
 
         self.helper.layout = Layout(
             Div(
-                Div('client_name', css_class='col-md-5'),
-                # Div(Field('new_coded_frame'), css_class='col-md-4'),
+                Div('client_name', css_class='col-md-4'),
+                Div(Field('study_type'), css_class='col-md-3'),
+                Div(Field('fields_number'), css_class='col-md-4'),
                 css_class='row-fluid'
             ),
             Div(
-                Div(Field('study_type'), css_class='col-md-5'),
-                Div(Field('fields_number'), css_class='col-md-4'),
+                Div(Submit('submit', 'submit'), css_class='col-md-1'),
                 css_class='row-fluid'
             ),
         )
@@ -51,20 +51,21 @@ class HeaderForm(forms.Form):
 
 class CellForm(forms.Form):
     language = forms.ChoiceField(choices=settings.LANGUAGES)
-    new_coded_frame = forms.BooleanField(widget=forms.CheckboxInput, initial=True)
-    sample_size = forms.IntegerField(min_value=1, initial=1)
-    story_questions = forms.IntegerField(min_value=1, initial=1)
-    impressions_number = forms.IntegerField(min_value=1, initial=1)
-    brands_number = forms.IntegerField(min_value=1, initial=1)
-    questions_number = forms.IntegerField(
-        widget=forms.TextInput(attrs={'readonly': 'readonly'})
-    )
+    new_coded_frame = forms.BooleanField(initial=True, required=False)
+    sample_size = forms.IntegerField(min_value=0, initial=0)
+    story_questions = forms.IntegerField(min_value=0, initial=0)
+    impressions_number = forms.IntegerField(min_value=0, initial=0)
+    question3_number = forms.IntegerField(min_value=0, initial=0)
+    brands_number = forms.IntegerField(min_value=0, initial=0)
+    # questions_number = forms.IntegerField(
+    #     widget=forms.TextInput(attrs={'readonly': 'readonly'})
+    # )
     # qt1 = forms.IntegerField(min_value=0, initial=0)
-    questionnaire_translation = forms.IntegerField(min_value=1, initial=1)
+    questionnaire_translation = forms.IntegerField(min_value=0, initial=0)
     code_frame_translation = forms.BooleanField(initial=True)
-    verbatim_story_translation = forms.IntegerField(min_value=1, initial=1)
-    verbatim_impression_translation = forms.IntegerField(min_value=1, initial=1)
-    verbatim_brand_translation = forms.IntegerField(min_value=1, initial=1)
+    verbatim_story_translation = forms.IntegerField(min_value=0, initial=0)
+    verbatim_impression_translation = forms.IntegerField(min_value=0, initial=0)
+    verbatim_brand_translation = forms.IntegerField(min_value=0, initial=0)
 
     def __init__(self, *args, **kwargs):
         self.helper = FormHelper()
@@ -79,8 +80,9 @@ class CellForm(forms.Form):
                 Div('sample_size', css_class='col-xs-1'),
                 Div('story_questions', css_class='col-xs-1'),
                 Div('impression_number', css_class='col-xs-1'),
+                Div('question3_number', css_class='col-xs-1'),
                 Div('brands_number', css_class='col-xs-1'),
-                Div('questions_number', css_class='col-xs-1'),
+                # Div('questions_number', css_class='col-xs-1'),
                 Div('questionnaire_translation', css_class='col-xs-1'),
                 Div('code_frame_translation', css_class='col-xs-1'),
                 Div('verbatim_story_translation', css_class='col-xs-1'),

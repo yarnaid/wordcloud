@@ -25,7 +25,8 @@ $(function() {
             success: function(j) {
                 data_loaded(null, j);
             },
-            method: 'post'});
+            method: 'post'
+        });
     };
     start();
 });
