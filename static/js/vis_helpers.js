@@ -27,7 +27,7 @@ var show_verbatims = function(d) {
             var a = answer;
             bootbox.dialog({
                 backdrop: false,
-                message: '<table id="table-methods-table" data-height="299">' +
+                message: '<table id="table-methods-table" data-search="true" data-show-refresh="true" data-show-toggle="true" data-show-export="true" data-pagination="true" data-show-columns="true" data-toggle="table" data-height="299">' +
                     '<thead>' +
                     '<tr>' +
                     '<th data-field="state" data-checkbox="true"></th>' +
@@ -42,10 +42,16 @@ var show_verbatims = function(d) {
                         label: 'Ok',
                         className: 'btn-default'
                     }
-                }
+                },
+                onEscape: function() {return;}
             });
             var $table = $('#table-methods-table').bootstrapTable({
-                data: answer
+                data: answer,
+                showExport: true,
+                exportOptions: {
+                    ignoreColumn: [0],
+                    fileName: 'verbatim'
+                }
             });
             //$('.modal-dialog').css('z-axis', '15000');
         }

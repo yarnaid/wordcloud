@@ -38,6 +38,7 @@ INTERNAL_IPS = ['*', '0.0.0.0', '127.0.0.1']
 # Application definition
 
 INSTALLED_APPS = (
+    'modeltranslation',
     'grappelli.dashboard',
     'grappelli',
     'filebrowser',
@@ -63,7 +64,9 @@ INSTALLED_APPS = (
     'helpers',
     'pricing_tool',
     'crispy_forms',
-    'django_tables2'
+    'django_tables2',
+    'data_app',
+    'color_widget'
 )
 
 
