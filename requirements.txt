@@ -1,5 +1,4 @@
 pandas
-pygments
 markdown
 django-filter
 djangorestframework
