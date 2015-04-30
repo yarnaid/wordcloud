@@ -4,5 +4,5 @@ from views import PricingView
 
 
 urlpatterns = (
-    url(r'^$', PricingView.as_view()),
+    url(r'^$', PricingView.as_view(), name='pricing_tool'),
 )

@@ -5,5 +5,5 @@ from views import TreeView
 
 
 urlpatterns = (
-    url(r'^$', TreeView.as_view()),
+    url(r'^$', TreeView.as_view(), name='tree'),
 )

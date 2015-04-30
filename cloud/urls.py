@@ -5,5 +5,5 @@ from views import CloudView
 
 
 urlpatterns = (
-    url(r'^$', CloudView.as_view()),
+    url(r'^$', CloudView.as_view(), name='cloud'),
 )

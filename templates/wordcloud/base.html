@@ -79,19 +79,19 @@
                                     {% block menu_body %}
                                         <ul class="nav list-group">
                                             <li>
-                                                <a class="list-group-item active" href="/cloud">CLICK ME TO SEE
+                                                <a class="list-group-item active" href="{% url 'cloud' %}">CLICK ME TO SEE
                                                     CLOUD!</a>
                                             </li>
                                             <li>
-                                                <a class="list-group-item active" href="/wordle">WORDLE</a>
+                                                <a class="list-group-item active" href="{% url 'wordle' %}">WORDLE</a>
                                             </li>
                                             <li>
-                                                <a class="list-group-item active" href="/tree">TREE
+                                                <a class="list-group-item active" href="{% url 'tree' %}">TREE
                                                     <spam class="badge">under construction</spam>
                                                 </a>
                                             </li>
                                             <li>
-                                                <a class="list-group-item active" href="/pricing_tool">Pricing Tool</a>
+                                                <a class="list-group-item active" href="{% url 'pricing_tool' %}">Pricing Tool</a>
                                             </li>
                                         </ul>
                                     {% endblock %}
