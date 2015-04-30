@@ -1,4 +1,5 @@
-pandas
+# pandas
+numpy
 markdown
 django-filter
 djangorestframework
