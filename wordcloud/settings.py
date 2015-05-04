@@ -73,7 +73,6 @@ INSTALLED_APPS = (
 
 MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
@@ -82,6 +81,7 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     # 'livereload.middleware.LiveReloadScript',
     'django.middleware.locale.LocaleMiddleware',
+    'django.middleware.common.CommonMiddleware',
 )
 
 if DEBUG_PANEL:
