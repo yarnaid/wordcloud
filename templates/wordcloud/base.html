@@ -33,25 +33,9 @@
 <body>
 
 <div class="page-wrap">
-    <div class="container" id="navBar">
-        {% include 'wordcloud/nav_bar_auth.html' %}
-    </div>
+    {% include 'wordcloud/nav_bar_auth.html' %}
 
-    <div class="container" id="header">
-        <div class="page-header col-md-12">
-            <div class="col-md-2 pull-left">
-                <a href="/">
-                    <img class="img-responsive" src="{% static 'img/logo.png' %}" alt=""/>
-                </a>
-            </div>
-            <div class="pull-right">
-                {% block page_header %}
-                    <h1>Header</h1>
-                {% endblock %}
-            </div>
-        </div>
-    </div>
-
+  <!--
     <div class="container" id="breadcrumb">
         {% block breadcrumbs %}
             <ol class="breadcrumb">
@@ -61,12 +45,16 @@
             </ol>
         {% endblock %}
     </div>
-
+   -->
     <div class="container" id="page">
         {% block page %}
 
             {% block nav_menu %}
                 <div class="col-md-3">
+              {% block page_header %}
+                <h1>Header</h1>
+              {% endblock %}
+
                     <div class="panel panel-default">
                         {% block left_menu %}
                             <div class="panel-heading">
@@ -112,6 +100,7 @@
     </div>
 </div>
 
+<!--
 <footer class="site-footer">
     <hr/>
     <div class="container text-center">
@@ -120,6 +109,7 @@
         {% endblock %}
     </div>
 </footer>
+-->
 
 </body>
 </html>
