@@ -19,6 +19,7 @@ var Cluster = function(_parent_id, _data, _eventHandler, _fps) {
         bottom: 200,
         left: 10
     };
+    this.raduis_scale = d3.scale.log().range([1, 50]).domain([1, 300]);
 
 
     this.min_radius = 4.5;
@@ -30,7 +31,7 @@ var Cluster = function(_parent_id, _data, _eventHandler, _fps) {
 
     this.radius = function(node, key) {
         key = key || 'effecif';
-        return node[key] * 2;
+        return self.raduis_scale(node[key] * 2);
     };
 
     this.duration = 1000 / this.fps;
@@ -157,7 +158,7 @@ Cluster.prototype.init = function() {
         self.force.stop();
 
         setTimeout(function() {
-            self.force.start();
+            // self.force.start();
         }, self.duration);
     };
 

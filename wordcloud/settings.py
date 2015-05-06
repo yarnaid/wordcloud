@@ -185,7 +185,8 @@ STUDY_TYPES = (
 
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': ('rest_framework.permissions.IsAdminUser',),
-    'PAGE_SIZE': 10
+    # 'PAGE_SIZE': 10,
+    'DEFAULT_FILTER_BACKENDS': ('rest_framework.filters.DjangoFilterBackend',),
 }
 # Default layout to use with "crispy_forms"
 CRISPY_TEMPLATE_PACK = 'bootstrap3'
