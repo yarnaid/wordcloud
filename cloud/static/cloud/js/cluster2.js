@@ -8,7 +8,7 @@ var Cluster = function(_parent_id, _data, _eventHandler, _fps) {
     this.fps = _fps || 40;
     this.gravity = 0.05;
     this.friction = 0.2;
-    this.link_strength = 1;
+    this.link_strength = 3;
 
     this.padding = -5; // separation between same-color nodes
     this.clusterPadding = 0; // separation between different-color nodes

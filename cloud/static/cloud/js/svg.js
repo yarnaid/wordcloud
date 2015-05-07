@@ -29,7 +29,7 @@ $(function() {
                 _.map(tmp, function(value, key, list) {
                     if (value.text.length > 0) {
                         overcodes[value.text] = {
-                            effecif: -1,
+                            effecif: 0,
                             repondants: -0.1,
                             total: -0.1,
                             cluster: value.text,
@@ -65,6 +65,7 @@ $(function() {
                             repondants: -0.1,
                             id: value.id
                         });
+                        clusters_by_id[cluster_id].effecif += value.children_verbatims.length
                     }
                 });
 
