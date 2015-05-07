@@ -8,18 +8,18 @@ var Cluster = function(_parent_id, _data, _eventHandler, _fps) {
     this.fps = _fps || 40;
     this.gravity = 0.05;
     this.friction = 0.2;
-    this.link_strength = 10;
+    this.link_strength = 1;
 
-    this.padding = 1.5; // separation between same-color nodes
-    this.clusterPadding = 20; // separation between different-color nodes
-    this.maxRadius = 12;
+    this.padding = -5; // separation between same-color nodes
+    this.clusterPadding = 0; // separation between different-color nodes
+    this.maxRadius = 500;
     this.margin = {
         top: 10,
         right: 40,
         bottom: 200,
         left: 10
     };
-    this.raduis_scale = d3.scale.log().range([1, 50]).domain([1, 300]);
+    this.raduis_scale = d3.scale.linear().range([10, 50]).domain([1, 300]);
 
 
     this.min_radius = 4.5;
@@ -126,6 +126,35 @@ Cluster.prototype.init = function() {
         .on("click", self.show_verbatims);
 
 
+
+    // Resolves collisions between d and all other circles.
+    var collide = function(alpha) {
+        var quadtree = d3.geom.quadtree(self.nodes);
+        return function(d) {
+            var r = d.radius + self.maxRadius + Math.max(self.padding, self.clusterPadding),
+                nx1 = d.x - r,
+                nx2 = d.x + r,
+                ny1 = d.y - r,
+                ny2 = d.y + r;
+            quadtree.visit(function(quad, x1, y1, x2, y2) {
+                if (quad.point && (quad.point !== d)) {
+                    var x = d.x - quad.point.x,
+                        y = d.y - quad.point.y,
+                        l = Math.sqrt(x * x + y * y),
+                        r = d.radius + quad.point.radius + (d.cluster === quad.point.cluster ? self.padding : self.clusterPadding);
+                    if (l < r) {
+                        l = (l - r) / l * alpha;
+                        d.x -= x *= l;
+                        d.y -= y *= l;
+                        quad.point.x += x;
+                        quad.point.y += y;
+                    }
+                }
+                return x1 > nx2 || x2 < nx1 || y1 > ny2 || y2 < ny1;
+            });
+        };
+    }
+
     var tick = function(e) {
         self.link.attr('x1', function(d) {
                 return d.source.x;
@@ -140,7 +169,9 @@ Cluster.prototype.init = function() {
                 return d.target.y;
             });
 
-        self.node.attr('cx', function(d) {
+        self.node
+            .each(collide(0.5))
+            .attr('cx', function(d) {
                 if (d.x > self.width - d.r) d.x -= 1;
                 else if (d.x < d.r) d.x += 1;
                 return d.x;
@@ -158,7 +189,7 @@ Cluster.prototype.init = function() {
         self.force.stop();
 
         setTimeout(function() {
-            // self.force.start();
+            self.force.start();
         }, self.duration);
     };
 

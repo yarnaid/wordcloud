@@ -67,12 +67,12 @@ $(function() {
                         });
                     }
                 });
-                console.log(codes);
 
                 var super_puper_data = {
                     clusters: overcodes,
                     nodes: codes
                 };
+                console.log(super_puper_data);
                 data_loaded(null, super_puper_data);
             }
         });
