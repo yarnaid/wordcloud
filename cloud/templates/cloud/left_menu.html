@@ -1,6 +1,8 @@
 {% load i18n sekizai_tags staticfiles %}
 
-
+<div class="" style="margin:1em;">
+    <button class="btn btn-default center-block" id="toggle_motion">Toggle motion</button>
+</div>
 <div class="panel panel-default">
     <div class="panel-heading">
         <a href="#colors-controls" data-toggle="collapse" aria-expanded="false" aria-controls="colors-controls">
@@ -46,20 +48,20 @@
             <div class="radio">
                 <label>
                     <input type="radio" name="optradio" checked="">Likes</label>
+                </div>
+                <div class="radio">
+                </div>
+                <div class="radio disabled">
+                    <label style="color:grey;">
+                        <input type="radio" name="optradio" disabled>Dislikes</label>
+                    </div>
+                </form>
             </div>
-            <div class="radio">
-            </div>
-            <div class="radio disabled">
-                <label style="color:grey;">
-                    <input type="radio" name="optradio" disabled>Dislikes</label>
-            </div>
-        </form>
-    </div>
-</div>
+        </div>
 
-{% block js %}
-    {% addtoblock 'js' %}
+        {% block js %}
+        {% addtoblock 'js' %}
         <script type="text/javascript" src="{% static 'cloud/js/menu.js' %}"></script>
-    {% endaddtoblock %}
-{% endblock %}
+        {% endaddtoblock %}
+        {% endblock %}
 

@@ -1,9 +1,19 @@
 'use strict';
 $(function() {
     var data = {};
+    var rest = new Rest();
 
     function init() {
-        var cluster = new Cluster('#svg', data);
+        var svg_parent_id = '#svg';
+        var cluster = new Cluster(svg_parent_id, data);
+        $('#toggle_motion').click(function() {
+            $(svg_parent_id).toggleClass('motion');
+            if($(svg_parent_id).hasClass('motion')) {
+                cluster.force.start();
+            } else {
+                cluster.force.stop();
+            }
+        });
     };
 
     function data_loaded(err, _data) {
@@ -41,7 +51,6 @@ $(function() {
                         clusters_by_id[value.id] = overcodes[value.text];
                     }
                 });
-                // console.log(overcodes);
             }
         });
         $.ajax({
@@ -51,7 +60,6 @@ $(function() {
 
                 _.map(tmp, function(value, key, list) {
                     if (value.text.length > 0) {
-                        // console.log(value);
 
                         var cluster_id = value.parent.url.split('/').reverse()[1]
                         codes.push({
@@ -73,20 +81,9 @@ $(function() {
                     clusters: overcodes,
                     nodes: codes
                 };
-                console.log(super_puper_data);
                 data_loaded(null, super_puper_data);
             }
         });
-        // $.ajax({
-        //     url: path,
-        //     data: {
-        //         all: true
-        //     },
-        //     success: function(j) {
-        //         data_loaded(null, j);
-        //     },
-        //     method: 'post'
-        // });
     };
     start();
 });

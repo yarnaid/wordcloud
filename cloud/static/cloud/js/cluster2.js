@@ -9,6 +9,7 @@ var Cluster = function(_parent_id, _data, _eventHandler, _fps) {
     this.gravity = 0.05;
     this.friction = 0.2;
     this.link_strength = 3;
+    $(this.parent_id).addClass('motion');
 
     this.padding = -5; // separation between same-color nodes
     this.clusterPadding = 0; // separation between different-color nodes
@@ -188,9 +189,13 @@ Cluster.prototype.init = function() {
 
         self.force.stop();
 
-        setTimeout(function() {
-            self.force.start();
-        }, self.duration);
+        if ($(self.parent_id).hasClass('motion')) {
+            setTimeout(function() {
+                self.force.start();
+            }, self.duration);
+        } else {
+            self.force.stop();
+        }
     };
 
     this.force.size([this.width, this.height])
@@ -286,4 +291,15 @@ Cluster.prototype.update = function() {};
 Cluster.prototype.wrangle = function() {
     // var self = this;
     this.display_data = this.data;
+};
+
+Cluster.prototype.toggle_motion = function() {
+    var self = this;
+    var parent_id = '#svg';
+    console.log('toggle', $(parent_id).hasClass('motion'), $(parent_id), parent_id);
+    $(parent_id).toggleClass('motion');
+    if ($(parent_id).hasClass('motion')) {
+        self.force.start();
+        console.log('starting motion');
+    }
 };

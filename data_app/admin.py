@@ -4,31 +4,39 @@ from modeltranslation.admin import TranslationAdmin
 # Register your models here.
 
 
-class JobAdmin(TranslationAdmin):
+class TranslationAdminTimeMixin(TranslationAdmin):
+    readonly_fields = ('created_at', 'updated_at')
+
+
+class ModelAdminTimeMixin(admin.ModelAdmin):
+    readonly_fields = ('created_at', 'updated_at')
+
+
+class JobAdmin(TranslationAdminTimeMixin):
     pass
 
 
-class CodeBookAdmin(admin.ModelAdmin):
+class CodeBookAdmin(ModelAdminTimeMixin):
     pass
 
 
-class QuestionAdmin(TranslationAdmin):
+class QuestionAdmin(TranslationAdminTimeMixin):
     pass
 
 
-class CodeAdmin(TranslationAdmin):
+class CodeAdmin(TranslationAdminTimeMixin):
     pass
 
 
-class VariableAdmin(admin.ModelAdmin):
+class VariableAdmin(ModelAdminTimeMixin):
     pass
 
 
-class VerbatimAdmin(TranslationAdmin):
+class VerbatimAdmin(TranslationAdminTimeMixin):
     pass
 
 
-class UploadFileAdmin(admin.ModelAdmin):
+class UploadFileAdmin(ModelAdminTimeMixin):
     pass
 
 

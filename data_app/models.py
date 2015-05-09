@@ -4,13 +4,14 @@ from mptt.models import MPTTModel, TreeForeignKey
 import pandas as pd
 import os
 import re
+import helpers.models as helpers
 
 # Create your models here.
 
 cb_regex = '^cb_.*$'
 
 
-class Job(MPTTModel):
+class Job(MPTTModel, helpers.TimeMixin):
     name = models.CharField(max_length=255)
     number = models.IntegerField()
     parent = TreeForeignKey('self', null=True, blank=True, related_name='children_jobs')
@@ -19,7 +20,7 @@ class Job(MPTTModel):
         return '{}_{}'.format(self.number, self.name)
 
 
-class Question(MPTTModel):
+class Question(MPTTModel, helpers.TimeMixin):
     name = models.CharField(max_length=255, blank=True)
     text = models.TextField(blank=True)
     title = models.CharField(max_length=255, blank=True)
@@ -31,7 +32,7 @@ class Question(MPTTModel):
         return '{}({})'.format(self.title, self.kind)
 
 
-class CodeBook(models.Model):
+class CodeBook(helpers.TimeMixin):
     name = models.CharField(max_length=255)
     job = models.ForeignKey('Job')
 
@@ -39,7 +40,7 @@ class CodeBook(models.Model):
         return '{}'.format(self.name)
 
 
-class Code(MPTTModel):
+class Code(MPTTModel, helpers.TimeMixin):
     ''' codes, nets and books in one model
     '''
     text = models.TextField(blank=True, null=True)
@@ -54,7 +55,7 @@ class Code(MPTTModel):
         return '{}'.format(self.title)
 
 
-class Verbatim(MPTTModel):
+class Verbatim(MPTTModel, helpers.TimeMixin):
     question = models.ForeignKey('Question', blank=True, null=True)
     variable = models.ForeignKey('Variable', blank=True, null=True)
     verbatim = models.TextField()
@@ -65,7 +66,7 @@ class Verbatim(MPTTModel):
         return '{}'.format(self.verbatim)
 
 
-class Variable(models.Model):
+class Variable(helpers.TimeMixin):
     uid = models.IntegerField()
     sex = models.IntegerField(blank=True, null=True)
     age_bands = models.IntegerField(blank=True, null=True)
@@ -83,7 +84,13 @@ class Variable(models.Model):
                                                  self.main_cell_text)
 
 
-class UploadFile(models.Model):
+class UploadFile(helpers.TimeMixin):
+    '''
+    Upload and process template file.
+
+    '''
+    # TODO: Comment and split to smaller function
+    # TODO: improve performace, bulk DB write
     sheet = models.FileField()
 
     def __str__(self):

@@ -7,19 +7,19 @@ from rest_framework import serializers
 class JobSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Job
-        fields = ('name', 'number', 'id')
+        fields = ('name', 'number', 'id', 'url')
 
 
 class QuestionSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Question
-        fields = ('name', 'text', 'title', 'kind', 'parent', 'code_book', 'id')
+        fields = ('name', 'text', 'title', 'kind', 'parent', 'code_book', 'id', 'url')
 
 
 class CodeBookSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = CodeBook
-        fields = ('name', 'job', 'id')
+        fields = ('name', 'job', 'id', 'url')
 
 
 class VariableSerializer(serializers.HyperlinkedModelSerializer):
