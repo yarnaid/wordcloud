@@ -16,7 +16,7 @@ class JobViewSet(viewsets.ModelViewSet):
 class QuestionViewSet(viewsets.ModelViewSet):
     queryset = models.Question.objects.all()
     serializer_class = serializers.QuestionSerializer
-    filter_fields = ('id', 'name', 'code_book')
+    filter_fields = ('id', 'name', 'code_book', 'parent')
 
 
 class CodeBookViewSet(viewsets.ModelViewSet):
@@ -28,7 +28,7 @@ class CodeBookViewSet(viewsets.ModelViewSet):
 class CodeViewSet(viewsets.ModelViewSet):
     queryset = models.Code.objects.all()
     serializer_class = serializers.CodeSerializer
-    filter_fields = ('overcode', 'code_book')
+    filter_fields = ('overcode', 'code_book', 'id', 'job')
 
 
 class VerbatimViewSet(viewsets.ModelViewSet):

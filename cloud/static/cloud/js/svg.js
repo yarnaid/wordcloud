@@ -23,15 +23,17 @@ $(function() {
         } else {
             console.log(err);
         }
-    };
+    }
 
-    var path = window.location.href
+    var path = window.location.href;
     var start = function() {
         var overcodes = {},
             codes = [],
             verbatims = {};
-        var base_url = '/data/codes/?format=json&job=25&code_book=73'
+        var base_url = '/data/codes/?format=json&job=25&code_book=73';
         var clusters_by_id = {};
+        // var question = rest.get_last_question();
+        // var question_codes = question.code_book.childern_codes;
         $.ajax({
             url: base_url + '&overcode=True',
             success: function(_overcodes) {
@@ -61,10 +63,11 @@ $(function() {
                 _.map(tmp, function(value, key, list) {
                     if (value.text.length > 0) {
 
-                        var cluster_id = value.parent.url.split('/').reverse()[1]
+                        var cluster_id = value.parent.id;
                         codes.push({
                             cluster: clusters_by_id[cluster_id].cluster,
                             code: value.code,
+                            code_id: value.id,
                             title: value.title,
                             question: value.text,
                             verbatims: value.children_verbatims,
@@ -73,7 +76,7 @@ $(function() {
                             repondants: -0.1,
                             id: value.id
                         });
-                        clusters_by_id[cluster_id].effecif += value.children_verbatims.length
+                        clusters_by_id[cluster_id].effecif += value.children_verbatims.length;
                     }
                 });
 
