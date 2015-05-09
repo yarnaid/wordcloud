@@ -79,15 +79,31 @@ var show_verbatims = function(d) {
         return;
     var rest = new Rest();
     var verbatims = rest.get_verbatims(d.code_id);
+    verbatims = verbatims.filter(function(v) {return parseInt(v.variable.uid) >= 0;});
+    verbatims.forEach(function(v) {
+        v.uid = v.variable.uid;
+        // 'sex', 'age_bands', 'reg_quota',
+                  // 'csp_quota', 'main_cell_text'
+        v.sex = v.variable.sex;
+        v.age = v.variable.age_bands;
+        v.region = v.variable.reg_quota;
+        v.csp = v.variable.csp_quota;
+        v.main_cell_text = v.variable.main_cell_text;
+    });
 
     bootbox.dialog({
         backdrop: false,
-        message: '<table id="table-methods-table" data-search="true" data-show-refresh="true" data-show-toggle="true" data-show-export="true" data-pagination="true" data-show-columns="true" data-toggle="table" data-height="299">' +
+        message: '<table id="table-methods-table" data-search="true" data-show-refresh="true" data-show-toggle="true" data-show-export="true" data-pagination="true" data-show-columns="true" data-toggle="table">' +
             '<thead>' +
             '<tr>' +
             '<th data-field="state" data-checkbox="true"></th>' +
-            '<th data-field="id">Responder ID</th>' +
+            '<th data-field="uid">Responder ID</th>' +
             '<th data-field="verbatim">Item Answer</th>' +
+            '<th data-field="sex">Item Sex</th>' +
+            '<th data-field="age">Item Age</th>' +
+            '<th data-field="region">Item Region</th>' +
+            '<th data-field="csp">Item CSP</th>' +
+            '<th data-field="main_cell_text">Item Mian Cell Text</th>' +
             '</tr>' +
             '</thead>' +
             '</table>',
