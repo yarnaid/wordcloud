@@ -131,31 +131,31 @@ var show_verbatims = function(d) {
 var tooltip_html = function(d) {
     var self = this;
     var code_html = '<tr>' +
-        '<td><strong>Code number:</strong></td>' +
+        '<td><i>Code number:</i></td>' +
         '<td>' + d.code + '</td>' +
         '</tr>';
     var code = d.code ? code_html : '';
-    var res = '<table class="table table-striped table-hover table-condensed">' +
-        '<caption class="text-center"><h5><strong>' + d.title + '</strong></h5></caption>' +
+    var res = '<div id="tooltip-border"><table class="table table-striped table-hover table-condensed">' +
+        '<caption class="text-center">' + d.title + '</caption>' +
         '<tbody>' +
         '<tr>' +
-        '<td><strong>Effectif:</strong></td>' +
+        '<td><i>Effectif:</i></td>' +
         '<td>' + d.radius + '</td>' +
         '</tr>' +
         '<tr>' +
-        '<td><strong>Code Title:</strong></td>' +
+        '<td><i>Code Title:</i></td>' +
         '<td>' + d.question + '</td>' +
         '</tr>' +
         code +
         '<tr>' +
-        '<td><strong>Repondents:</strong></td>' +
+        '<td><i>Repondents:</i></td>' +
         '<td>' + self.percentage(d.repondants) + '</td>' +
         '</tr>' +
         '<tr>' +
-        '<td><strong>Total:</strong></td>' +
+        '<td><i>Total:</i></td>' +
         '<td>' + self.percentage(d.total) + '</td>' +
         '</tr>' +
         '</tbody>' +
-        '</table>';
+        '</table></div>';
     return res;
 };

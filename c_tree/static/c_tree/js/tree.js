@@ -188,7 +188,7 @@ Tree.prototype.update = function(source) {
         .on("mouseover", function(d) {
             self.tooltip_elem.transition()
                 .duration(self.duration)
-                .style("opacity", .95);
+                .style("opacity", 1);
             self.tooltip_elem.html(self.tooltip_html(d))
                 .style("left", (d3.event.pageX) + "px")
                 .style("top", (d3.event.pageY - 28) + "px");

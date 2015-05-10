@@ -6,21 +6,22 @@ var Cluster = function(_parent_id, _data, _eventHandler, _fps) {
     this.data = _data;
     this.event_handler = _eventHandler;
     this.fps = _fps || 40;
-    this.gravity = 0.05;
+    this.gravity = 0.1;
     this.friction = 0.2;
-    this.link_strength = 3;
+    this.link_strength = 2;
     $(this.parent_id).addClass('motion');
 
     this.padding = -5; // separation between same-color nodes
-    this.clusterPadding = 0; // separation between different-color nodes
+    this.clusterPadding = 2; // separation between different-color nodes
     this.maxRadius = 500;
+    this.codes_overlap = 5;
     this.margin = {
         top: 10,
         right: 40,
         bottom: 200,
         left: 10
     };
-    this.raduis_scale = d3.scale.linear().range([10, 50]).domain([1, 300]);
+    this.raduis_scale = d3.scale.linear().range([10, 40]).domain([1, 300]);
 
 
     this.min_radius = 4.5;
@@ -42,7 +43,7 @@ var Cluster = function(_parent_id, _data, _eventHandler, _fps) {
         .friction(this.friction)
         .linkStrength(this.link_strength)
         .linkDistance(function(link) {
-            return self.radius(link.source) + self.radius(link.target);
+            return self.radius(link.source) + self.radius(link.target) - self.codes_overlap;
         })
         .charge(function(node) {
             return -30 * self.radius(node);
@@ -67,16 +68,16 @@ Cluster.prototype.init = function() {
     this.svg = d3.select(this.parent_id).append('svg')
         .attr('width', this.width)
         .attr('height', this.height)
-        .style('background', '#DFF2FF')
         // .attr('pointer-events', 'all')
         .append('svg:g')
         .call(self.zoom.on('zoom', zoom))
         .append('svg:g');
 
-    // this.svg.append('rect') // do i need it?
-    //     .attr('width', this.width)
-    //     .attr('height', this.height)
-    //     .style('fill', 'none');
+    this.svg.append('rect') // scaling rectangle
+        .attr('width', this.width)
+        .attr('height', this.height)
+        .attr('transform', 'translate(' + this.width*0.1 + ',' + this.height*0.1 + ') scale(0.8)')
+        .style('fill', 'none');
 
     // update data
     this.wrangle();
@@ -108,12 +109,15 @@ Cluster.prototype.init = function() {
         .data(this.nodes)
         .enter()
         .append('g')
-        .attr('class', 'node')
+        .attr('class', function(d) {
+            var c = d.overcode ? 'overcode' : 'code';
+            return 'node ' + c;
+        })
         .call(this.force.drag)
         .on("mouseover", function(d) {
             self.tooltip_elem.transition()
                 .duration(self.duration)
-                .style("opacity", .95);
+                .style("opacity", 1);
             self.tooltip_elem.html(self.tooltip_html(d))
                 .style("left", (d3.event.pageX) + "px")
                 .style("top", (d3.event.pageY - 28) + "px");
@@ -256,9 +260,11 @@ Cluster.prototype.init = function() {
         .attr('y', function(d) {
             return -d.radius * 0.7;
         })
+        .attr('id', 'two')
         .attr('fill', 'none');
 
     text_area.append('text')
+        .attr('id', 'one')
         .attr('y', function(d) {
             return -(d.radius * 0.7) / 2;
         })
@@ -273,7 +279,6 @@ Cluster.prototype.init = function() {
         .style('font-size', function(d) {
             return Math.max(3, Math.min(2 * d.radius, (2 * d.radius - 8) / this.getComputedTextLength() * 12)) + "px";
         })
-        .style('fill', 'black')
         .style('text-anchor', 'middle')
         .call(wrap);
 

@@ -50,3 +50,44 @@ html, body {
   /*background: orange;*/
     background: #f5f5f5;
 }
+
+div.tooltip {
+  position: absolute;
+  padding: 5px;
+  font-family: 'Open Sans', sans-serif;
+  font: 14px;
+  background: white;
+  border-radius: 3px;
+  pointer-events: none;
+  opacity: 1;
+}
+
+table > caption {
+  color: #358ACD;
+  font-weight: bold;
+}
+
+#tooltip-border {
+  border-radius: 3px;
+  outline: 1.5px solid #358ACD;
+}
+
+.table-striped>tbody>tr:nth-child(odd)>td,
+.table-striped>tbody>tr:nth-child(odd)>th {
+   background-color: #E8F5FF;
+}
+
+.tooltip > div > .table tr>td:nth-child(1) {
+   text-align: right;
+}
+.tooltip > div > .table tr>td:nth-child(2) {
+   text-align: left;
+   font-weight: bold;
+}
+
+.tooltip > div > .table th, .table td {
+     border-top: none !important;
+}
+.tooltip > div > .table {
+  margin: 0px;
+}
