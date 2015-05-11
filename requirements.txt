@@ -17,8 +17,8 @@ Pillow
 django-filebrowser
 django-admin-tools
 django-grappelli>=2.6
-# django-livereload
-# livereload
+django-livereload
+livereload
 -e git://github.com/ojii/django-sekizai.git#egg=sekizai
 django-jquery
 django-bootstrap3
