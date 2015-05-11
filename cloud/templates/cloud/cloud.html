@@ -24,9 +24,11 @@
     <script type="text/javascript" src="{% static 'cloud/js/svg.js' %}"></script>
 
     {# COMMENTS #}
+    {% if settings.DEBUG %}
     <div>
         {% disqus_show_comments %}
     </div>
+    {% endif %}
 {% endblock %}
 
 

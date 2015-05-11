@@ -16,7 +16,19 @@ class JobViewSet(viewsets.ModelViewSet):
 class QuestionViewSet(viewsets.ModelViewSet):
     queryset = models.Question.objects.all()
     serializer_class = serializers.QuestionSerializer
-    filter_fields = ('id', 'name', 'code_book', 'parent')
+    filter_fields = ('id', 'name', 'code_book', 'parent', 'kind')
+
+
+class ShortQuestionViewSet(viewsets.ModelViewSet):
+    queryset = models.Question.objects.exclude(kind='Variable')
+    serializer_class = serializers.ShortQuestionSerializer
+    filter_fields = ('id', 'parent', 'kind', 'name')
+
+
+class VariableCodesViewSet(viewsets.ModelViewSet):
+    queryset = models.Question.objects.filter(kind='Variable')
+    serializer_class = serializers.VariableCodesSerializer
+    filter_fields = ('id', 'parent', 'name')
 
 
 class CodeBookViewSet(viewsets.ModelViewSet):
@@ -41,3 +53,9 @@ class VariableViewSet(viewsets.ModelViewSet):
     queryset = models.Variable.objects.all()
     serializer_class = serializers.VariableSerializer
     filter_fields = ('id', 'uid')
+
+
+class VisDataViewSet(viewsets.ModelViewSet):
+    queryset = models.Job.objects.all()
+    serializer_class = serializers.VisDataSerializer
+    filter_fields = ('id', 'children_questions')

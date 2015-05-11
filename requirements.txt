@@ -1,3 +1,6 @@
+werkzeug
+django-bower
+django-extensions
 django-markup
 django-disqus
 xlrd

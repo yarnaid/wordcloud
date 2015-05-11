@@ -1,19 +1,24 @@
 {% extends 'wordcloud/base.html' %}
-{% load sekizai_tags staticfiles dixit_downloader disqus_tags %}
+{% load sekizai_tags staticfiles dixit_downloader disqus_tags data_filter_tags i18n %}
 
 {% block page_header %}
-    <h2>Tree View</h2>
+    <h2>{% trans "Tree View" %}</h2>
 {% endblock %}
+
+{% block menu_body %}
+    {% data_filter %}
+{% endblock menu_body %}
 
 {% block content %}
     <div id="svg"></div>
         <div class="col-md-6 pull-right">
     {% downloader %}
     </div>
+        <script type="text/javascript" src="{% static 'c_tree/js/svg.js' %}"></script>
 
     {# COMMENTS #}
     <div>
-        {% disqus_show_comments %}
+        {# {% disqus_show_comments %} #}
     </div>
 {% endblock %}
 
@@ -32,7 +37,6 @@
         <script type="text/javascript" src="{% static 'js/d3.v3.min.js' %}"></script>
         <script type="text/javascript" src="{% static 'js/underscore.js' %}"></script>
         <script type="text/javascript" src="{% static 'c_tree/js/tree.js' %}"></script>
-        <script type="text/javascript" src="{% static 'c_tree/js/svg.js' %}"></script>
         <script type="text/javascript" src="{% static 'js/bootstrap-table.min.js' %}"></script>
         <script type="text/javascript" src="{% static 'js/bootbox.min.js' %}"></script>
         <script type="text/javascript" src="{% static 'js/tableExport.js' %}"></script>

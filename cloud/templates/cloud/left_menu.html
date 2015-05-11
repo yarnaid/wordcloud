@@ -1,5 +1,4 @@
-{% load i18n sekizai_tags staticfiles %}
-
+{% load i18n sekizai_tags staticfiles data_filter_tags %}
 <div class="" style="margin:1em;">
     <button class="btn btn-default center-block" id="toggle_motion">Toggle motion</button>
 </div>
@@ -43,25 +42,10 @@
             <h3 class="panel-title text-center">Question</h3>
         </a>
     </div>
-    <div id="question-controls" class="panel-body collapse">
-        <form role="form">
-            <div class="radio">
-                <label>
-                    <input type="radio" name="optradio" checked="">Likes</label>
-                </div>
-                <div class="radio">
-                </div>
-                <div class="radio disabled">
-                    <label style="color:grey;">
-                        <input type="radio" name="optradio" disabled>Dislikes</label>
-                    </div>
-                </form>
-            </div>
-        </div>
-
-        {% block js %}
-        {% addtoblock 'js' %}
-        <script type="text/javascript" src="{% static 'cloud/js/menu.js' %}"></script>
-        {% endaddtoblock %}
-        {% endblock %}
-
+    <div id="question-controls" class="panel-body">
+    {% data_filter %}
+    </div>
+</div>
+{% block js %} {% addtoblock 'js' %}
+<script type="text/javascript" src="{% static 'cloud/js/menu.js' %}"></script>
+{% endaddtoblock %} {% endblock %}

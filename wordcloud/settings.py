@@ -27,7 +27,7 @@ SECRET_KEY = 't@dpxuj8i5&uh+&v#(z7+&x@$g#-^7%tk-$@ker9rc8_t#z#ph'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-DEBUG_PANEL = not False
+DEBUG_PANEL = False
 
 TEMPLATE_DEBUG = DEBUG
 
@@ -53,7 +53,7 @@ INSTALLED_APPS = (
     'django.contrib.sites',
     'reversion',
     'rest_framework',
-    'livereload',
+    # 'livereload',
     'sekizai',
     'wordcloud',
     'jquery',
@@ -70,6 +70,8 @@ INSTALLED_APPS = (
     'color_widget',
     'django_markup',
     'disqus',
+    'django_extensions',
+    'data_filter',
 )
 
 
@@ -158,6 +160,13 @@ FILEBROWSER_STRICT_PIL = True
 # Static asset configuration
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'wordcloud/../static'),
+)
+
+STATICFILES_FINDERS = (
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+    # 'djangobower.finders.BowerFinder',
+    # 'compressor.finders.CompressorFinder',
 )
 
 # Parse database configuration from $DATABASE_URL

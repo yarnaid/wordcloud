@@ -58,6 +58,15 @@ class CodeBookIdSerializer(serializers.HyperlinkedModelSerializer):
         fields = ('name', 'id', )
 
 
+class ShortCodeSerializer(serializers.HyperlinkedModelSerializer):
+
+    class Meta:
+        model = Code
+        depth = 1
+        fields = ('text', 'title', 'code', 'id', )
+        filter_fields = ('overcode', )
+
+
 class CodeSerializer(serializers.HyperlinkedModelSerializer):
     children_verbatims = VerbatimSerialier(many=True)
     job = JobSerializer()
@@ -86,6 +95,15 @@ class CodeBookSerializer(serializers.HyperlinkedModelSerializer):
         fields = ('name', 'job', 'id', 'children_codes')
 
 
+class CodesSerializer(serializers.HyperlinkedModelSerializer):
+    children_codes = ShortCodeSerializer(many=True)
+
+    class Meta:
+        model = CodeBook
+        depth = 1
+        fields = ('id', 'children_codes')
+
+
 class QuestionSerializer(serializers.HyperlinkedModelSerializer):
     parent = JobSerializer()
     code_book = CodeBookSerializer()
@@ -97,3 +115,32 @@ class QuestionSerializer(serializers.HyperlinkedModelSerializer):
             'name', 'text', 'title', 'kind', 'parent', 'code_book', 'id',
             'url')
         filter_fields = ('parent', )
+
+
+class VariableCodesSerializer(serializers.HyperlinkedModelSerializer):
+    code_book = CodesSerializer()
+
+    class Meta:
+        model = Question
+        depth = 1
+        fields = ('name', 'text', 'title', 'id', 'code_book')
+        filter_fields = ('parent', )
+
+
+class ShortQuestionSerializer(serializers.HyperlinkedModelSerializer):
+    code_book = CodeBookIdSerializer()
+
+    class Meta:
+        model = Question
+        depth = 1
+        fields = ('name', 'text', 'title', 'kind', 'id', 'code_book')
+
+
+class VisDataSerializer(serializers.HyperlinkedModelSerializer):
+    children_questions = QuestionSerializer(many=True)
+
+    class Meta:
+        model = Question
+        depth = 1
+        fields = ('name', 'text', 'title', 'id', 'children_questions', )
+
