@@ -121,7 +121,6 @@ Cluster.prototype.init = function() {
             self.tooltip_elem.html(self.tooltip_html(d))
                 .style("left", (d3.event.pageX) + "px")
                 .style("top", (d3.event.pageY - 28) + "px");
-            // .style("cursor", function () {return !d.overcode ? "pointer" : "default";});
         })
         .on("mouseout", function(d) {
             self.tooltip_elem.transition()
@@ -213,6 +212,7 @@ Cluster.prototype.init = function() {
         .attr('class', 'link');
 
     this.node.append('circle')
+        .attr('id', 'one')
         .attr('class', function(d) {
             var c = d.overcode ? 'overcode' : 'code';
             return 'node ' + c;
@@ -264,7 +264,7 @@ Cluster.prototype.init = function() {
         .attr('fill', 'none');
 
     text_area.append('text')
-        .attr('id', 'one')
+        // .attr('id', 'one')
         .attr('y', function(d) {
             return -(d.radius * 0.7) / 2;
         })

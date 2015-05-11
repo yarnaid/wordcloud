@@ -34,6 +34,8 @@ TEMPLATE_DEBUG = DEBUG
 ALLOWED_HOSTS = ['*']
 INTERNAL_IPS = ['*', '0.0.0.0', '127.0.0.1']
 
+SITE_ID = 1
+COMMENTS_XTD_CONFIRM_EMAIL = True
 
 # Application definition
 
@@ -42,18 +44,16 @@ INSTALLED_APPS = (
     'grappelli.dashboard',
     'grappelli',
     'filebrowser',
-    # 'admin_tools',
-    # 'admin_tools.theming',
-    # 'admin_tools.menu',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
     'reversion',
     'rest_framework',
-    # 'livereload',
+    'livereload',
     'sekizai',
     'wordcloud',
     'jquery',
@@ -67,7 +67,9 @@ INSTALLED_APPS = (
     'crispy_forms',
     'django_tables2',
     'data_app',
-    'color_widget'
+    'color_widget',
+    'django_markup',
+    'disqus',
 )
 
 
@@ -190,3 +192,5 @@ REST_FRAMEWORK = {
 }
 # Default layout to use with "crispy_forms"
 CRISPY_TEMPLATE_PACK = 'bootstrap3'
+DISQUS_API_KEY = 'UMEIxG4BoKA5i2k29rjEjcAWepfR4YZItxSuNZtjI4ZOendtjOsCUcqeMz3nUL1c'
+DISQUS_WEBSITE_SHORTNAME = 'dixit'
