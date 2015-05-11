@@ -1,6 +1,7 @@
 {% extends 'wordcloud/base.html' %}
 {% load sekizai_tags staticfiles i18n dixit_downloader disqus_tags %}
-{% disqus_dev %}
+{# {% disqus_dev %} #}
+{% set_disqus_identifier 'cloud' %}
 
 
 {% block page_header %}
