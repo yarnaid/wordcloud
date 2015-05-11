@@ -1,0 +1,10 @@
+<div class="row">
+    <div class="col-md-6 col-xs-6 col-sm-6 text-right"><label for="sel-{{label}}">{{label}}:</label></div>
+    <div class="col-md-6 col-xs-6 col-sm-6 text-left">
+        <select id="sel-{{label}}">
+            {% for id in options %}
+                <option value="{{id}}">{{id}}</option>
+            {% endfor %}
+        </select>
+    </div>
+</div>

@@ -1,0 +1,83 @@
+{% load sekizai_tags static i18n %}
+
+<div class="container-fluid" id="sel-List">
+    {% include "data_filter/selector.html" with label="Job" options=job_numbers %}
+    {% include "data_filter/selector.html" with label="Question" options=question_names %}
+
+    <script type="text/javascript">
+        var get_filter_params = function() {
+            return {
+                job: $("#sel-Job").val(),
+                question: $("#sel-Question").val()
+            };
+        };
+        $(function() {
+            var rest = new Rest();
+
+            var update_questions = function(job_id) {
+                var questions = rest.get_short_questions(job_id);
+                var q_sel = $("#sel-Question");
+                q_sel.find("option").remove();
+                for (q in questions) {
+                    var quest = questions[q];
+                    q_sel.append("<option value=" + quest.name + ">" + quest.name + "</option>");
+                }
+            }
+            // RENDER VARIABLES
+            var update_variables = function(job_id) {
+                $("#sel-List").find(".menu_variable").remove();
+                var variables = rest.get_variable_codes(job_id);
+                var sel_template = $("#sel-Template");
+                for (var i=0; i < variables.length; ++i) {
+                    v = variables[i];
+                    var my_templ = sel_template.clone();
+                    my_templ.attr("id", "sel-" + v.text);
+                    my_templ.addClass("menu_variable");
+                    my_templ.toggleClass("hidden");
+                    var label = my_templ.find("label");
+                    var sel = my_templ.find("select");
+                    sel.attr("id", "sel-" + v.text);
+                    sel.append("<option value=-1>{% trans 'Any' %}</option>");
+                    for (var j=0; j < v.code_book.children_codes.length; ++j) {
+                        var code = v.code_book.children_codes[j];
+                        if (code.title.length > 0) {
+                            sel.append("<option value=" + code.id + ">" + code.title + "</option>");
+                        }
+                    }
+                    label.html(v.text + ":");
+                    my_templ.appendTo("#sel-List");
+                }
+            }
+            var update_menu = function() {
+                var job_id = $("#sel-Job").val();
+                update_questions(job_id);
+                update_variables(job_id);
+            }
+            update_menu();
+            $("#sel-Job").change(function(event) {
+                update_menu();
+            });
+
+        });
+</script>
+</div>
+
+<div class="hidden" id="sel-Template">
+    {% include "data_filter/selector.html" %}
+</div>
+
+
+
+{# MEDIA #}
+
+{% block js %}
+{% addtoblock 'js' %}
+<script type="text/javascript" src="{% static 'js/vis_helpers.js' %}"></script>
+{% endaddtoblock %}
+{% endblock %}
+
+{% block css %}
+{% addtoblock 'css' %}
+{% endaddtoblock %}
+{% endblock %}
+
