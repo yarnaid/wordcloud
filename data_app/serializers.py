@@ -32,14 +32,22 @@ class CodeIdSerializer(serializers.HyperlinkedModelSerializer):
         fields = ('text', 'id')
 
 
+class QuestionIdSerializer(serializers.HyperlinkedModelSerializer):
+
+    class Meta:
+        model = Question
+        fields = ('id', 'name')
+
+
 class VerbatimSerialier(serializers.HyperlinkedModelSerializer):
     parent = CodeIdSerializer()
     variable = VariableSerializer()
+    question = QuestionIdSerializer()
 
     class Meta:
         model = Verbatim
         depth = 1
-        fields = ('variable', 'verbatim', 'parent', 'id')
+        fields = ('variable', 'verbatim', 'parent', 'id', 'question')
 
 
 class VerbatimIdSerialier(serializers.HyperlinkedModelSerializer):

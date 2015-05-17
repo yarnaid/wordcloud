@@ -221,6 +221,7 @@ var get_vis_data = function(job_id, question_name) {
     var question = rest.get_short_questions(job_id, "&name="+question_name)[0];
     var code_book_id = question.code_book.id;
     var base_url = '/data/codes/?format=json&job=' + job_id +'&code_book=' + code_book_id;
+    console.log(base_url);
     var clusters_by_id = {};
         $.ajax({
             async: false,
@@ -282,6 +283,12 @@ var get_vis_data = function(job_id, question_name) {
 var make_svg = function(Vis, toggle_motion, svg_parent_id_) {
     var data = {};
     var rest = new Rest();
+    var event_handler = get_filter_event_handler();
+
+    $(event_handler).on('filter_menu_update', function() {
+        $('#svg svg').remove();
+        start();
+    });
 
     function init() {
         var svg_parent_id = svg_parent_id_ || '#svg';
@@ -311,6 +318,7 @@ var make_svg = function(Vis, toggle_motion, svg_parent_id_) {
     var start = function() {
         var params = get_filter_params();
         var vis_data = get_vis_data(params.job, params.question);
+        console.log(vis_data);
         data_loaded(null, vis_data);
     };
     start();
