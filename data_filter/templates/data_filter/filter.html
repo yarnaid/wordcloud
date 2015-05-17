@@ -60,7 +60,7 @@
                 for (var j = 0; j < v.code_book.children_codes.length; ++j) {
                     var code = v.code_book.children_codes[j];
                     if (code.title.length > 0) {
-                        sel.append("<option value=" + code.id + ">" + code.title + "</option>");
+                        sel.append("<option value=" + code.code + ">" + code.title + "</option>");
                     }
                 }
                 label.html(v.text + ":");

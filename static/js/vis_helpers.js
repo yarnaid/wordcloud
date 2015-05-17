@@ -221,7 +221,6 @@ var get_vis_data = function(job_id, question_name) {
     var question = rest.get_short_questions(job_id, "&name="+question_name)[0];
     var code_book_id = question.code_book.id;
     var base_url = '/data/codes/?format=json&job=' + job_id +'&code_book=' + code_book_id;
-    console.log(base_url);
     var clusters_by_id = {};
         $.ajax({
             async: false,
@@ -250,22 +249,43 @@ var get_vis_data = function(job_id, question_name) {
             url: base_url + '&overcode=False',
             success: function(_codes) {
                 var tmp = _codes;
+                var filter_params = get_filter_params();
+                console.log(filter_params);
 
                 _.map(tmp, function(value, key, list) {
                     if (value.text.length > 0) {
                         var cluster_id = value.parent.id;
-                        codes.push({
-                            cluster: clusters_by_id[cluster_id].cluster,
-                            code: value.code,
-                            code_id: value.id,
-                            title: value.title,
-                            question: value.text,
-                            verbatims: value.children_verbatims,
-                            effecif: value.children_verbatims.length,
-                            total: -0.1,
-                            repondants: -0.1,
-                            id: value.id
+                        value.children_verbatims = value.children_verbatims.filter(function(verbatim) {
+                            var res, sel_val;
+                            var selectors = {
+                                Age: 'age_bands',
+                                Region: 'reg_quota',
+                                Csp: 'csp_quota',
+                                Sexe: 'sex'
+                            };
+                            for (var k in selectors) {
+                                sel_val = $('select#sel-'+k).val();
+                                res = (verbatim.variable['age_bands'] == sel_val);
+                                if (sel_val < 0) {
+                                    res = true;
+                                }
+                            }
+                            return res;
                         });
+                        if (value.children_verbatims.length > 0) {
+                            codes.push({
+                                cluster: clusters_by_id[cluster_id].cluster,
+                                code: value.code,
+                                code_id: value.id,
+                                title: value.title,
+                                question: value.text,
+                                verbatims: value.children_verbatims,
+                                effecif: value.children_verbatims.length,
+                                total: -0.1,
+                                repondants: -0.1,
+                                id: value.id
+                            });
+                        }
                         clusters_by_id[cluster_id].effecif += value.children_verbatims.length;
                     }
                 });

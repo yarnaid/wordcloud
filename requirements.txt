@@ -1,3 +1,4 @@
+djangorestframework-filters
 werkzeug
 django-bower
 django-extensions
