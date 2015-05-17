@@ -228,7 +228,7 @@ var get_vis_data = function(job_id, question_name) {
             success: function(_overcodes) {
                 var tmp = _overcodes;
                 _.map(tmp, function(value, key, list) {
-                    if (value) {
+                    if (value && value.text.length > 0) {
                         overcodes[value.text] = {
                             effecif: 0,
                             repondants: -0.1,
@@ -250,13 +250,14 @@ var get_vis_data = function(job_id, question_name) {
             success: function(_codes) {
                 var tmp = _codes;
                 var filter_params = get_filter_params();
-                console.log(filter_params);
+                // console.log(filter_params);
 
                 _.map(tmp, function(value, key, list) {
                     if (value.text.length > 0) {
                         var cluster_id = value.parent.id;
                         value.children_verbatims = value.children_verbatims.filter(function(verbatim) {
-                            var res, sel_val;
+                            var sel_val;
+                            var res = true;
                             var selectors = {
                                 Age: 'age_bands',
                                 Region: 'reg_quota',
@@ -265,9 +266,9 @@ var get_vis_data = function(job_id, question_name) {
                             };
                             for (var k in selectors) {
                                 sel_val = $('select#sel-'+k).val();
-                                res = (verbatim.variable['age_bands'] == sel_val);
-                                if (sel_val < 0) {
-                                    res = true;
+                                if (sel_val > -1 && verbatim.variable[selectors[k]] == sel_val) {
+                                    console.log(sel_val, k, verbatim.variable, selectors[k]);
+                                    res = false;
                                 }
                             }
                             return res;
@@ -338,7 +339,7 @@ var make_svg = function(Vis, toggle_motion, svg_parent_id_) {
     var start = function() {
         var params = get_filter_params();
         var vis_data = get_vis_data(params.job, params.question);
-        console.log(vis_data);
+        // console.log(vis_data);
         data_loaded(null, vis_data);
     };
     start();
