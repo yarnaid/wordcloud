@@ -100,7 +100,6 @@ class UploadFile(helpers.TimeMixin):
              update_fields=None):
         super(UploadFile, self).save(force_insert=force_insert, force_update=force_update,
                                      using=using, update_fields=update_fields)
-        errors = False
 
         file_name = self.sheet.path
         f = pd.ExcelFile(file_name)
@@ -117,6 +116,7 @@ class UploadFile(helpers.TimeMixin):
 
         question_df = f.parse('question')
         question_df = question_df.where(pd.notnull(question_df), None)
+        q_to_create = set()
         for question in question_df.iterrows():
             qq = question[1]
             cb = CodeBook.objects.get_or_create(job=job[0], name=qq.code_book)
@@ -135,11 +135,14 @@ class UploadFile(helpers.TimeMixin):
             for key in qq.keys():
                 if key.count('text_') or key.count('title_'):
                     setattr(q. key, qq[key])
+            q_to_create.add(q)
+        # Question.objects.bulk_create(q_to_create)
+        for q in q_to_create:
             q.save()
 
         variable_df = f.parse('variables')
         variable_df = variable_df.where(pd.notnull(variable_df), None)
-        variable_records = list()
+        variable_records = set()
         for vverbatim in variable_df.iterrows():
             verbat = vverbatim[1]
             v = Variable.objects.get_or_create(
@@ -151,7 +154,10 @@ class UploadFile(helpers.TimeMixin):
                 main_cell_text=verbat[5],
                 job=job[0]
             )
-            variable_records.append(v)
+            variable_records.add(v[0])
+        # Variable.objects.bulk_create(variable_records)
+        for v in variable_records:
+            v.save()
 
         for key, cb in code_books.iteritems():
             try:
@@ -173,6 +179,7 @@ class UploadFile(helpers.TimeMixin):
             #     print r.NET
             ocb = cb[pd.isnull(cb.Codes)]
             cb = cb[pd.notnull(cb.Codes)]
+            oc_to_save = list()
             for oocode in ocb.iterrows():
                 code = oocode[1]
                 oc = Code.objects.get_or_create(
@@ -189,7 +196,10 @@ class UploadFile(helpers.TimeMixin):
                 for ckey in code.keys():
                     if ckey.count('text_') > 0 or ckey.count('title_') > 0:
                         setattr(oc, ckey, code[ckey])
-                oc.save()
+                # oc.save()
+                oc_to_save.append(os)
+            Code.objects.bulk_create(oc_to_save)
+            codes_to_save = list()
             for ccode in cb.iterrows():
                 code = ccode[1]
                 parent = Code.objects.get_or_create(code=code.NET, job=job[0], overcode=True, code_book=code_book, parent=None)
@@ -210,7 +220,9 @@ class UploadFile(helpers.TimeMixin):
                 for ckey in code.keys():
                     if ckey.count('text_') > 0 or ckey.count('title_') > 0:
                         setattr(c, ckey, code[ckey])
-                c.save()
+                # c.save()
+                codes_to_save.append(c)
+            Code.objects.bulk_create(codes_to_save)
 
         verbatim_df = f.parse('verbatims')
         verbatim_df = verbatim_df.where(pd.notnull(verbatim_df), None)
@@ -227,6 +239,8 @@ class UploadFile(helpers.TimeMixin):
                     var_keys.append(vk)
             vdf = verbatim_df[var_keys]
             question = Question.objects.get(parent=job[0], name=q_n)
+            var_to_save = list()
+            ver_to_save = list()
             for vverbatim in vdf.iterrows():
                 verbat = vverbatim[1]
                 if verbat[0] is not None:
@@ -234,7 +248,8 @@ class UploadFile(helpers.TimeMixin):
                 else:
                     var = Variable.objects.get_or_create(uid=-1, job=job[0])
                     if var[1]:
-                        var[0].save()
+                        # var[0].save()
+                        var_to_save.append(var[0])
                     var = var[0]
                 text = verbat[1]
                 if text is None:
@@ -262,4 +277,7 @@ class UploadFile(helpers.TimeMixin):
                             setattr(v, 'verbatim_' + lang, verbat[ckey])
 
                     if v[1]:
-                        v[0].save()
+                        # v[0].save()
+                        ver_to_save.append(v[0])
+            Verbatim.objects.bulk_create(ver_to_save)
+            Variable.objects.bulk_create(var_to_save)
