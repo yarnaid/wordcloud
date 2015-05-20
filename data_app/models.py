@@ -5,6 +5,9 @@ import pandas as pd
 import os
 import re
 import helpers.models as helpers
+from django.db import transaction
+from silk.profiling.profiler import silk_profile
+
 
 # Create your models here.
 
@@ -96,6 +99,8 @@ class UploadFile(helpers.TimeMixin):
     def __str__(self):
         return '{}'.format(os.path.basename(self.sheet.name))
 
+    # @transaction.atomic
+    @silk_profile(name='Save File')
     def save(self, force_insert=False, force_update=False, using=None,
              update_fields=None):
         super(UploadFile, self).save(force_insert=force_insert, force_update=force_update,
@@ -116,7 +121,11 @@ class UploadFile(helpers.TimeMixin):
 
         question_df = f.parse('question')
         question_df = question_df.where(pd.notnull(question_df), None)
-        q_to_create = set()
+        q_to_create = list()
+        try:
+            q_id = Question.objects.latest('id').id + 1
+        except:
+            q_id = 0
         for question in question_df.iterrows():
             qq = question[1]
             cb = CodeBook.objects.get_or_create(job=job[0], name=qq.code_book)
@@ -135,10 +144,11 @@ class UploadFile(helpers.TimeMixin):
             for key in qq.keys():
                 if key.count('text_') or key.count('title_'):
                     setattr(q. key, qq[key])
-            q_to_create.add(q)
-        # Question.objects.bulk_create(q_to_create)
-        for q in q_to_create:
-            q.save()
+            q_id += 1
+            q_to_create.append(q)
+        for i, qq in enumerate(q_to_create):
+            qq.id = i
+        Question.objects.bulk_create(q_to_create)
 
         variable_df = f.parse('variables')
         variable_df = variable_df.where(pd.notnull(variable_df), None)
@@ -155,9 +165,13 @@ class UploadFile(helpers.TimeMixin):
                 job=job[0]
             )
             variable_records.add(v[0])
-        # Variable.objects.bulk_create(variable_records)
-        for v in variable_records:
-            v.save()
+        try:
+            v_id = Variable.objects.latest('id').id + 1
+        except:
+            v_id = 0
+        for i, v in enumerate(variable_records):
+            v.id = i
+        Variable.objects.bulk_create(variable_records)
 
         for key, cb in code_books.iteritems():
             try:
@@ -169,14 +183,6 @@ class UploadFile(helpers.TimeMixin):
                 print key, job[0]
                 raise e
             cb = cb.where(pd.notnull(cb), None)
-            # for row in cb.iterrows():
-            #     r = row[1]
-            #     last_net = None
-            #     if r.NET is not None:
-            #         last_net = r.NET
-            #     else:
-            #         r.NET = last_net
-            #     print r.NET
             ocb = cb[pd.isnull(cb.Codes)]
             cb = cb[pd.notnull(cb.Codes)]
             oc_to_save = list()
@@ -197,8 +203,11 @@ class UploadFile(helpers.TimeMixin):
                     if ckey.count('text_') > 0 or ckey.count('title_') > 0:
                         setattr(oc, ckey, code[ckey])
                 # oc.save()
-                oc_to_save.append(os)
-            Code.objects.bulk_create(oc_to_save)
+                oc_to_save.append(oc)
+            with transaction.atomic():
+                for c in oc_to_save:
+                    c.save()
+            # Code.objects.bulk_create(oc_to_save)
             codes_to_save = list()
             for ccode in cb.iterrows():
                 code = ccode[1]
@@ -222,7 +231,10 @@ class UploadFile(helpers.TimeMixin):
                         setattr(c, ckey, code[ckey])
                 # c.save()
                 codes_to_save.append(c)
-            Code.objects.bulk_create(codes_to_save)
+            with transaction.atomic():
+                for c in codes_to_save:
+                    c.save()
+            # Code.objects.bulk_create(codes_to_save)
 
         verbatim_df = f.parse('verbatims')
         verbatim_df = verbatim_df.where(pd.notnull(verbatim_df), None)
@@ -238,13 +250,19 @@ class UploadFile(helpers.TimeMixin):
                 if vk.count(q_n) > 0:
                     var_keys.append(vk)
             vdf = verbatim_df[var_keys]
-            question = Question.objects.get(parent=job[0], name=q_n)
+            try:
+                question = Question.objects.get(parent=job[0], name=q_n)
+            except:
+                question = Question.objects.filter(parent=job[0], name=q_n)[0]  # FIX: DIRTY HACK
             var_to_save = list()
             ver_to_save = list()
             for vverbatim in vdf.iterrows():
                 verbat = vverbatim[1]
                 if verbat[0] is not None:
-                    var = Variable.objects.get(uid=verbat[0], job=job[0])
+                    try:
+                        var = Variable.objects.get(uid=verbat[0], job=job[0])
+                    except:
+                        var = Variable.objects.filter(uid=verbat[0], job=job[0])[0]  # FIX: DIRTY HACK
                 else:
                     var = Variable.objects.get_or_create(uid=-1, job=job[0])
                     if var[1]:
@@ -279,5 +297,7 @@ class UploadFile(helpers.TimeMixin):
                     if v[1]:
                         # v[0].save()
                         ver_to_save.append(v[0])
-            Verbatim.objects.bulk_create(ver_to_save)
-            Variable.objects.bulk_create(var_to_save)
+            # Verbatim.objects.bulk_create(ver_to_save)
+            # Variable.objects.bulk_create(var_to_save)
+            for x in ver_to_save + var_to_save:
+                x.save()

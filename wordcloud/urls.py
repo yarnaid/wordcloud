@@ -32,4 +32,7 @@ if settings.DEBUG and settings.DEBUG_PANEL:
 
     urlpatterns += patterns('',
                             url(r'^__debug__/', include(debug_toolbar.urls)),
+                            url(r'^silk/', include('silk.urls', namespace='silk'))
                             )
+
+# urlpatterns += patterns('', )

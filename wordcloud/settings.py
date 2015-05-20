@@ -40,6 +40,7 @@ COMMENTS_XTD_CONFIRM_EMAIL = True
 # Application definition
 
 INSTALLED_APPS = (
+    'silk',
     'modeltranslation',
     'grappelli.dashboard',
     'grappelli',
@@ -86,6 +87,7 @@ MIDDLEWARE_CLASSES = (
     # 'livereload.middleware.LiveReloadScript',
     'django.middleware.locale.LocaleMiddleware',
     'django.middleware.common.CommonMiddleware',
+    # 'silk.middleware.SilkyMiddleware',
 )
 
 if DEBUG_PANEL:
@@ -203,3 +205,4 @@ REST_FRAMEWORK = {
 CRISPY_TEMPLATE_PACK = 'bootstrap3'
 DISQUS_API_KEY = 'UMEIxG4BoKA5i2k29rjEjcAWepfR4YZItxSuNZtjI4ZOendtjOsCUcqeMz3nUL1c'
 DISQUS_WEBSITE_SHORTNAME = 'dixit'
+SILKY_PYTHON_PROFILER = True
