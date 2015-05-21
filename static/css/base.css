@@ -1,93 +1,136 @@
+/* line 4, scss/base.scss */
+div.tooltip {
+  position: absolute;
+  padding: 5px;
+  font-family: "Open Sans", sans-serif;
+  font: 14px;
+  background: white;
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
+  pointer-events: none;
+  opacity: 1;
+}
+
+/* line 15, scss/base.scss */
+.mm-menu {
+  background-color: white !important;
+}
+
+/* line 20, scss/base.scss */
 .footer div {
-    width: 100%;
-    padding-top: 1em;
-    padding-bottom: 2em;
-    background-color: #f5f5f5;
+  width: 100%;
+  padding-top: 1em;
+  padding-bottom: 2em;
 }
 
+/* line 27, scss/base.scss */
 .wrap {
-    height:auto !important;
-    height:100%;
-    min-height:100%;
-    position:relative;
+  height: auto !important;
+  height: 100%;
+  min-height: 100%;
+  position: relative;
 }
+
+/* line 34, scss/base.scss */
+.navbar .navbar-nav {
+  display: inline-block;
+  float: none;
+}
+
+/* line 39, scss/base.scss */
+.navbar .navbar-collapse {
+  text-align: center;
+}
+
+/* line 44, scss/base.scss */
+nav {
+  background-color: transparent !important;
+  border-color: white;
+  border: white !important;
+  background-image: none !important;
+  text-shadow: white;
+  padding: 0;
+  box-shadow: none !important;
+}
+
+/* line 55, scss/base.scss */
 .empty {
-    height:4em; /* равняется высоте футера */
+  height: 4em;
 }
 
+/* line 59, scss/base.scss */
 .footer hr {
-    max-width: 80%;
+  max-width: 80%;
 }
+
+/* line 62, scss/base.scss */
 #header {
-    padding-top: 4em;
+  padding-top: 4em;
 }
 
-body {
-    background: white;
-    font-family: 'Open Sans', sans-serif;
-}
-
+/* line 66, scss/base.scss */
 html, body {
+  background: white;
+  font-family: "Open Sans", sans-serif !important;
   height: 100%;
 }
 
+/* line 72, scss/base.scss */
 .page-wrap {
   min-height: 100%;
   /* equal to footer height */
   margin-bottom: -100px;
 }
 
+/* line 78, scss/base.scss */
 .page-wrap:after {
   content: "";
   display: block;
 }
 
+/* line 83, scss/base.scss */
 .site-footer, .page-wrap:after {
   height: 100px;
 }
 
+/* line 87, scss/base.scss */
 .site-footer {
-  /*background: orange;*/
-    background: #f5f5f5;
+  background: #AEA0BC;
+  color: #FBFAFB;
 }
 
-div.tooltip {
-  position: absolute;
-  padding: 5px;
-  font-family: 'Open Sans', sans-serif;
-  font: 14px;
-  background: white;
-  border-radius: 3px;
-  pointer-events: none;
-  opacity: 1;
-}
-
-table > caption {
+/* line 93, scss/base.scss */
+table caption {
   color: #358ACD;
   font-weight: bold;
 }
 
-#tooltip-border {
-  border-radius: 3px;
-  outline: 1.5px solid #358ACD;
+/* line 102, scss/base.scss */
+.table-striped tbody tr:nth-child(odd) td, .table-striped tbody tr:nth-child(odd) th {
+  background-color: #E8F5FF;
 }
 
-.table-striped>tbody>tr:nth-child(odd)>td,
-.table-striped>tbody>tr:nth-child(odd)>th {
-   background-color: #E8F5FF;
+/* line 109, scss/base.scss */
+.tooltip {
+  -moz-box-shadow: rgba(0, 0, 0, 0.4) 0 0 25px;
+  -webkit-box-shadow: rgba(0, 0, 0, 0.4) 0 0 25px;
+  box-shadow: rgba(0, 0, 0, 0.4) 0 0 25px;
 }
-
-.tooltip > div > .table tr>td:nth-child(1) {
-   text-align: right;
-}
-.tooltip > div > .table tr>td:nth-child(2) {
-   text-align: left;
-   font-weight: bold;
-}
-
-.tooltip > div > .table th, .table td {
-     border-top: none !important;
-}
-.tooltip > div > .table {
+/* line 112, scss/base.scss */
+.tooltip div .table {
   margin: 0px;
+}
+/* line 115, scss/base.scss */
+.tooltip div .table tr td:nth-child(1) {
+  text-align: right;
+}
+/* line 118, scss/base.scss */
+.tooltip div .table tr td:nth-child(2) {
+  text-align: left;
+  font-weight: bold;
+}
+/* line 123, scss/base.scss */
+.tooltip div .table th, .tooltip div .table td {
+  border-top: none !important;
 }

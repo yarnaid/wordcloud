@@ -1,0 +1,13 @@
+#tooltip-border {
+  border-radius: 3px;
+  outline: 1.5px solid #358ACD;
+}
+
+.table-striped>tbody>tr:nth-child(odd)>td,
+.table-striped>tbody>tr:nth-child(odd)>th {
+   background-color: #E8F5FF;
+}
+
+.tooltip > div > .table th, .table td {
+     border-top: none !important;
+}
