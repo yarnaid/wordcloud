@@ -1,15 +1,14 @@
 @import 'const';
 @import "compass/css3";
-
 div.tooltip {
-  position: absolute;
-  padding: 5px;
-  font-family: $font-family;
-  font: $font-size;
-  background: $background;
-  @include border-radius(3px);
-  pointer-events: none;
-  opacity: 1;
+    position: absolute;
+    padding: 5px;
+    font-family: $font-family;
+    font: $font-size;
+    background: $background;
+    @include border-radius(3px);
+    pointer-events: none;
+    opacity: 1;
 }
 
 .mm-menu {
@@ -40,10 +39,7 @@ div.tooltip {
     text-align: center;
 }
 
-
-nav
-{
-
+nav {
     background-color: transparent !important;
     border-color: white;
     border: white !important;
@@ -52,6 +48,7 @@ nav
     padding: 0;
     box-shadow: none !important;
 }
+
 .empty {
     height: 4em;
 }
@@ -59,29 +56,33 @@ nav
 .footer hr {
     max-width: 80%;
 }
+
 #header {
     padding-top: 4em;
 }
 
-html, body {
+html,
+body {
     background: $background;
     font-family: $font-family !important;
     height: 100%;
 }
 
 .page-wrap {
-  min-height: 100%;
-  /* equal to footer height */
-  margin-bottom: -100px;
+    min-height: 100%;
+    /* equal to footer height */
+
+    margin-bottom: -100px;
 }
 
 .page-wrap:after {
-  content: "";
-  display: block;
+    content: "";
+    display: block;
 }
 
-.site-footer, .page-wrap:after {
-  height: 100px;
+.site-footer,
+.page-wrap:after {
+    height: 100px;
 }
 
 .site-footer {
@@ -91,14 +92,14 @@ html, body {
 
 table {
     caption {
-      color: $blue;
-      font-weight: bold;
+        color: $blue;
+        font-weight: bold;
     }
 }
 
-.table-striped{
+.table-striped {
     tbody {
-        tr:nth-child(odd) {
+        tr: nth-child(odd) {
             td, th {
                 background-color: $light-blue;
             }
@@ -112,7 +113,7 @@ table {
         .table {
             margin: 0px;
             tr {
-                td:nth-child(1) {
+                td: nth-child(1) {
                     text-align: right;
                 }
                 td:nth-child(2) {
@@ -120,7 +121,8 @@ table {
                     font-weight: bold;
                 }
             }
-            th, td {
+            th,
+            td {
                 border-top: none !important;
             }
         }
