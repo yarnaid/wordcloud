@@ -1,40 +1,29 @@
-{% load staticfiles sekizai_tags i18n %}
+{% load staticfiles i18n %}
 <nav class="navbar navbar-default navbar-static-top">
-      <a class="navbar-brand" href="#left-nav"><span class="glyphicon glyphicon-menu-hamburger"></span></a>
-
+  <a class="navbar-brand" href="#left-nav"><span class="glyphicon glyphicon-menu-hamburger"></span></a>
   <div class="container text-center">
-    <!-- Brand and toggle get grouped for better mobile display -->
-
     <div class="navbar-header">
       <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-        <span class="sr-only">Toggle navigation</span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
+      <span class="sr-only">Toggle navigation</span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" rel="home" href="/">
-        <img style="max-width:100px; margin-top: -7px;"
-             class="img img-responsive" src="{% static 'img/logo.png' %}" alt=""/>
+      <a class="navbar-brand" rel="home" href="{% url 'home' %}">
+        <img style="max-width:100px; margin-top: -7px;" class="img img-responsive" src="{% static 'img/logo.png' %}" alt="" />
       </a>
     </div>
-
-    <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav">
-        <li>
-          <a href="/cloud">Cloud</a>
-        </li>
-        <li>
-          <a href="/wordle">WORDLE</a>
-        </li>
-        <li>
-          <a href="/tree">TREE</a>
-        </li>
-        <li>
-          <a href="/pricing_tool">Pricing Tool</a>
-        </li>
+        <li><a href="#">{% trans "Library" %}</a></li>
+        <li><a href="#">{% trans "Pricing and Timing" %}</a></li>
+        <li><a href="#">{% trans "Dashboard" %}</a></li>
+        <li><a href="#">{% trans "Settings" %}</a></li>
+        <li> <a href="{% url 'cloud' %}">Cloud</a> </li>
+        <li> <a href="{% url 'wordle' %}">WORDLE</a> </li>
+        <li> <a href="{% url 'tree' %}">TREE</a> </li>
+        <li> <a href="{% url 'pricing_tool' %}">Pricing Tool</a> </li>
       </ul>
-
       <ul class="nav navbar-nav navbar-right">
         {% if user.is_authenticated %}
           <li class="dropdown">
@@ -50,7 +39,21 @@
           <li><a href="{% url 'django.contrib.auth.views.login' %}?next={{ request.get_full_path }}">Log in</a></li>
         {% endif %}
       </ul>
-
-    </div><!-- /.navbar-collapse -->
-  </div><!-- /.container-fluid -->
+      <ul class="nav navbar-nav navbar-right">
+        {% if user.is_authenticated %}
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">User: {{ user.username }} <span class="caret"></span></a>
+            <ul class="dropdown-menu" role="menu">
+              {% if user.is_staff %}
+                <li><a href="{% url 'admin:index' %}">Admin Panel</a></li>
+              {% endif %}
+              <li><a href="{% url 'django.contrib.auth.views.logout' %}?next=/">Logout</a></li>
+            </ul>
+          </li>
+        {% else %}
+          <li><a href="{% url 'django.contrib.auth.views.login' %}?next={{ request.get_full_path }}">Log in</a></li>
+        {% endif %}
+      </ul>
+    </div>
+  </div>
 </nav>
