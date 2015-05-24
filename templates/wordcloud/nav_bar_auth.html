@@ -1,4 +1,6 @@
 {% load staticfiles i18n %}
+{% get_current_language as LANGUAGE_CODE %}
+{% get_available_languages as LANGUAGES %}
 <nav class="navbar navbar-default navbar-static-top">
   <a class="navbar-brand" href="#left-nav"><span class="glyphicon glyphicon-menu-hamburger"></span></a>
   <div class="container text-center">
@@ -40,20 +42,29 @@
         {% endif %}
       </ul>
       <ul class="nav navbar-nav navbar-right">
-        {% if user.is_authenticated %}
           <li class="dropdown">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown">User: {{ user.username }} <span class="caret"></span></a>
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{ LANGUAGE_CODE }}<span class="caret"></span></a>
             <ul class="dropdown-menu" role="menu">
-              {% if user.is_staff %}
-                <li><a href="{% url 'admin:index' %}">Admin Panel</a></li>
-              {% endif %}
-              <li><a href="{% url 'django.contrib.auth.views.logout' %}?next=/">Logout</a></li>
+              {% for lang in LANGUAGES %}
+                <li><a href="#" class="change_language" lang_code="{{ lang.0 }}">{{ lang.1 }}</a></li>
+              {% endfor %}
             </ul>
           </li>
-        {% else %}
-          <li><a href="{% url 'django.contrib.auth.views.login' %}?next={{ request.get_full_path }}">Log in</a></li>
-        {% endif %}
       </ul>
     </div>
   </div>
 </nav>
+
+<form action="{% url 'set_language' %}" method="post" style="display: none" id="change_language_form">
+    {% csrf_token %}
+    <input type="hidden" value="" name="language" id="language" />
+</form>
+
+<script>
+    $('.change_language').click(function(e){
+        e.preventDefault();
+        var lang = $(this).attr('lang_code');
+        $('#language').val(lang);
+        $('#change_language_form').submit();
+    });
+</script>
