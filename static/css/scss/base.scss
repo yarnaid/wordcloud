@@ -35,6 +35,11 @@ END GENERAL
 Navigation
 */
 
+.navbar {
+    background: #ffffff;
+    border: none;
+}
+
 .navbar .navbar-nav {
     display: inline-block;
     float: none;
@@ -44,14 +49,13 @@ Navigation
     text-align: center;
 }
 
-nav {
-    background-color: transparent !important;
-    border-color: white;
-    border: white !important;
-    background-image: none !important;
-    text-shadow: white;
+.logo {
+    margin: 0;
     padding: 0;
-    box-shadow: none !important;
+    img {
+        max-width: 100px;
+        padding-top: 5px;
+    }
 }
 /*
 END Navigation
@@ -61,24 +65,12 @@ END Navigation
     background-color: white !important;
 }
 
-.footer {
-    div {
-        width: 100%;
-        padding-top: 1em;
-        padding-bottom: 2em;
-    }
-}
-
 .empty {
     height: 4em;
 }
 
 .footer hr {
     max-width: 80%;
-}
-
-#header {
-    padding-top: 4em;
 }
 
 .page-wrap:after {
@@ -103,15 +95,15 @@ table {
     }
 }
 
-.table-striped {
-    tbody {
-        tr:nth-child(odd) {
-            td, th {
-                background-color: $light-blue;
-            }
-        }
-    }
-}
+// .table-striped {
+//     tbody {
+//         tr:nth-child(odd) {
+//             td, th {
+//                 background-color: $light-blue;
+//             }
+//         }
+//     }
+// }
 /*
 Tooltip
 */
@@ -133,10 +125,10 @@ div.tooltip {
         .table {
             margin: 0px;
             tr {
-                td:nth-child(1) {
-                    text-align: right;
-                }
-                td:nth-child(2) {
+                // td:nth-child(1) {
+                //     text-align: right;
+                // }
+                td: nth-child(2) {
                     text-align: left;
                     font-weight: bold;
                 }
