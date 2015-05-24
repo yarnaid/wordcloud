@@ -1,26 +1,18 @@
 @import 'const';
 @import "compass/css3";
-div.tooltip {
-    position: absolute;
-    padding: 5px;
-    font-family: $font-family;
-    font: $font-size;
+/*
+GENERAL
+*/
+
+html,
+body {
     background: $background;
-    @include border-radius(3px);
-    pointer-events: none;
-    opacity: 1;
+    font-family: $font-family !important;
+    height: 100%;
 }
 
-.mm-menu {
-    background-color: white !important;
-}
-
-.footer {
-    div {
-        width: 100%;
-        padding-top: 1em;
-        padding-bottom: 2em;
-    }
+body {
+    padding-top: 70px;
 }
 
 .wrap {
@@ -29,6 +21,19 @@ div.tooltip {
     min-height: 100%;
     position: relative;
 }
+
+.page-wrap {
+    min-height: 100%;
+    /* equal to footer height */
+
+    margin-bottom: -100px;
+}
+/*
+END GENERAL
+*/
+/*
+Navigation
+*/
 
 .navbar .navbar-nav {
     display: inline-block;
@@ -48,6 +53,21 @@ nav {
     padding: 0;
     box-shadow: none !important;
 }
+/*
+END Navigation
+*/
+
+.mm-menu {
+    background-color: white !important;
+}
+
+.footer {
+    div {
+        width: 100%;
+        padding-top: 1em;
+        padding-bottom: 2em;
+    }
+}
 
 .empty {
     height: 4em;
@@ -59,20 +79,6 @@ nav {
 
 #header {
     padding-top: 4em;
-}
-
-html,
-body {
-    background: $background;
-    font-family: $font-family !important;
-    height: 100%;
-}
-
-.page-wrap {
-    min-height: 100%;
-    /* equal to footer height */
-
-    margin-bottom: -100px;
 }
 
 .page-wrap:after {
@@ -99,12 +105,26 @@ table {
 
 .table-striped {
     tbody {
-        tr: nth-child(odd) {
+        tr:nth-child(odd) {
             td, th {
                 background-color: $light-blue;
             }
         }
     }
+}
+/*
+Tooltip
+*/
+
+div.tooltip {
+    position: absolute;
+    padding: 5px;
+    font-family: $font-family;
+    font: $font-size;
+    background: $background;
+    @include border-radius(3px);
+    pointer-events: none;
+    opacity: 1;
 }
 
 .tooltip {
@@ -113,7 +133,7 @@ table {
         .table {
             margin: 0px;
             tr {
-                td: nth-child(1) {
+                td:nth-child(1) {
                     text-align: right;
                 }
                 td:nth-child(2) {
@@ -128,3 +148,6 @@ table {
         }
     }
 }
+/*
+END Tooltip
+*/
