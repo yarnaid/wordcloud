@@ -10,16 +10,22 @@
 {% endblock menu_body %}
 
 {% block content %}
-    <div id="svg"></div>
-        <div class="col-md-6 pull-right">
-    {% downloader %}
-    </div>
-        <script type="text/javascript" src="{% static 'c_tree/js/svg.js' %}"></script>
+<section class="tree-block">
+    <div class="container">
+        <div clas="row">
+            <div id="svg"></div>
+                <div class="col-md-6 pull-right">
+            {% downloader %}
+            </div>
+                <script type="text/javascript" src="{% static 'c_tree/js/svg.js' %}"></script>
 
-    {# COMMENTS #}
-    <div>
-        {% disqus_show_comments %}
+            {# COMMENTS #}
+            <div>
+                {% disqus_show_comments %}
+            </div>
+        </div>
     </div>
+</section>
 {% endblock %}
 
 

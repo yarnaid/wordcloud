@@ -17,28 +17,28 @@
     </div>
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav">
-        <li><a href="#">{% trans "Library" %}</a></li>
-        <li><a href="#">{% trans "Pricing and Timing" %}</a></li>
-        <li><a href="#">{% trans "Dashboard" %}</a></li>
-        <li><a href="#">{% trans "Settings" %}</a></li>
-        <li> <a href="{% url 'cloud' %}">Cloud</a> </li>
-        <li> <a href="{% url 'wordle' %}">WORDLE</a> </li>
-        <li> <a href="{% url 'tree' %}">TREE</a> </li>
-        <li> <a href="{% url 'pricing_tool' %}">Pricing Tool</a> </li>
+        <li><a href="#"><p class="text-muted">{% trans "Library" %}</p></a></li>
+        <li><a href="#"><p class="text-muted">{% trans "Pricing and Timing" %}</p></a></li>
+        <li><a href="#"><p class="text-muted">{% trans "Dashboard" %}</p></a></li>
+        <li><a href="#"><p class="text-muted">{% trans "Settings" %}</p></a></li>
+        <li> <a href="{% url 'cloud' %}">{% trans "Cloud" %}</a> </li>
+        <li> <a href="{% url 'wordle' %}">{% trans "WORDLE" %}</a> </li>
+        <li> <a href="{% url 'tree' %}">{% trans "TREE" %}</a> </li>
+        <li> <a href="{% url 'pricing_tool' %}">{% trans "Pricing Tool" %}</a> </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
         {% if user.is_authenticated %}
           <li class="dropdown">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown">User: {{ user.username }} <span class="caret"></span></a>
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">{% trans "User" %}: {{ user.username }} <span class="caret"></span></a>
             <ul class="dropdown-menu" role="menu">
               {% if user.is_staff %}
-                <li><a href="{% url 'admin:index' %}">Admin Panel</a></li>
+                <li><a href="{% url 'admin:index' %}">{% trans "Admin Panel" %}</a></li>
               {% endif %}
-              <li><a href="{% url 'django.contrib.auth.views.logout' %}?next=/">Logout</a></li>
+              <li><a href="{% url 'django.contrib.auth.views.logout' %}?next=/">{% trans "Logout" %}</a></li>
             </ul>
           </li>
         {% else %}
-          <li><a href="{% url 'django.contrib.auth.views.login' %}?next={{ request.get_full_path }}">Log in</a></li>
+          <li><a href="{% url 'django.contrib.auth.views.login' %}?next={{ request.get_full_path }}">{% trans "Log in" %}</a></li>
         {% endif %}
       </ul>
       <ul class="nav navbar-nav navbar-right">

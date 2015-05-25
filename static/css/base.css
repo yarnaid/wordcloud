@@ -3,12 +3,212 @@
   src: url("../fonts/glyphicons-halflings-regular.eot");
   src: url("../fonts/glyphicons-halflings-regular.eot?#iefix") format("embedded-opentype"), url("../fonts/glyphicons-halflings-regular.woff2") format("woff2"), url("../fonts/glyphicons-halflings-regular.woff") format("woff"), url("../fonts/glyphicons-halflings-regular.ttf") format("truetype"), url("../fonts/glyphicons-halflings-regular.svg#glyphicons_halflingsregular") format("svg"), url("../fonts/klavikaregular-osf-opentype.otf") format("opentype");
 }
-/* line 4, scss/base.scss */
+/*
+GENERAL
+*/
+/* line 8, scss/base.scss */
+html,
+body {
+  background: white;
+  font-family: "Klavika Regular", klavika-regular !important;
+  font-size: 16px;
+  line-height: 1.4;
+  height: 100%;
+}
+
+/* line 17, scss/base.scss */
+.mainpage {
+  /* equal to header height */
+  padding-top: 55px;
+}
+
+/* line 22, scss/base.scss */
+.wrap {
+  height: auto !important;
+  height: 100%;
+  min-height: 100%;
+  position: relative;
+}
+
+/* line 29, scss/base.scss */
+.page-wrap {
+  min-height: 100%;
+  /* equal to footer height */
+  margin-bottom: -100px;
+}
+
+/* line 35, scss/base.scss */
+h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
+  font-family: "Klavika Regular", klavika-regular;
+  font-weight: 500;
+  line-height: 1.2;
+  color: inherit;
+}
+
+/* line 42, scss/base.scss */
+h4, .h4, h5, .h5, h6, .h6 {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+/* line 47, scss/base.scss */
+h2 {
+  font-size: 20px;
+  color: #0065b3;
+}
+
+/* line 52, scss/base.scss */
+h4 {
+  font-size: 18px;
+}
+
+/*
+END GENERAL
+*/
+/*
+Layout
+*/
+/* line 62, scss/base.scss */
+section {
+  padding: 60px 0;
+}
+/* line 64, scss/base.scss */
+section.section-hilite {
+  background: #eee;
+}
+/* line 67, scss/base.scss */
+section.section-center {
+  text-align: center;
+}
+/* line 70, scss/base.scss */
+section.section-nopadding {
+  padding: 0 0 60px 0;
+}
+
+/*
+END Layout
+*/
+/*
+Navigation
+*/
+/* line 82, scss/base.scss */
+.navbar {
+  background: #ffffff;
+  border: none;
+}
+
+/* line 87, scss/base.scss */
+.navbar .navbar-nav {
+  display: inline-block;
+  float: none;
+}
+
+/* line 92, scss/base.scss */
+.navbar .navbar-collapse {
+  text-align: center;
+}
+
+/* line 96, scss/base.scss */
+.logo {
+  margin: 0;
+  padding: 0;
+}
+/* line 99, scss/base.scss */
+.logo img {
+  max-width: 100px;
+  padding-top: 5px;
+}
+
+/*
+END Navigation
+*/
+/*
+Main page
+*/
+/* line 112, scss/base.scss */
+.mainpage-image {
+  margin-bottom: 50px;
+}
+
+/* line 117, scss/base.scss */
+.welcome-block p {
+  font-size: 16px;
+  line-height: 1.3;
+  color: #1c2924;
+}
+
+/* line 125, scss/base.scss */
+.benefits-block .icon-wrap {
+  height: 120px;
+  width: 120px;
+  margin: 10px auto;
+}
+/* line 129, scss/base.scss */
+.benefits-block .icon-wrap img {
+  max-height: 120px;
+}
+/* line 133, scss/base.scss */
+.benefits-block p {
+  max-height: 65px;
+  overflow: hidden;
+}
+
+/*
+END Main page
+*/
+/* line 143, scss/base.scss */
+.mm-menu {
+  background-color: white !important;
+}
+
+/* line 147, scss/base.scss */
+.empty {
+  height: 4em;
+}
+
+/* line 151, scss/base.scss */
+.footer hr {
+  max-width: 80%;
+}
+
+/* line 155, scss/base.scss */
+.page-wrap:after {
+  content: "";
+  display: block;
+}
+
+/* line 160, scss/base.scss */
+.site-footer,
+.page-wrap:after {
+  height: 80px;
+}
+
+/* line 165, scss/base.scss */
+.site-footer {
+  background: #AEA0BC;
+  color: #FBFAFB;
+}
+
+/* line 171, scss/base.scss */
+table caption {
+  color: #358ACD;
+  font-weight: bold;
+}
+
+/* line 180, scss/base.scss */
+.table-striped tbody tr:nth-child(odd) td, .table-striped tbody tr:nth-child(odd) th {
+  background-color: #E8F5FF;
+}
+
+/*
+Tooltip
+*/
+/* line 191, scss/base.scss */
 div.tooltip {
   position: absolute;
   padding: 5px;
   font-family: "Klavika Regular", klavika-regular;
-  font: 14px;
+  font: 16px;
   background: white;
   -moz-border-radius: 3px;
   -webkit-border-radius: 3px;
@@ -17,125 +217,31 @@ div.tooltip {
   opacity: 1;
 }
 
-/* line 15, scss/base.scss */
-.mm-menu, .mm-panel {
-  background-color: white !important;
-}
-
-/* line 25, scss/base.scss */
-.footer div {
-  width: 100%;
-  padding-top: 1em;
-  padding-bottom: 2em;
-}
-
-/* line 32, scss/base.scss */
-.wrap {
-  height: auto !important;
-  height: 100%;
-  min-height: 100%;
-  position: relative;
-}
-
-/* line 39, scss/base.scss */
-.navbar .navbar-nav {
-  display: inline-block;
-  float: none;
-}
-
-/* line 44, scss/base.scss */
-.navbar .navbar-collapse {
-  text-align: center;
-}
-
-/* line 49, scss/base.scss */
-nav {
-  background-color: transparent !important;
-  border-color: white;
-  border: white !important;
-  background-image: none !important;
-  text-shadow: white;
-  padding: 0;
-  box-shadow: none !important;
-}
-
-/* line 60, scss/base.scss */
-.empty {
-  height: 4em;
-}
-
-/* line 64, scss/base.scss */
-.footer hr {
-  max-width: 80%;
-}
-
-/* line 67, scss/base.scss */
-#header {
-  padding-top: 4em;
-}
-
-/* line 71, scss/base.scss */
-html, body {
-  background: white;
-  font-family: "Klavika Regular", klavika-regular !important;
-  height: 100%;
-}
-
-/* line 77, scss/base.scss */
-.page-wrap {
-  min-height: 100%;
-  /* equal to footer height */
-  margin-bottom: -100px;
-}
-
-/* line 83, scss/base.scss */
-.page-wrap:after {
-  content: "";
-  display: block;
-}
-
-/* line 88, scss/base.scss */
-.site-footer, .page-wrap:after {
-  height: 100px;
-}
-
-/* line 92, scss/base.scss */
-.site-footer {
-  background: #AEA0BC;
-  color: #FBFAFB;
-}
-
-/* line 98, scss/base.scss */
-table caption {
-  color: #358ACD;
-  font-weight: bold;
-}
-
-/* line 107, scss/base.scss */
-.table-striped tbody tr:nth-child(odd) td, .table-striped tbody tr:nth-child(odd) th {
-  background-color: #E8F5FF;
-}
-
-/* line 114, scss/base.scss */
+/* line 202, scss/base.scss */
 .tooltip {
   -moz-box-shadow: rgba(0, 0, 0, 0.4) 0 0 25px;
   -webkit-box-shadow: rgba(0, 0, 0, 0.4) 0 0 25px;
   box-shadow: rgba(0, 0, 0, 0.4) 0 0 25px;
 }
-/* line 117, scss/base.scss */
+/* line 205, scss/base.scss */
 .tooltip div .table {
   margin: 0px;
 }
-/* line 120, scss/base.scss */
+/* line 208, scss/base.scss */
 .tooltip div .table tr td:nth-child(1) {
   text-align: right;
 }
-/* line 123, scss/base.scss */
+/* line 211, scss/base.scss */
 .tooltip div .table tr td:nth-child(2) {
   text-align: left;
   font-weight: bold;
 }
-/* line 128, scss/base.scss */
-.tooltip div .table th, .tooltip div .table td {
+/* line 216, scss/base.scss */
+.tooltip div .table th,
+.tooltip div .table td {
   border-top: none !important;
 }
+
+/*
+END Tooltip
+*/
