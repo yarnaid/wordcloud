@@ -10,22 +10,30 @@ from filebrowser.sites import site
 urlpatterns = i18n_patterns('',
                             url(r'^admin_tools/', include('admin_tools.urls')),
                             url(r'^admin/filebrowser/', include(site.urls)),
-                            url(r'^grappelli/', include('grappelli.urls')),  # grappelli URLS
+                            url(r'^grappelli/', include('grappelli.urls')),
                             url(r'^admin/', include(admin.site.urls)),
-                            url('^accounts/', include('django.contrib.auth.urls')),
+                            url('^accounts/',
+                                include('django.contrib.auth.urls')),
 
                             url(r'^data/', include('data_app.urls')),
-                            url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
+                            url(r'^api-auth/', include('rest_framework.urls',
+                                namespace='rest_framework')),
 
-                            url(r'^cloud/', include('cloud.urls')),
-                            url(r'^wordle/', include('wordle.urls')),
-                            url(r'^tree/', include('c_tree.urls')),
-                            url(r'^pricing_tool', include('pricing_tool.urls')),
+                            url(r'^cloud/', include('cloud.urls'),
+                                name='cloud'),
+                            url(r'^wordle/', include('wordle.urls'),
+                                name='wordle'),
+                            url(r'^tree/', include('c_tree.urls'),
+                                name='tree'),
+                            url(r'^pricing_tool', include('pricing_tool.urls'),
+                                name='pricing_tool'),
 
-                            url(r'^$', TemplateView.as_view(template_name='wordcloud/base.html')),
+                            url(r'^$', TemplateView.as_view(
+                                template_name='wordcloud/base.html'),
+                                name='home'),
 
                             ) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) + \
-              static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 if settings.DEBUG and settings.DEBUG_PANEL:
     import debug_toolbar
@@ -34,4 +42,7 @@ if settings.DEBUG and settings.DEBUG_PANEL:
                             url(r'^__debug__/', include(debug_toolbar.urls)),
                             )
 
-urlpatterns += patterns('', url(r'^silk/', include('silk.urls', namespace='silk')))
+# urlpatterns += patterns('', url(r'^silk/', include('silk.urls',
+#                         namespace='silk')))
+
+urlpatterns += patterns('', (r'^i18n/', include('django.conf.urls.i18n')))

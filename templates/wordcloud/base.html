@@ -1,7 +1,9 @@
-<!DOCTYPE html> {% load staticfiles sekizai_tags i18n %}
-<html>
+<!DOCTYPE html>
+{% load staticfiles sekizai_tags i18n %}
+{% get_current_language as LANGUAGE_CODE %}
 
-<head lang="en">
+<html>
+<head lang="{{ LANGUAGE_CODE }}">
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="author" content="yarnaid">
@@ -64,35 +66,30 @@
                 {# {% endblock %} #}
             </div>
         </div>
-    </nav>
-    <div class="page-wrap">
-        {% include 'wordcloud/nav_bar_auth.html' %}
-        <!--
-    <div class="container" id="breadcrumb">
-        {% block breadcrumbs %}
-            <ol class="breadcrumb">
-                <li><a href="#">Home</a></li>
-                <li><a href="#">Library</a></li>
-                <li class="active">Data</li>
-            </ol>
-        {% endblock %}
     </div>
-   -->
-        <script type="text/javascript">
-        $(function() {
-            $("#left-nav").mmenu({
-                // configuration
-                offCanvas: {
-                    pageNodetype: "section",
-                    zposition: "front"
-                }
-            });
-            console.log('ready to menu!');
-        });
-        </script>
-        <div id="page" class="mainpage">
-            {% block page %}
-            {% comment %}
+</nav>
+
+
+
+<div class="page-wrap">
+    {% include 'wordcloud/nav_bar_auth.html' %}
+
+   <script type="text/javascript">
+    $(function() {
+   $("#left-nav").mmenu({
+          // configuration
+          offCanvas: {
+             pageNodetype: "section",
+             zposition : "front"
+          }
+       });
+       console.log('ready to menu!');
+    });
+   </script>
+    <div class="container" id="page">
+        {% block page %}
+
+{% comment %}
             {% block nav_menu %}
             <nav>
                 <div class="col-md-3">

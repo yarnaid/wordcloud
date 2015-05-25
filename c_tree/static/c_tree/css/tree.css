@@ -17,3 +17,7 @@ svg {
     border: 2px solid;
     border-radius: 25px;
 }
+
+.collapsed {
+    fill: lightsteelblue;
+}

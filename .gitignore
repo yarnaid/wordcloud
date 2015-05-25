@@ -4,3 +4,4 @@ venv
 *.pyc
 staticfiles
 src
+static/css/base.css*

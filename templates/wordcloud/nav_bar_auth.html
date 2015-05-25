@@ -1,52 +1,70 @@
-{% load staticfiles sekizai_tags i18n %}
-<nav class="navbar navbar-default navbar-fixed-top">
-    <a class="navbar-brand" href="#left-nav"><span class="glyphicon glyphicon-menu-hamburger"></span></a>
-    <div class="container text-center">
-        <!-- Brand and toggle get grouped for better mobile display -->
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand logo" rel="home" href="/">
-                <img class="img img-responsive" src="{% static 'img/logo.png' %}" alt="Dixit">
-            </a>
-        </div>
-        <!-- Collect the nav links, forms, and other content for toggling -->
-        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-            <ul class="nav navbar-nav">
-                <li>
-                    <a href="/cloud">Cloud</a>
-                </li>
-                <li>
-                    <a href="/wordle">WORDLE</a>
-                </li>
-                <li>
-                    <a href="/tree">TREE</a>
-                </li>
-                <li>
-                    <a href="/pricing_tool">Pricing Tool</a>
-                </li>
-            </ul>
-            <ul class="nav navbar-nav navbar-right">
-                {% if user.is_authenticated %}
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">User: {{ user.username }} <span class="caret"></span></a>
-                    <ul class="dropdown-menu" role="menu">
-                        {% if user.is_staff %}
-                        <li><a href="{% url 'admin:index' %}">Admin Panel</a></li>
-                        {% endif %}
-                        <li><a href="{% url 'django.contrib.auth.views.logout' %}?next=/">Logout</a></li>
-                    </ul>
-                </li>
-                {% else %}
-                <li><a href="{% url 'django.contrib.auth.views.login' %}?next={{ request.get_full_path }}">Log in</a></li>
-                {% endif %}
-            </ul>
-        </div>
-        <!-- /.navbar-collapse -->
+{% load staticfiles i18n %}
+{% get_current_language as LANGUAGE_CODE %}
+{% get_available_languages as LANGUAGES %}
+<nav class="navbar navbar-default navbar-static-top">
+  <a class="navbar-brand" href="#left-nav"><span class="glyphicon glyphicon-menu-hamburger"></span></a>
+  <div class="container text-center">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+      <span class="sr-only">Toggle navigation</span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" rel="home" href="{% url 'home' %}">
+        <img style="max-width:100px; margin-top: -7px;" class="img img-responsive" src="{% static 'img/logo.png' %}" alt="" />
+      </a>
     </div>
-    <!-- /.container-fluid -->
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav">
+        <li><a href="#"><p class="text-muted">{% trans "Library" %}</p></a></li>
+        <li><a href="#"><p class="text-muted">{% trans "Pricing and Timing" %}</p></a></li>
+        <li><a href="#"><p class="text-muted">{% trans "Dashboard" %}</p></a></li>
+        <li><a href="#"><p class="text-muted">{% trans "Settings" %}</p></a></li>
+        <li> <a href="{% url 'cloud' %}">{% trans "Cloud" %}</a> </li>
+        <li> <a href="{% url 'wordle' %}">{% trans "WORDLE" %}</a> </li>
+        <li> <a href="{% url 'tree' %}">{% trans "TREE" %}</a> </li>
+        <li> <a href="{% url 'pricing_tool' %}">{% trans "Pricing Tool" %}</a> </li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        {% if user.is_authenticated %}
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">{% trans "User" %}: {{ user.username }} <span class="caret"></span></a>
+            <ul class="dropdown-menu" role="menu">
+              {% if user.is_staff %}
+                <li><a href="{% url 'admin:index' %}">{% trans "Admin Panel" %}</a></li>
+              {% endif %}
+              <li><a href="{% url 'django.contrib.auth.views.logout' %}?next=/">{% trans "Logout" %}</a></li>
+            </ul>
+          </li>
+        {% else %}
+          <li><a href="{% url 'django.contrib.auth.views.login' %}?next={{ request.get_full_path }}">{% trans "Log in" %}</a></li>
+        {% endif %}
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{ LANGUAGE_CODE }}<span class="caret"></span></a>
+            <ul class="dropdown-menu" role="menu">
+              {% for lang in LANGUAGES %}
+                <li><a href="#" class="change_language" lang_code="{{ lang.0 }}">{{ lang.1 }}</a></li>
+              {% endfor %}
+            </ul>
+          </li>
+      </ul>
+    </div>
+  </div>
 </nav>
+
+<form action="{% url 'set_language' %}" method="post" style="display: none" id="change_language_form">
+    {% csrf_token %}
+    <input type="hidden" value="" name="language" id="language" />
+</form>
+
+<script>
+    $('.change_language').click(function(e){
+        e.preventDefault();
+        var lang = $(this).attr('lang_code');
+        $('#language').val(lang);
+        $('#change_language_form').submit();
+    });
+</script>

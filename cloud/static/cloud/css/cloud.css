@@ -57,7 +57,8 @@
 }*/
 
 .link {
-  stroke: #ccc;
+  /*stroke: #ccc;*/
+  stroke: none;
 }
 
 body {
