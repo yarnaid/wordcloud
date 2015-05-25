@@ -51,6 +51,8 @@ var Cluster = function(_parent_id, _data, _eventHandler, _fps) {
 
     this.links = this.force.links();
     this.zoom = d3.behavior.zoom();
+    this.venn = venn.VennDiagram();
+    this.pack = d3.layout.pack().size([this.width, this.height]);
 
     this.init();
 };
@@ -201,6 +203,7 @@ Cluster.prototype.init = function() {
         }
     };
 
+    this.pack.nodes({children: clusters});
     this.force.size([this.width, this.height])
         .nodes(this.nodes)
         .links(this.links)
@@ -281,6 +284,7 @@ Cluster.prototype.init = function() {
         })
         .style('text-anchor', 'middle')
         .call(wrap);
+
 
 
     this.update();

@@ -6,15 +6,20 @@
 {% endblock %}
 
 {% block content %}
-<div id="svg"></div>
-    <div class="col-md-6 pull-right">
-    {% downloader %}
+<section class="wordle-block">
+    <div class="container">
+        <div clas="row">
+            <div id="svg"></div>
+            <div class="col-md-6 pull-right">
+                {% downloader %}
+            </div>
+            {# COMMENTS #}
+            <div>
+                {% disqus_show_comments %}
+            </div>
+        </div>
     </div>
-
-    {# COMMENTS #}
-    <div>
-        {% disqus_show_comments %}
-    </div>
+</section>
 {% endblock %}
 
 

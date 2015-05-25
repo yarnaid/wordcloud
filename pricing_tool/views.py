@@ -1,9 +1,6 @@
 import json
-from django.shortcuts import render
-from django.views.generic import FormView, TemplateView
+from django.views.generic import TemplateView
 from django.http import HttpResponse
-from django.shortcuts import render_to_response
-from django.forms.formsets import formset_factory
 
 from forms import HeaderForm, CellFormSet
 
@@ -12,7 +9,7 @@ from helpers.views import CsrfCookieMixin
 # Create your views here.
 
 point_price = 0.12
-point_time = 7.2 / 60. # to minutes
+point_time = 7.2 / 60.  # to minutes
 new_code_frame_price = [
     11.2,
     4.2,

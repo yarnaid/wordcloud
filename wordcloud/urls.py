@@ -44,3 +44,5 @@ if settings.DEBUG and settings.DEBUG_PANEL:
 
 # urlpatterns += patterns('', url(r'^silk/', include('silk.urls',
 #                         namespace='silk')))
+
+urlpatterns += patterns('', (r'^i18n/', include('django.conf.urls.i18n')))

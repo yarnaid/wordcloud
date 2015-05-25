@@ -45,26 +45,28 @@
             var sel_template = $("#sel-Template");
             for (var i = 0; i < variables.length; ++i) {
                 v = variables[i];
-                var my_templ = sel_template.clone();
-                my_templ.attr("id", "sel-" + v.text);
-                params_ids.push(my_templ.attr("id"));
-                my_templ.addClass("menu_variable");
-                my_templ.toggleClass("hidden");
-                var label = my_templ.find("label");
-                var sel = my_templ.find("select");
-                sel.change(function() {
-                    $(event_handler).trigger("filter_menu_update");
-                });
-                sel.attr("id", "sel-" + v.text);
-                sel.append("<option value=-1>{% trans 'Any' %}</option>");
-                for (var j = 0; j < v.code_book.children_codes.length; ++j) {
-                    var code = v.code_book.children_codes[j];
-                    if (code.title.length > 0) {
-                        sel.append("<option value=" + code.code + ">" + code.title + "</option>");
+                if (v.text.length > 0) {  // TODO: DIRTY HACK
+                    var my_templ = sel_template.clone();
+                    my_templ.attr("id", "sel-" + v.text);
+                    params_ids.push(my_templ.attr("id"));
+                    my_templ.addClass("menu_variable");
+                    my_templ.toggleClass("hidden");
+                    var label = my_templ.find("label");
+                    var sel = my_templ.find("select");
+                    sel.change(function() {
+                        $(event_handler).trigger("filter_menu_update");
+                    });
+                    sel.attr("id", "sel-" + v.text);
+                    sel.append("<option value=-1>{% trans 'Any' %}</option>");
+                    for (var j = 0; j < v.code_book.children_codes.length; ++j) {
+                        var code = v.code_book.children_codes[j];
+                        if (code.title.length > 0) {
+                            sel.append("<option value=" + code.code + ">" + code.title + "</option>");
+                        }
                     }
+                    label.html(v.text + ":");
+                    my_templ.appendTo("#sel-List");
                 }
-                label.html(v.text + ":");
-                my_templ.appendTo("#sel-List");
             }
         }
         var update_menu = function() {

@@ -1,32 +1,22 @@
-@import 'const';
+@import "const";
 @import "compass/css3";
 
-div.tooltip {
-  position: absolute;
-  padding: 5px;
-  font-family: $font-family;
-  font: $font-size;
-  background: $background;
-  @include border-radius(3px);
-  pointer-events: none;
-  opacity: 1;
+/*
+GENERAL
+*/
+
+html,
+body {
+    background: $background;
+    font-family: $font-family !important;
+    font-size: $font-size;
+    line-height: $line-height;
+    height: 100%;
 }
 
-.mm-menu, .mm-panel {
-    background-color: white !important;
-    // @include box-shadow(rgba(black, 0.4) 0 0 25px);
-}
-
-// #left-nav {
-    // @include box-shadow(rgba(black, 0.4) 0 0 25px) !important;
-// }
-
-.footer {
-    div {
-        width: 100%;
-        padding-top: 1em;
-        padding-bottom: 2em;
-    }
+.mainpage {
+    /* equal to header height */
+    padding-top: 55px;
 }
 
 .wrap {
@@ -34,6 +24,64 @@ div.tooltip {
     height: 100%;
     min-height: 100%;
     position: relative;
+}
+
+.page-wrap {
+    min-height: 100%;
+    /* equal to footer height */
+    margin-bottom: -100px;
+}
+
+h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
+    font-family: $font-family;
+    font-weight: 500;
+    line-height: 1.2;
+    color: inherit;
+}
+
+h4, .h4, h5, .h5, h6, .h6 {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+h2 {
+    font-size: 20px;
+    color: #0065b3;
+}
+
+h4 {
+    font-size: 18px;
+}
+
+/*
+END GENERAL
+*/
+/*
+Layout
+*/
+section {
+    padding: 60px 0;
+    &.section-hilite {
+        background: #eee;
+    }
+    &.section-center {
+        text-align: center;
+    }
+    &.section-nopadding {
+        padding: 0 0 60px 0;
+    }
+}
+
+/*
+END Layout
+*/
+/*
+Navigation
+*/
+
+.navbar {
+    background: #ffffff;
+    border: none;
 }
 
 .navbar .navbar-nav {
@@ -45,18 +93,57 @@ div.tooltip {
     text-align: center;
 }
 
-
-nav
-{
-
-    background-color: transparent !important;
-    border-color: white;
-    border: white !important;
-    background-image: none !important;
-    text-shadow: white;
+.logo {
+    margin: 0;
     padding: 0;
-    box-shadow: none !important;
+    img {
+        max-width: 100px;
+        padding-top: 5px;
+    }
 }
+
+/*
+END Navigation
+*/
+/*
+Main page
+*/
+
+.mainpage-image {
+    margin-bottom: 50px;
+}
+
+.welcome-block {
+    p {
+        font-size: 16px;
+        line-height: 1.3;
+        color: #1c2924;
+    }
+}
+
+.benefits-block {
+    .icon-wrap {
+        height: 120px;
+        width: 120px;
+        margin: 10px auto;
+        img {
+            max-height: 120px;
+        }
+    }
+    p {
+        max-height: 65px;
+        overflow: hidden;
+    }
+}
+
+/*
+END Main page
+*/
+
+.mm-menu {
+    background-color: white !important;
+}
+
 .empty {
     height: 4em;
 }
@@ -64,29 +151,15 @@ nav
 .footer hr {
     max-width: 80%;
 }
-#header {
-    padding-top: 4em;
-}
-
-html, body {
-    background: $background;
-    font-family: $font-family !important;
-    height: 100%;
-}
-
-.page-wrap {
-  min-height: 100%;
-  /* equal to footer height */
-  margin-bottom: -100px;
-}
 
 .page-wrap:after {
-  content: "";
-  display: block;
+    content: "";
+    display: block;
 }
 
-.site-footer, .page-wrap:after {
-  height: 100px;
+.site-footer,
+.page-wrap:after {
+    height: 80px;
 }
 
 .site-footer {
@@ -96,12 +169,12 @@ html, body {
 
 table {
     caption {
-      color: $blue;
-      font-weight: bold;
+        color: $blue;
+        font-weight: bold;
     }
 }
 
-.table-striped{
+.table-striped {
     tbody {
         tr:nth-child(odd) {
             td, th {
@@ -109,6 +182,21 @@ table {
             }
         }
     }
+}
+
+/*
+Tooltip
+*/
+
+div.tooltip {
+    position: absolute;
+    padding: 5px;
+    font-family: $font-family;
+    font: $font-size;
+    background: $background;
+    @include border-radius(3px);
+    pointer-events: none;
+    opacity: 1;
 }
 
 .tooltip {
@@ -125,9 +213,14 @@ table {
                     font-weight: bold;
                 }
             }
-            th, td {
+            th,
+            td {
                 border-top: none !important;
             }
         }
     }
 }
+
+/*
+END Tooltip
+*/
