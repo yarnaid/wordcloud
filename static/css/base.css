@@ -48,13 +48,13 @@ h4, .h4, h5, .h5, h6, .h6 {
 
 /* line 47, scss/base.scss */
 h2 {
-  font-size: 20px;
+  font-size: 24px;
   color: #0065b3;
 }
 
 /* line 52, scss/base.scss */
 h4 {
-  font-size: 18px;
+  font-size: 20px;
 }
 
 /*
@@ -68,14 +68,41 @@ section {
   padding: 60px 0;
 }
 /* line 64, scss/base.scss */
+section .section-title {
+  margin: 0 0 30px;
+  text-align: center;
+  position: relative;
+}
+/* line 68, scss/base.scss */
+section .section-title:after {
+  content: "";
+  display: block;
+  height: 1px;
+  background: #f5f5f5;
+  position: absolute;
+  top: 15px;
+  width: 100%;
+}
+/* line 77, scss/base.scss */
+section .section-title span {
+  background: #fff;
+  padding: 0 10px;
+  z-index: 1;
+  position: relative;
+}
+/* line 84, scss/base.scss */
 section.section-hilite {
   background: #eee;
 }
-/* line 67, scss/base.scss */
+/* line 86, scss/base.scss */
+section.section-hilite span {
+  background: #eee;
+}
+/* line 90, scss/base.scss */
 section.section-center {
   text-align: center;
 }
-/* line 70, scss/base.scss */
+/* line 93, scss/base.scss */
 section.section-nopadding {
   padding: 0 0 60px 0;
 }
@@ -86,29 +113,29 @@ END Layout
 /*
 Navigation
 */
-/* line 82, scss/base.scss */
+/* line 105, scss/base.scss */
 .navbar {
   background: #ffffff;
   border: none;
 }
 
-/* line 87, scss/base.scss */
+/* line 110, scss/base.scss */
 .navbar .navbar-nav {
   display: inline-block;
   float: none;
 }
 
-/* line 92, scss/base.scss */
+/* line 115, scss/base.scss */
 .navbar .navbar-collapse {
   text-align: center;
 }
 
-/* line 96, scss/base.scss */
+/* line 119, scss/base.scss */
 .logo {
   margin: 0;
   padding: 0;
 }
-/* line 99, scss/base.scss */
+/* line 122, scss/base.scss */
 .logo img {
   max-width: 100px;
   padding-top: 5px;
@@ -120,29 +147,29 @@ END Navigation
 /*
 Main page
 */
-/* line 112, scss/base.scss */
+/* line 135, scss/base.scss */
 .mainpage-image {
   margin-bottom: 50px;
 }
 
-/* line 117, scss/base.scss */
+/* line 140, scss/base.scss */
 .welcome-block p {
   font-size: 16px;
   line-height: 1.3;
   color: #1c2924;
 }
 
-/* line 125, scss/base.scss */
+/* line 148, scss/base.scss */
 .benefits-block .icon-wrap {
   height: 120px;
   width: 120px;
   margin: 10px auto;
 }
-/* line 129, scss/base.scss */
+/* line 152, scss/base.scss */
 .benefits-block .icon-wrap img {
   max-height: 120px;
 }
-/* line 133, scss/base.scss */
+/* line 156, scss/base.scss */
 .benefits-block p {
   max-height: 65px;
   overflow: hidden;
@@ -151,46 +178,46 @@ Main page
 /*
 END Main page
 */
-/* line 143, scss/base.scss */
+/* line 166, scss/base.scss */
 .mm-menu {
   background-color: white !important;
 }
 
-/* line 147, scss/base.scss */
+/* line 170, scss/base.scss */
 .empty {
   height: 4em;
 }
 
-/* line 151, scss/base.scss */
+/* line 174, scss/base.scss */
 .footer hr {
   max-width: 80%;
 }
 
-/* line 155, scss/base.scss */
+/* line 178, scss/base.scss */
 .page-wrap:after {
   content: "";
   display: block;
 }
 
-/* line 160, scss/base.scss */
+/* line 183, scss/base.scss */
 .site-footer,
 .page-wrap:after {
   height: 80px;
 }
 
-/* line 165, scss/base.scss */
+/* line 188, scss/base.scss */
 .site-footer {
   background: #AEA0BC;
   color: #FBFAFB;
 }
 
-/* line 171, scss/base.scss */
+/* line 194, scss/base.scss */
 table caption {
   color: #358ACD;
   font-weight: bold;
 }
 
-/* line 180, scss/base.scss */
+/* line 203, scss/base.scss */
 .table-striped tbody tr:nth-child(odd) td, .table-striped tbody tr:nth-child(odd) th {
   background-color: #E8F5FF;
 }
@@ -198,7 +225,7 @@ table caption {
 /*
 Tooltip
 */
-/* line 191, scss/base.scss */
+/* line 214, scss/base.scss */
 div.tooltip {
   position: absolute;
   padding: 5px;
@@ -212,26 +239,26 @@ div.tooltip {
   opacity: 1;
 }
 
-/* line 202, scss/base.scss */
+/* line 225, scss/base.scss */
 .tooltip {
   -moz-box-shadow: rgba(0, 0, 0, 0.4) 0 0 25px;
   -webkit-box-shadow: rgba(0, 0, 0, 0.4) 0 0 25px;
   box-shadow: rgba(0, 0, 0, 0.4) 0 0 25px;
 }
-/* line 205, scss/base.scss */
+/* line 228, scss/base.scss */
 .tooltip div .table {
   margin: 0px;
 }
-/* line 208, scss/base.scss */
+/* line 231, scss/base.scss */
 .tooltip div .table tr td:nth-child(1) {
   text-align: right;
 }
-/* line 211, scss/base.scss */
+/* line 234, scss/base.scss */
 .tooltip div .table tr td:nth-child(2) {
   text-align: left;
   font-weight: bold;
 }
-/* line 216, scss/base.scss */
+/* line 239, scss/base.scss */
 .tooltip div .table th,
 .tooltip div .table td {
   border-top: none !important;
