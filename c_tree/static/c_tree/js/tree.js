@@ -18,6 +18,11 @@ var Tree = function(_parent_id, _data, _event_handler) {
     self.t_offset = 13;
     self.duration = 400;
 
+    self.rect_height = 32;
+    self.rect_width = 150;
+    self.rect_rx = self.rect_height / 2;
+    self.rect_ry = self.rect_rx;
+
     this.width = $(this.parent_id).width() - this.margin.left - this.margin.right;
     this.height = $(this.parent_id).height();
     this.height = Math.max(window.innerHeight, this.height);
@@ -39,7 +44,7 @@ var Tree = function(_parent_id, _data, _event_handler) {
 
     self.diagonal = d3.svg.diagonal()
         .projection(function(d) {
-            return [d.y, d.x];
+            return [d.y + self.rect_width/3, d.x];
         });
 
 
@@ -66,16 +71,17 @@ Tree.prototype.init = function() {
         .attr('transform', 'translate(' + self.margin.left + ',' + self.margin.top + ')');
 
     self.process_data();
-    var root = self.display_data;
-    root.x0 = self.height / 2. + self.margin.left;
-    root.y0 = 0;
+    self.display_data.x0 = self.height / 2. + self.margin.left;
+    self.display_data.y0 = 0;
     self.update(self.display_data);
 };
 
 Tree.prototype.process_data = function() {
     var self = this;
 
-    $.map(self.data.nodes, function(v) {v.id = null;});
+    $.map(self.data.nodes, function(v) {
+        v.id = null;
+    });
 
     var job_name = 'Job Name';
     var root = {
@@ -169,19 +175,21 @@ Tree.prototype.update = function(source) {
         if (!d.overcode) {
             self.show_verbatims(d);
         } else {
-        if (d.children) {
-            d._children = d.children;
-            d.children = null;
-        } else {
-            d.children = d._children;
-            d._children = null;
+            if (d.children) {
+                d._children = d.children;
+                d.children = null;
+            } else {
+                d.children = d._children;
+                d._children = null;
+            }
+            self.update(d);
         }
-        self.update(d);
-    }
     }
 
     var nodeEnter = node.enter().append('g')
-        .attr('class', 'node')
+        .attr('class', function(d) {
+            return d.overcode? 'node overcode' : 'node code';
+        })
         .attr('transform', function(d) {
             return 'translate(' + source.y0 + ',' + source.x0 + ')'
         })
@@ -201,15 +209,16 @@ Tree.prototype.update = function(source) {
         })
         .on('click', click);
 
-    nodeEnter.append('circle')
-        .attr('r', 1e-6)// function(d) {
-            // return Math.max(self.radius(d), self.min_r) || self.min_r;
-        // })
-        .style("fill", function(d) { return d._children ? "lightsteelblue" : "#fff"; });
+    nodeEnter.append('rect')
+        .attr('height', 1e-6) // function(d) {
+    // return Math.max(self.radius(d), self.min_r) || self.min_r;
+    // })
+    .attr("rx", self.rect_rx)
+        .attr("ry", self.rect_ry);
 
     nodeEnter.append('text')
         .attr('x', function(d) {
-            return d.children || d._children ? -self.radius(d) - self.t_offset : self.radius(d) + self.t_offset;
+            return d.children || d._children ? 30 + self.radius(d) + self.t_offset : self.radius(d) + self.t_offset;
         })
         .attr('dy', '.35em')
         .attr('text-anchor', function(d) {
@@ -221,28 +230,34 @@ Tree.prototype.update = function(source) {
         .style('fill-opacity', 1e-6);
 
     var nodeUpdate = node.transition()
-      .duration(self.duration)
-      .attr("transform", function(d) { return "translate(" + d.y + "," + d.x + ")"; });
+        .duration(self.duration)
+        .attr("transform", function(d) {
+            return "translate(" + d.y + "," + d.x + ")";
+        });
 
-    nodeUpdate.select("circle")
-      .attr("r", function(d) {
-            return Math.max(self.radius(d), self.min_r) || self.min_r;
-        })
-      .style("fill", function(d) { return d._children ? "lightsteelblue" : "#fff"; });
+    nodeUpdate.select("rect")
+    // .attr("height", function(d) {
+    //       return Math.max(self.radius(d), self.min_r) || self.min_r;
+    //   })
+    .attr("height", self.rect_height)
+        .attr("width", self.rect_width)
+        .attr("y", -self.rect_height / 2);
 
     nodeUpdate.select("text")
-      .style("fill-opacity", 1);
+        .style("fill-opacity", 1);
 
     var nodeExit = node.exit().transition()
-      .duration(self.duration)
-      .attr("transform", function(d) { return "translate(" + source.y + "," + source.x + ")"; })
-      .remove();
+        .duration(self.duration)
+        .attr("transform", function(d) {
+            return "translate(" + source.y + "," + source.x + ")";
+        })
+        .remove();
 
-    nodeExit.select("circle")
-      .attr("r", 1e-6);
+    nodeExit.select("rect")
+        .attr("height", 1e-6);
 
     nodeExit.select("text")
-      .style("fill-opacity", 1e-6);
+        .style("fill-opacity", 1e-6);
 
     var link = self.svg.selectAll('path.link')
         .data(links, function(d) {
@@ -250,31 +265,44 @@ Tree.prototype.update = function(source) {
         });
 
     link.enter().insert('path', 'g')
-        .attr('class', 'link')
+        .attr('class', function(d) {
+            return d.target.overcode? 'link overcode': 'link code';
+        })
         .attr('d', function(d) {
-        var o = {x: source.x0, y: source.y0};
-        return self.diagonal({source: o, target: o});
-      });
+            var o = {
+                x: source.x0,
+                y: source.y0
+            };
+            return self.diagonal({
+                source: o,
+                target: o
+            });
+        });
 
     link.transition()
-      .duration(self.duration)
-      .attr("d", self.diagonal);
+        .duration(self.duration)
+        .attr("d", self.diagonal);
 
     link.exit().transition()
-      .duration(self.duration)
-      .attr('d', function(d) {
-        var o = {x: source.x, y: source.y};
-        return self.diagonal({source: o, target: o});
-      })
-      .remove();
+        .duration(self.duration)
+        .attr('d', function(d) {
+            var o = {
+                x: source.x,
+                y: source.y
+            };
+            return self.diagonal({
+                source: o,
+                target: o
+            });
+        })
+        .remove();
 
     nodes.forEach(function(d) {
-    d.x0 = d.x;
-    d.y0 = d.y;
-  });
+        d.x0 = d.x;
+        d.y0 = d.y;
+    });
 };
 
-Tree.prototype.tooltip_html = tooltip_html;
+// Tree.prototype.tooltip_html = tooltip_html;
 Tree.prototype.show_verbatims = show_verbatims;
 Tree.prototype.helpers_init = helpers_init;
-

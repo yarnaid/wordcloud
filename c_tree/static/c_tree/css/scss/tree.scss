@@ -1,0 +1,64 @@
+@import "const";
+@import "compass/css3";
+
+
+// .node rect {
+//    /*fill: none;*/
+//    stroke: steelblue;
+//    stroke-width: 3px;
+//    cursor: pointer;
+//  }
+
+.node {
+  text {
+    font: $vis-font;
+  }
+  rect {
+    stroke-width: 3px;
+    cursor: pointer;
+    fill: white;
+  }
+  &.overcode {
+    rect {
+      stroke: $vis-pink;
+      &:hover {
+        fill: $overcode-pink-hover;
+      }
+    }
+    text {
+      fill: $overcode-pink;
+    }
+  }
+  &.code {
+    text {
+      fill: $code-blue;
+    }
+    rect {
+      stroke: $vis-blue;
+      &:hover {
+        fill: $code-blue-hover;
+      }
+    }
+  }
+}
+
+.link {
+  fill: none;
+  stroke: #ccc;
+  stroke-width: 2px;
+  &.code {
+    stroke: $vis-blue;
+  }
+  &.overcode {
+    stroke: $vis-pink;
+  }
+}
+
+svg {
+    border: 2px solid;
+    border-radius: 25px;
+}
+
+.collapsed {
+    fill: lightsteelblue;
+}
