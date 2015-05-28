@@ -212,7 +212,12 @@ class UploadFile(helpers.TimeMixin):
             for ccode in cb.iterrows():
                 code = ccode[1]
                 print code.NET, job[0], code_book
-                parent = Code.objects.get_or_create(code=code.NET, job=job[0], overcode=True, code_book=code_book, parent=None)
+                try:
+                    parent = Code.objects.get_or_create(code=code.NET, job=job[0], overcode=True, code_book=code_book, parent=None)
+                except Exception as e:
+                    print e
+                    print Code.objects.filter(code=code.NET, job=job[0], overcode=True, code_book=code_book, parent=None)
+                    raise e
                 if parent[1]:
                     parent[0].save()
                 parent = parent[0]
