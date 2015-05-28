@@ -211,6 +211,7 @@ class UploadFile(helpers.TimeMixin):
             codes_to_save = list()
             for ccode in cb.iterrows():
                 code = ccode[1]
+                print code.NET, job[0], code_book
                 parent = Code.objects.get_or_create(code=code.NET, job=job[0], overcode=True, code_book=code_book, parent=None)
                 if parent[1]:
                     parent[0].save()
