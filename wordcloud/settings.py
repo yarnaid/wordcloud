@@ -27,7 +27,7 @@ SECRET_KEY = 't@dpxuj8i5&uh+&v#(z7+&x@$g#-^7%tk-$@ker9rc8_t#z#ph'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-DEBUG_PANEL = False
+DEBUG_PANEL = not False
 
 TEMPLATE_DEBUG = DEBUG
 
@@ -40,7 +40,7 @@ COMMENTS_XTD_CONFIRM_EMAIL = True
 # Application definition
 
 INSTALLED_APPS = (
-    'silk',
+    # 'silk',
     'modeltranslation',
     'grappelli.dashboard',
     'grappelli',
@@ -73,6 +73,7 @@ INSTALLED_APPS = (
     'disqus',
     'django_extensions',
     'data_filter',
+    'compare_vis',
 )
 
 
@@ -81,7 +82,6 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
-    # 'django.contrib.auth.context_processors.auth',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     # 'livereload.middleware.LiveReloadScript',
@@ -92,7 +92,8 @@ MIDDLEWARE_CLASSES = (
 
 if DEBUG_PANEL:
     INSTALLED_APPS = INSTALLED_APPS + ('debug_toolbar',)
-    MIDDLEWARE_CLASSES = ('debug_toolbar.middleware.DebugToolbarMiddleware',) + MIDDLEWARE_CLASSES
+    MIDDLEWARE_CLASSES = ('debug_toolbar.middleware.DebugToolbarMiddleware',) + \
+        MIDDLEWARE_CLASSES
 
 TEMPLATES = [
     {
@@ -132,19 +133,16 @@ DATABASES = {
 LANGUAGE_CODE = 'en-us'
 
 LANGUAGES = (
-  ('en', _('English')),
-  ('fr', _('French')),
-  # ('de', _('German')),
-  ('sp', _('Spanish')),
-  # ('ru', _('Russian')),
+    ('en', _('English')),
+    ('fr', _('French')),
+    # ('de', _('German')),
+    ('sp', _('Spanish')),
+    # ('ru', _('Russian')),
 )
 
 TIME_ZONE = 'UTC'
-
 USE_I18N = True
-
 USE_L10N = True
-
 USE_TZ = True
 
 

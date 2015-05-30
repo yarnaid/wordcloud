@@ -1,0 +1,25 @@
+@font-face {
+  font-family: 'Glyphicons Halflings';
+  src: url('../fonts/glyphicons-halflings-regular.eot');
+  src: url('../fonts/glyphicons-halflings-regular.eot?#iefix') format('embedded-opentype'), url('../fonts/glyphicons-halflings-regular.woff2') format('woff2'), url('../fonts/glyphicons-halflings-regular.woff') format('woff'), url('../fonts/glyphicons-halflings-regular.ttf') format('truetype'), url('../fonts/glyphicons-halflings-regular.svg#glyphicons_halflingsregular') format('svg'), url('../fonts/klavikaregular-osf-opentype.otf') format('opentype');
+}
+
+$background: white;
+$font-family: 'Klavika Regular', klavika-regular;
+$font-size: 16px;
+$line-height: 1.4;
+
+$gray: #f5f5f5;
+$blue: #358acd;
+$light-blue: #e8f5ff;
+$footer-color: #aea0bc;
+$footer-text: #fbfafb;
+$hover-color: #f0f9ff;
+$vis-text-color: #3f87cd;
+$vis-font: 12px Arial, 'Helvetica Neue', Helvetica, sans-serif;
+$vis-pink: #d69ae6;
+$vis-blue: #c2daec;
+$code-blue: #4596d3;
+$code-blue-hover: #eef5fa;
+$overcode-pink: #9b36bb;
+$overcode-pink-hover: #f8f2fa;

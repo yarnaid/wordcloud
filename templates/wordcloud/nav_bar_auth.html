@@ -19,11 +19,12 @@
       <ul class="nav navbar-nav">
         <li><a href="#"><p class="text-muted">{% trans "Library" %}</p></a></li>
         <li><a href="{% url 'pricing_round_tool' %}">{% trans "Pricing and Timing" %}</a></li>
+        <li><a href="{% url 'compare' %}">{% trans "Compare" %}</a></li>
         <li><a href="#"><p class="text-muted">{% trans "Dashboard" %}</p></a></li>
         <li><a href="#"><p class="text-muted">{% trans "Settings" %}</p></a></li>
         <li> <a href="{% url 'cloud' %}">{% trans "Cloud" %}</a> </li>
-        <li> <a href="{% url 'wordle' %}">{% trans "WORDLE" %}</a> </li>
-        <li> <a href="{% url 'tree' %}">{% trans "TREE" %}</a> </li>
+        <li> <a href="{% url 'wordle' %}">{% trans "Wordle" %}</a> </li>
+        <li> <a href="{% url 'tree' %}">{% trans "Tree" %}</a> </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
         {% if user.is_authenticated %}

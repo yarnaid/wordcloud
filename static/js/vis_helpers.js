@@ -306,8 +306,9 @@ var make_svg = function(Vis, toggle_motion, svg_parent_id_) {
     var rest = new Rest();
     var event_handler = get_filter_event_handler();
 
+    var on1 = $(event_handler).on('filter_menu_update')
     $(event_handler).on('filter_menu_update', function() {
-        $('#svg svg').remove();
+        $(svg_parent_id_ || '#svg' + ' svg').remove();
         start();
     });
 
@@ -339,7 +340,6 @@ var make_svg = function(Vis, toggle_motion, svg_parent_id_) {
     var start = function() {
         var params = get_filter_params();
         var vis_data = get_vis_data(params.job, params.question);
-        // console.log(vis_data);
         data_loaded(null, vis_data);
     };
     start();

@@ -1,0 +1,12 @@
+{% load sekizai_tags staticfiles i18n dixit_downloader disqus_tags %}
+{% for i in "x"|rjust:N %}
+    {% with forloop.counter0|add:"1" as cols %}
+    <div class="col-md-{{w}}" id="vis-{{cols}}">
+        <div id="svg_{{cols}}"></div>
+        <script type="text/javascript">$(function() {
+            make_svg(Cluster, true, "#svg_{{cols}}");
+        })</script>
+        <div>{% downloader %}</div>
+    </div>
+    {% endwith %}
+{% endfor %}
