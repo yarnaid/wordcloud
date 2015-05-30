@@ -75,3 +75,10 @@ class PricingView(CsrfCookieMixin, TemplateView):
         })
         response = HttpResponse(json.dumps(res), content_type='application/json')
         return response
+
+
+class PricingRoundView(CsrfCookieMixin, TemplateView):
+    template_name = 'pricing_tool/content_round.html'
+
+    def post(self, *args, **kwargs):
+        return self.get(*args, **kwargs)

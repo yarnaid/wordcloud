@@ -215,7 +215,7 @@ class UploadFile(helpers.TimeMixin):
                 try:
                     parent = Code.objects.get_or_create(code=code.NET, job=job[0], overcode=True, code_book=code_book, parent=None)
                 except Exception as e:
-                    print e
+                    print e, code.NET, code.id, code_book
                     print Code.objects.filter(code=code.NET, job=job[0], overcode=True, code_book=code_book, parent=None)
                     raise e
                 if parent[1]:
