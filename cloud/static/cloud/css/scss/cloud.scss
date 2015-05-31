@@ -1,0 +1,50 @@
+@import "compass/css3";
+
+  .node {
+    cursor: pointer;
+    stroke: rgba(57, 141, 207, 0.5);
+    stroke-width: 1px;
+  }
+
+  .node:hover {
+    stroke: rgba(175, 97, 203, 1);
+    stroke-width: 2px;
+  }
+
+.cloud * g rect {
+  stroke: none;
+  position: absolute;
+}
+
+.overcode {
+  fill: rgba(175, 97, 203, 0.08);
+}
+
+.overcode:hover {
+  fill: rgba(175, 97, 203, 0.5);
+}
+
+.code {
+  stroke: rgba(57, 141, 207, 1);
+  fill: rgba(57, 141, 207, 0.05);
+}
+
+.code:hover {
+  stroke: rgba(57, 141, 207, 1);
+  fill: rgba(57, 141, 207, 0.5);
+}
+
+.code > g > .circle-text {
+  fill: rgba(57, 141, 207, 1);
+}
+
+.circle-text {
+  fill: #AF61CB;
+  stroke: none;
+  position: absolute;
+}
+
+.cloud * .link {
+  stroke: none;
+}
+

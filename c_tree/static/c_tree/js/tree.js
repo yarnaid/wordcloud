@@ -8,10 +8,10 @@ var Tree = function(_parent_id, _data, _event_handler) {
     self.data = _data;
     self.event_handler = _event_handler;
     self.margin = {
-        top: 20,
+        top: 10,
         bottom: 200,
-        left: 20,
-        right: 20
+        left: 0,
+        right: 0
     };
     self.i = 0;
     self.min_r = 5;
@@ -19,7 +19,7 @@ var Tree = function(_parent_id, _data, _event_handler) {
     self.duration = 400;
 
     self.rect_height = 32;
-    self.rect_width = 150;
+    self.rect_width = 120;
     self.rect_rx = self.rect_height / 2;
     self.rect_ry = self.rect_rx;
 
@@ -62,6 +62,7 @@ Tree.prototype.init = function() {
 
     self.svg = d3.select(self.parent_id)
         .append('svg')
+        .attr('class', 'tree')
         .attr('width', self.width)
         .attr('height', self.height)
         .attr('pointer-events', 'all')

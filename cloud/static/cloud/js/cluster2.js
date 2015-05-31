@@ -70,12 +70,14 @@ Cluster.prototype.init = function() {
     this.svg = d3.select(this.parent_id).append('svg')
         .attr('width', this.width)
         .attr('height', this.height)
+        .attr('class', 'cloud')
         // .attr('pointer-events', 'all')
         .append('svg:g')
         .call(self.zoom.on('zoom', zoom))
         .append('svg:g');
 
     this.svg.append('rect') // scaling rectangle
+        .attr('class', 'hidden')
         .attr('width', this.width)
         .attr('height', this.height)
         .attr('transform', 'translate(' + this.width*0.1 + ',' + this.height*0.1 + ') scale(0.8)')

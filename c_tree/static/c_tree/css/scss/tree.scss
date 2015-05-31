@@ -2,14 +2,8 @@
 @import "compass/css3";
 
 
-// .node rect {
-//    /*fill: none;*/
-//    stroke: steelblue;
-//    stroke-width: 3px;
-//    cursor: pointer;
-//  }
-
-.node {
+.tree * {
+  .node {
   text {
     font: $vis-font;
   }
@@ -54,11 +48,6 @@
   }
 }
 
-svg {
-    border: 2px solid;
-    border-radius: 25px;
-}
-
 .collapsed {
     fill: lightsteelblue;
-}
+}}

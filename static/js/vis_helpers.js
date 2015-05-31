@@ -301,7 +301,7 @@ var get_vis_data = function(job_id, question_name) {
 }
 
 
-var make_svg = function(Vis, toggle_motion, svg_parent_id_) {
+var make_svg = function(Vis, toggle_motion_id, svg_parent_id_) {
     var data = {};
     var rest = new Rest();
     var event_handler = get_filter_event_handler();
@@ -315,8 +315,8 @@ var make_svg = function(Vis, toggle_motion, svg_parent_id_) {
     function init() {
         var svg_parent_id = svg_parent_id_ || '#svg';
         var cluster = new Vis(svg_parent_id, data);
-        if (toggle_motion) {
-            $('#toggle_motion').click(function() {
+        if (toggle_motion_id) {
+            $(toggle_motion_id).click(function() {
                 $(svg_parent_id).toggleClass('motion');
                 if($(svg_parent_id).hasClass('motion')) {
                     cluster.force.start();

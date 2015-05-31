@@ -3,63 +3,55 @@
   src: url("../fonts/glyphicons-halflings-regular.eot");
   src: url("../fonts/glyphicons-halflings-regular.eot?#iefix") format("embedded-opentype"), url("../fonts/glyphicons-halflings-regular.woff2") format("woff2"), url("../fonts/glyphicons-halflings-regular.woff") format("woff"), url("../fonts/glyphicons-halflings-regular.ttf") format("truetype"), url("../fonts/glyphicons-halflings-regular.svg#glyphicons_halflingsregular") format("svg"), url("../fonts/klavikaregular-osf-opentype.otf") format("opentype");
 }
-/* line 13, scss/tree.scss */
-.node text {
+/* line 7, scss/tree.scss */
+.tree * .node text {
   font: 12px Arial, "Helvetica Neue", Helvetica, sans-serif;
 }
-/* line 16, scss/tree.scss */
-.node rect {
+/* line 10, scss/tree.scss */
+.tree * .node rect {
   stroke-width: 3px;
   cursor: pointer;
   fill: white;
 }
-/* line 22, scss/tree.scss */
-.node.overcode rect {
+/* line 16, scss/tree.scss */
+.tree * .node.overcode rect {
   stroke: #d69ae6;
 }
-/* line 24, scss/tree.scss */
-.node.overcode rect:hover {
+/* line 18, scss/tree.scss */
+.tree * .node.overcode rect:hover {
   fill: #f8f2fa;
 }
-/* line 28, scss/tree.scss */
-.node.overcode text {
+/* line 22, scss/tree.scss */
+.tree * .node.overcode text {
   fill: #9b36bb;
 }
-/* line 33, scss/tree.scss */
-.node.code text {
+/* line 27, scss/tree.scss */
+.tree * .node.code text {
   fill: #4596d3;
 }
-/* line 36, scss/tree.scss */
-.node.code rect {
+/* line 30, scss/tree.scss */
+.tree * .node.code rect {
   stroke: #c2daec;
 }
-/* line 38, scss/tree.scss */
-.node.code rect:hover {
+/* line 32, scss/tree.scss */
+.tree * .node.code rect:hover {
   fill: #eef5fa;
 }
-
-/* line 45, scss/tree.scss */
-.link {
+/* line 39, scss/tree.scss */
+.tree * .link {
   fill: none;
   stroke: #ccc;
   stroke-width: 2px;
 }
-/* line 49, scss/tree.scss */
-.link.code {
+/* line 43, scss/tree.scss */
+.tree * .link.code {
   stroke: #c2daec;
 }
-/* line 52, scss/tree.scss */
-.link.overcode {
+/* line 46, scss/tree.scss */
+.tree * .link.overcode {
   stroke: #d69ae6;
 }
-
-/* line 57, scss/tree.scss */
-svg {
-  border: 2px solid;
-  border-radius: 25px;
-}
-
-/* line 62, scss/tree.scss */
-.collapsed {
+/* line 51, scss/tree.scss */
+.tree * .collapsed {
   fill: lightsteelblue;
 }

@@ -212,19 +212,19 @@ END Main page
 
 /* line 188, scss/base.scss */
 .site-footer {
-  background: #AEA0BC;
-  color: #FBFAFB;
+  background: #aea0bc;
+  color: #fbfafb;
 }
 
 /* line 194, scss/base.scss */
 table caption {
-  color: #358ACD;
+  color: #358acd;
   font-weight: bold;
 }
 
 /* line 203, scss/base.scss */
 .table-striped tbody tr:nth-child(odd) td, .table-striped tbody tr:nth-child(odd) th {
-  background-color: #E8F5FF;
+  background-color: #e8f5ff;
 }
 
 /*
