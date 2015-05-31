@@ -1,11 +1,14 @@
 {% load sekizai_tags i18n staticfiles %}
 <form action="" id="save_form">
     {% csrf_token %}
-    <div class="input-group" role="group">
-        <span class="input-group-addon">{% trans "Download" %} {{ extra_text }} {% trans "as" %}</span>
-        <input onclick="saveSvgAsPng(document.getElementsByTagName('svg')[0], 'diagram.png', {scale: 2})" type="button" class="btn btn-default" value="PNG"/>
-        <input onclick="get_csv(window.location.href)" type="button" class="btn btn-default" download="" value="CSV" download/>
-    </div>
+    {# <div class="input-group" role="group"> #}
+        {# <span class="input-group-addon">{% trans "Download" %} {{ extra_text }} {% trans "as" %}</span> #}
+        
+        <a onclick="saveSvgAsPng(document.getElementsByTagName('svg')[0], 'diagram.png', {scale: 2})" type="button" value="PNG"><div class="col-md-2 svg-menu-item">Export PNG</div></a>
+        
+            <a onclick="get_csv(window.location.href)" type="button" download="" value="CSV" download><div class="col-md-2 svg-menu-item right">Export CSV
+        </div></a>
+    {# </div> #}
 </form>
 <canvas style="display:none"></canvas>
 

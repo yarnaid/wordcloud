@@ -4,3 +4,51 @@
 svg {
     stroke: 1px;
 }
+
+$border-color: rgb(227, 227, 227);
+$menu-border: 1.5px solid $border-color;
+$hover-color: #f0f9ff;
+.svg-menu {
+    font-size: 0.8em;
+    margin-top: -8px;
+}
+
+a div {
+    cursor: pointer;
+}
+
+.svg-menu-item {
+    text-align: center;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+
+    border-bottom: $menu-border;
+    margin-bottom: 1em;
+    border-top: $menu-border;
+    &.right {
+        border-right: $menu-border;
+    }
+    &.left{
+        border-left: $menu-border;
+    }
+    border-bottom: $menu-border;
+    margin-bottom: 1em;
+    &:hover {
+        border-bottom: $menu-border;
+        border-top: $menu-border;
+        border-left: $menu-border;
+        border-right: $menu-border;
+        background-color: $hover-color;
+    }
+}
+
+// .justified {
+//       text-align: justify;
+//     }
+
+// .justified:after {
+//   content: "";
+//   display: inline-block;
+//   width: 100%;
+// }

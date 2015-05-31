@@ -6,7 +6,14 @@
         <script type="text/javascript">$(function() {
             make_svg(Cluster, true, "#svg_{{cols}}");
         })</script>
-        <div>{% downloader %}</div>
+        {# <div class="justified"> #}
+        <div class="row-fluid svg-menu">
+            <a href="#"><div class="col-md-2 svg-menu-item left">{% trans "Options" %}</div></a>
+            <a href="#"><div class="col-md-2 svg-menu-item">{% trans "Stop motion" %}</div></a>
+            <a href="#"><div class="col-md-2 svg-menu-item">{% trans "Unlock" %}</div></a>
+            <a href="#"><div class="col-md-2 svg-menu-item">{% trans "Show in Wordle" %}</div></a>
+            {% downloader %}
+        </div>
     </div>
     {% endwith %}
 {% endfor %}

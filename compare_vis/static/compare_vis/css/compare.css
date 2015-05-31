@@ -2,3 +2,43 @@
 svg {
   stroke: 1px;
 }
+
+/* line 11, scss/compare.scss */
+.svg-menu {
+  font-size: 0.8em;
+  margin-top: -8px;
+}
+
+/* line 16, scss/compare.scss */
+a div {
+  cursor: pointer;
+}
+
+/* line 20, scss/compare.scss */
+.svg-menu-item {
+  text-align: center;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  border-bottom: 1.5px solid #e3e3e3;
+  margin-bottom: 1em;
+  border-top: 1.5px solid #e3e3e3;
+  border-bottom: 1.5px solid #e3e3e3;
+  margin-bottom: 1em;
+}
+/* line 29, scss/compare.scss */
+.svg-menu-item.right {
+  border-right: 1.5px solid #e3e3e3;
+}
+/* line 32, scss/compare.scss */
+.svg-menu-item.left {
+  border-left: 1.5px solid #e3e3e3;
+}
+/* line 37, scss/compare.scss */
+.svg-menu-item:hover {
+  border-bottom: 1.5px solid #e3e3e3;
+  border-top: 1.5px solid #e3e3e3;
+  border-left: 1.5px solid #e3e3e3;
+  border-right: 1.5px solid #e3e3e3;
+  background-color: #f0f9ff;
+}

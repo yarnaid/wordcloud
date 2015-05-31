@@ -17,9 +17,9 @@ var Cluster = function(_parent_id, _data, _eventHandler, _fps) {
     this.codes_overlap = 5;
     this.margin = {
         top: 10,
-        right: 40,
+        right: 0,
         bottom: 200,
-        left: 10
+        left: 0
     };
     this.raduis_scale = d3.scale.linear().range([10, 40]).domain([1, 300]);
 
