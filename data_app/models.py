@@ -1,23 +1,54 @@
 import re
-from django.db import models
-from mptt.models import MPTTModel, TreeForeignKey
-import pandas as pd
-import os
-import re
+import thread
+
 import helpers.models as helpers
+import os
+import pandas as pd
+import re
+import time
+
+from django.db import models
 from django.db import transaction
+from mptt.models import MPTTModel
+from mptt.models import TreeForeignKey
 from silk.profiling.profiler import silk_profile
-
-
-# Create your models here.
+from django.core.files.storage import FileSystemStorage
+from django.conf import settings
 
 cb_regex = '^cb_.*$'
+
+
+class OverwriteStorage(FileSystemStorage):
+
+    def get_available_name(self, name):
+        """Returns a filename that's free on the target storage system, and
+        available for new content to be written to.
+
+        Found at http://djangosnippets.org/snippets/976/
+
+        This file storage solves overwrite on upload problem. Another
+        proposed solution was to override the save method on the model
+        like so (from https://code.djangoproject.com/ticket/11663):
+
+        def save(self, *args, **kwargs):
+            try:
+                this = MyModelName.objects.get(id=self.id)
+                if this.MyImageFieldName != self.MyImageFieldName:
+                    this.MyImageFieldName.delete()
+            except: pass
+            super(MyModelName, self).save(*args, **kwargs)
+        """
+        # If the filename already exists, remove it as if it was a true file system
+        if self.exists(name):
+            os.remove(os.path.join(settings.MEDIA_ROOT, name))
+        return name
 
 
 class Job(MPTTModel, helpers.TimeMixin):
     name = models.CharField(max_length=255)
     number = models.IntegerField()
-    parent = TreeForeignKey('self', null=True, blank=True, related_name='children_jobs')
+    parent = TreeForeignKey('self', null=True, blank=True,
+                            related_name='children_jobs')
 
     def __str__(self):
         return '{}_{}'.format(self.number, self.name)
@@ -28,7 +59,8 @@ class Question(MPTTModel, helpers.TimeMixin):
     text = models.TextField(blank=True)
     title = models.CharField(max_length=255, blank=True)
     kind = models.CharField(max_length=255)
-    parent = TreeForeignKey(Job, null=True, blank=True, related_name='children_questions')
+    parent = TreeForeignKey(Job, null=True, blank=True,
+                            related_name='children_questions')
     code_book = models.ForeignKey('CodeBook', null=True, blank=True)  # key for root code
 
     def __str__(self):
@@ -49,8 +81,10 @@ class Code(MPTTModel, helpers.TimeMixin):
     text = models.TextField(blank=True, null=True)
     title = models.CharField(max_length=255, blank=True)
     code = models.IntegerField(blank=True, null=True)
-    parent = TreeForeignKey('self', null=True, blank=True, related_name='children_codes')
-    code_book = models.ForeignKey('CodeBook', null=True, blank=True, related_name='children_codes')
+    parent = TreeForeignKey('self', null=True, blank=True,
+                            related_name='children_codes')
+    code_book = models.ForeignKey('CodeBook', null=True, blank=True,
+                                  related_name='children_codes')
     job = models.ForeignKey('Job')
     overcode = models.BooleanField()
 
@@ -62,7 +96,8 @@ class Verbatim(MPTTModel, helpers.TimeMixin):
     question = models.ForeignKey('Question', blank=True, null=True)
     variable = models.ForeignKey('Variable', blank=True, null=True)
     verbatim = models.TextField()
-    parent = TreeForeignKey('Code', null=True, blank=True, related_name='children_verbatims')
+    parent = TreeForeignKey('Code', null=True, blank=True,
+                            related_name='children_verbatims')
     job = models.ForeignKey('Job')
 
     def __str__(self):
@@ -88,222 +123,404 @@ class Variable(helpers.TimeMixin):
 
 
 class UploadFile(helpers.TimeMixin):
-    '''
-    Upload and process template file.
+    """Upload and process template file.
 
-    '''
+    Parses and uploads data from .xls spreadsheets to the existing databases
+    Each file represents single job
+
+    Attributes:
+    -----------
+        job : Job
+            temporary attribute. Represents job entity while input's processing
+        code_books_entities : dict
+            dict {code_book_name : code_book_entity}, contains codebooks, available
+            in current file
+    """
+
     # TODO: Comment and split to smaller function
     # TODO: improve performace, bulk DB write
-    sheet = models.FileField()
+
+    sheet = models.FileField(storage=OverwriteStorage(),
+                             upload_to=lambda i, x: x)
 
     def __str__(self):
         return '{}'.format(os.path.basename(self.sheet.name))
 
-    # @transaction.atomic
-    @silk_profile(name='Save File')
-    def save(self, force_insert=False, force_update=False, using=None,
-             update_fields=None):
-        super(UploadFile, self).save(force_insert=force_insert, force_update=force_update,
-                                     using=using, update_fields=update_fields)
+    def parse_questions(self, excel_file):
+        """Separate method to parse questions from spreadsheet
 
-        file_name = self.sheet.path
-        f = pd.ExcelFile(file_name)
-
-        file_name = os.path.splitext(file_name)[0]
-        file_name = os.path.basename(file_name)
-        job_number = file_name.split('_')[0]
-        job_name = ' '.join(file_name.split('_')[1:])
-        job = Job.objects.get_or_create(name=job_name, number=job_number)
-        job[0].save()
-
-        code_books_names = filter(lambda x: re.match(cb_regex, x, re.IGNORECASE) is not None, f.sheet_names)
-        code_books = {name: f.parse(name) for name in code_books_names}
-
-        question_df = f.parse('question')
+        Arguments:
+        ----------
+            excel_file: ExcelFile
+                input .xls file, that contains data about questions
+        """
+        start = time.clock()
+        question_df = excel_file.parse('question')
         question_df = question_df.where(pd.notnull(question_df), None)
-        q_to_create = list()
+        q_to_save = list()
         try:
             q_id = Question.objects.latest('id').id + 1
         except:
             q_id = 0
+
+        questions_in_df = dict()
+
+        questions_names = list()
+        questions_kinds = list()
+        questions_codebooks = list()
+
         for question in question_df.iterrows():
             qq = question[1]
-            cb = CodeBook.objects.get_or_create(job=job[0], name=qq.code_book)
-            if cb[1]:
-                cb[0].save()
-            q = Question.objects.get_or_create(
-                # text=qq.title,
-                # title=qq.text,
-                name=qq.id,
-                kind=qq.type,
-                parent=job[0],
-                code_book=cb[0],
-            )[0]
-            q.text_en = qq.text
-            q.title_en = qq.title
+            if qq.code_book not in questions_codebooks:
+                questions_codebooks.append(qq.code_book)
+            questions_names.append(qq.id)
+            questions_kinds.append(qq.type)
+            q = {
+                'id': q_id,
+                'name': qq.id,
+                'kind': qq.type,
+                'parent': self.job,
+                'text_en': qq.text,
+                'title_en': qq.title
+            }
             for key in qq.keys():
                 if key.count('text_') or key.count('title_'):
-                    setattr(q. key, qq[key])
-            q_id += 1
-            q_to_create.append(q)
-        for i, qq in enumerate(q_to_create):
-            qq.id = i
-        Question.objects.bulk_create(q_to_create)
+                    q[key] = qq[key]
 
-        variable_df = f.parse('variables')
+            q_id += 1
+
+            questions_in_df[(qq.id, qq.type, self.job, qq.code_book)] = q
+
+        # TODO: MAKE INDEX
+        existing_codebooks = {cb.name: cb for cb in CodeBook.objects
+                                .filter(name__in=questions_codebooks)}
+
+        # TODO: OPTIMIZE QUERY
+        existing_questions = {(q.name, q.kind, q.parent, q.code_book): q
+                              for q in Question.objects.filter(
+            name__in=questions_names,
+            parent=self.job,
+            kind__in=questions_kinds,
+            code_book__in=existing_codebooks.values()
+        )}
+
+        for key, q in questions_in_df.iteritems():
+            if key[3] in existing_codebooks.keys():
+                cb = existing_codebooks[key[3]]
+            else:
+                cb = CodeBook.objects.create(job=self.job, name=key.code_book)
+                existing_codebooks[cb.name] = cb
+
+            key = (key[0], key[1], key[2], cb)
+
+            if key in existing_questions.keys():
+                question = existing_questions[key]
+            else:
+                question = Question()
+
+            for attribute, value in q.iteritems():
+                setattr(question, attribute, value)
+            question.code_book = cb
+            q_to_save.append(question)
+        # TODO: USE BULK CRAEATE AND Q_ID
+        for q in q_to_save:
+            q.save()
+        return q_to_save
+
+    def parse_variables(self, excel_file):
+        """Method that parses variables from spreadsheet
+
+        Arguments:
+        ----------
+            excel_file: ExcelFile
+                input .xls file, that contains data about variables
+        """
+
+        start = time.clock()
+        variable_df = excel_file.parse('variables')
         variable_df = variable_df.where(pd.notnull(variable_df), None)
         variable_records = set()
+
+        try:
+            v_id = Variable.objects.latest('id').id + 1
+        except:
+            v_id = 0
+
         for vverbatim in variable_df.iterrows():
             verbat = vverbatim[1]
-            v = Variable.objects.get_or_create(
+            v = Variable(
+                id=v_id,
                 uid=verbat[0],
                 sex=verbat[1],
                 age_bands=verbat[2],
                 reg_quota=verbat[3],
                 csp_quota=verbat[4],
                 main_cell_text=verbat[5],
-                job=job[0]
+                job=self.job
             )
-            variable_records.add(v[0])
-        try:
-            v_id = Variable.objects.latest('id').id + 1
-        except:
-            v_id = 0
-        for i, v in enumerate(variable_records):
-            v.id = i
-        Variable.objects.bulk_create(variable_records)
+            variable_records.add(v)
 
-        for key, cb in code_books.iteritems():
+            v_id += 1
+
+        # TODO: BULK CREATE
+        for v in variable_records:
+            v.save()
+        return variable_records
+
+    def parse_codes(self, excel_file, code_books):
+        """Method that parses codes from spreadsheet
+
+        Arguments:
+        ----------
+            excel_file: ExcelFile
+                input .xls file, that contains data about codes
+        """
+
+        start = time.clock()
+        for key, cb in self.code_books_entities.iteritems():
+            codes_dict = dict()
+            parents_dict = dict()
+            related_codes = dict()
+
+            codes_text = list()
+            codes_titles = list()
+            codes_nets = list()
+            codes_codebooks = list()
+
             try:
-                code_book = CodeBook.objects.get(
-                    name=key,
-                    job=job[0]
-                )
+                code_book = cb
             except Exception as e:
-                print key, job[0]
+                print key, self.job
                 raise e
+            cb = code_books[key]
             cb = cb.where(pd.notnull(cb), None)
-            ocb = cb[pd.isnull(cb.Codes)]
+            ocb = cb[pd.isnull(cb.Codes)]  # overcodes
             cb = cb[pd.notnull(cb.Codes)]
-            oc_to_save = list()
+
             for oocode in ocb.iterrows():
                 code = oocode[1]
-                oc = Code.objects.get_or_create(
-                    text=code.text,
-                    title=code.title,
-                    code=code.NET,
-                    parent=None,
-                    code_book=code_book,
-                    job=job[0],
-                    overcode=True
-                )[0]
-                oc.text_en = code.text
-                oc.title_en = code.title
+                codes_text.append(code.text)
+                codes_titles.append(code.title)
+                codes_nets.append(code.NET)
+                codes_codebooks.append(code_book)
+                ccode = {
+                    'text': code.text,
+                    'title': code.title,
+                    'code': code.NET,
+                    'parent': None,
+                    'code_book': code_book,
+                    'job': self.job,
+                    'overcode': True,
+                    'text_en': code.text,
+                    'title_en': code.title
+                }
                 for ckey in code.keys():
                     if ckey.count('text_') > 0 or ckey.count('title_') > 0:
-                        setattr(oc, ckey, code[ckey])
+                        ccode[ckey] = code[ckey]
                 # oc.save()
-                oc_to_save.append(oc)
-            with transaction.atomic():
-                for c in oc_to_save:
-                    c.save()
-            # Code.objects.bulk_create(oc_to_save)
-            codes_to_save = list()
+                codes_dict[(ccode['code'], ccode['text'], ccode['title'])] = ccode
+            # TODO: OPTIMIZE QUERY
+            existing_codes = {(code.text, code.title,):
+                                  code for code in Code.objects.filter(text__in=codes_text, title__in=codes_titles,
+                                                                       code__in=codes_nets, code_book=code_book,
+                                                                       job=self.job, parent=None)}
+            for k, value in codes_dict.iteritems():
+                if key in existing_codes.keys():
+                    code = existing_codes[k]
+                else:
+                    code = Code()
+                for arg, val in value.iteritems():
+                    setattr(code, arg, val)
+                code.save()
+
+            parent_nets = list()
+            related_nets = list()
+            related_text = list()
+            related_titles = list()
+
+            codes_parent_nets = list()
             for ccode in cb.iterrows():
                 code = ccode[1]
-                print code.NET, job[0], code_book
-                try:
-                    parent = Code.objects.get_or_create(code=code.NET, job=job[0], overcode=True, code_book=code_book, parent=None)
-                except Exception as e:
-                    print e, code.NET, code.id, code_book
-                    print Code.objects.filter(code=code.NET, job=job[0], overcode=True, code_book=code_book, parent=None)
-                    raise e
-                if parent[1]:
-                    parent[0].save()
-                parent = parent[0]
-                c = Code.objects.get_or_create(
-                    text=code.text,
-                    title=code.title,
-                    code=code.Codes,
-                    job=job[0],
-                    overcode=False,
-                    parent=parent,
-                    code_book=code_book
-                )[0]
-                c.text_en = code.text
-                c.title_en = code.title
+                parent_nets.append(code.NET)
+                codes_parent_nets.append(code.NET)
+                parent = {
+                    'code': code.NET,
+                    'job': self.job,
+                    'overcode': True,
+                    'code_book': code_book,
+                    'parent': None
+                }
+
+                parent_key = parent['code']
+                if parent not in parents_dict.values():
+                    parents_dict[parent_key] = parent
+
+                related_text.append(code.text)
+                related_titles.append(code.title)
+                related_nets.append(code.Codes)
+                c = {
+                    'text': code.text,
+                    'title': code.title,
+                    'code': code.Codes,
+                    'job': self.job,
+                    'overcode': False,
+                    'parent': parent_key,
+                    'code_book': code_book,
+                    'text_en': code.text,
+                    'title_en': code.title
+                }
+
                 for ckey in code.keys():
                     if ckey.count('text_') > 0 or ckey.count('title_') > 0:
-                        setattr(c, ckey, code[ckey])
-                # c.save()
-                codes_to_save.append(c)
-            with transaction.atomic():
-                for c in codes_to_save:
-                    c.save()
-            # Code.objects.bulk_create(codes_to_save)
+                        c[ckey] = code[ckey]
 
-        verbatim_df = f.parse('verbatims')
+                related_codes[(c['text'], c['title'], c['code'], parent_key)] = c
+
+            existing_parents = {code.code: code for code in Code.objects.filter(code__in=codes_parent_nets,
+                                                                                job=self.job,
+                                                                                overcode=True,
+                                                                                code_book=code_book,
+                                                                                parent=None)}
+            existing_related = {(code.text, code.title, code.NET, code.parent): code
+                                for code in Code.objects.filter(code__in=related_nets,
+                                                                job=self.job,
+                                                                overcode=False,
+                                                                parent__in=existing_parents,
+                                                                text__in=related_text,
+                                                                title__in=related_titles)}
+
+            for key, value in related_codes.iteritems():
+                if key[3] in existing_parents.keys():
+                    key = (key[0], key[1], key[2], existing_parents[key[3]])
+                else:
+                    parent = Code()
+                    for arg, val in parents_dict[value['parent']].iteritems():
+                        setattr(parent, arg, val)
+                    parent.save()
+                    key = (key[0], key[1], key[2], parent)
+                    existing_parents[parent.code] = parent
+
+                value['parent'] = key[3]
+
+                if key in existing_related.keys():
+                    code = existing_related[key]
+                else:
+                    code = Code()
+
+                for arg, val in value.iteritems():
+                    setattr(code, arg, val)
+
+                code.save()
+
+    def parse_code_books(self, excel_file):
+        code_books_names = filter(lambda x: re.match(cb_regex, x, re.IGNORECASE) is not None, excel_file.sheet_names)
+        code_books = {name: excel_file.parse(name) for name in code_books_names}
+        return {name: CodeBook.objects.get_or_create(job=self.job, name=name)[0] for name in
+                code_books_names}, code_books
+
+    def parse_verbatims(self, excel_file):
+        """Method that parses verbatims and adds it to database
+
+        Current parsing method ignores if input file contains verbatims
+        that refers to unexisting question and has unexisting codes
+
+        Arguments:
+        ----------
+            excel_file: ExcelFile
+                input .xls file, that contains data about codes
+        """
+        verbatim_df = excel_file.parse('verbatims')
         verbatim_df = verbatim_df.where(pd.notnull(verbatim_df), None)
 
         keys = verbatim_df.keys()
         var_id = keys[0]
         q = set()
+        questions = {q.name: q for q in Question.objects.filter(parent=self.job)}
+        codes = {(code.code, code.code_book): code for code in Code.objects.filter(job=self.job)}
+        ver_to_save = list()
+
         for k in keys[1:]:
             q.add(k.split('-')[0].rstrip())
+
+        vars = {var.uid: var for var in Variable.objects.filter(job=self.job)}
+        # for each question in the top row
         for q_n in q:
-            var_keys = [var_id]
+            start = time.clock()
+
+            # Respondents serial
+            var_keys = [var_id, ]
             for vk in keys:
                 if vk.count(q_n) > 0:
                     var_keys.append(vk)
             vdf = verbatim_df[var_keys]
-            try:
-                question = Question.objects.get(parent=job[0], name=q_n)
-            except:
-                question = Question.objects.filter(parent=job[0], name=q_n)[0]  # FIX: DIRTY HACK
-            var_to_save = list()
-            ver_to_save = list()
+            question = questions[q_n]
+
+            '''
+            Is there any logic to create codes with no enough information about it?
+            Is there a reason to save an verbatim of unknovn variable?
+            '''
             for vverbatim in vdf.iterrows():
                 verbat = vverbatim[1]
                 if verbat[0] is not None:
-                    try:
-                        var = Variable.objects.get(uid=verbat[0], job=job[0])
-                    except:
-                        var = Variable.objects.filter(uid=verbat[0], job=job[0])[0]  # FIX: DIRTY HACK
+                    var = vars[verbat[0]]
                 else:
-                    var = Variable.objects.get_or_create(uid=-1, job=job[0])
-                    if var[1]:
-                        # var[0].save()
-                        var_to_save.append(var[0])
-                    var = var[0]
+                    continue
                 text = verbat[1]
                 if text is None:
                     continue  # TODO: dropna for df
                 for code_id in verbat[2:]:
                     if code_id is None:
                         continue
-                    code = Code.objects.get_or_create(job=job[0], code=code_id, overcode=False, code_book=question.code_book)
-                    if code[1]:
-                        continue
-                        # code[0].save()
+                    code = codes[(code_id, question.code_book)]
 
-                    code = code[0]
-                    v = Verbatim.objects.get_or_create(
-                        job=job[0],
+                    if code is None:
+                        continue
+
+                    v = Verbatim(
+                        job=self.job,
                         variable=var,
                         verbatim=text,
                         parent=code,
                         question=question
                     )
-                    v[0].verbatim_en = text
+                    v.verbatim_en = text
                     for ckey in verbat.keys():
                         if ckey.count('text_') > 0:
                             lang = ckey.split('_')[-1]
                             setattr(v, 'verbatim_' + lang, verbat[ckey])
+                    v.save()
 
-                    if v[1]:
-                        # v[0].save()
-                        ver_to_save.append(v[0])
-            # Verbatim.objects.bulk_create(ver_to_save)
-            # Variable.objects.bulk_create(var_to_save)
-            for x in ver_to_save + var_to_save:
-                x.save()
+
+    @transaction.atomic
+    @silk_profile(name='Save File')
+    def save(self, force_insert=False, force_update=False, using=None,
+             update_fields=None):
+
+        file_name = self.sheet.path
+        fname = self.sheet.path
+
+        file_name = os.path.splitext(file_name)[0]
+        file_name = os.path.basename(file_name)
+
+        job_number = file_name.split('_')[0]
+        job_name = ' '.join(file_name.split('_')[1:])
+
+        job = Job.objects.get_or_create(name=os.path.basename(job_name), number=job_number)
+        if job[1]:  # exists
+            job[0].delete()
+        job = job[0]
+
+        super(UploadFile, self).save(force_insert=force_insert, force_update=force_update,
+                                     using=using, update_fields=update_fields)
+
+        f = pd.ExcelFile(fname)
+
+        job = Job.objects.create(name=job_name, number=job_number)
+
+        self.job = job
+        self.code_books_entities, code_books = self.parse_code_books(f)
+        self.parse_questions(f)
+        self.parse_variables(f)
+        self.parse_codes(f, code_books)
+        self.parse_verbatims(f)
+

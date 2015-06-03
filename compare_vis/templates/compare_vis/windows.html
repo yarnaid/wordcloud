@@ -16,9 +16,10 @@
             {# <div class="dropup"> #}
 
             <a class="btn col-md-2 svg-menu-item left" href="#" rel="popover" data-toggle="popover" title="" data-placement="top" data-content='
-            {% filter escapejs %}
+            {# {% filter escapejs %} #}
                 {% include "cloud/left_menu.html" %}
-            {% endfilter %}'><b class="caret"></b>{% trans "Options" %}</a>
+            {# {% endfilter %} #}
+            '><b class="caret"></b>{% trans "Options" %}</a>
 
             <a href="#" id="stop-{{cols}}"><div class="col-md-2 svg-menu-item">{% trans "Stop motion" %}
             {% comment %}
