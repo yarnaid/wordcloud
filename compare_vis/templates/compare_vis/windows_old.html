@@ -1,0 +1,37 @@
+{% load sekizai_tags staticfiles i18n dixit_downloader disqus_tags %}
+{% for i in "x"|rjust:N %}
+    {% with forloop.counter0|add:"1" as cols %}
+    <div class="col-md-{{w}}" id="vis-{{cols}}">
+        <div class="bordered" id="svg_{{cols}}"></div>
+        <script type="text/javascript">$(function() {
+            var visualizations = [Cluster, Tree];
+            make_svg(visualizations[{{cols|add:"-1"}} % visualizations.length], "#stop-{{cols}}", "#svg_{{cols}}");
+
+            $('[data-toggle=popover]').popover({html:true});
+        });
+        </script>
+
+
+        <div class="row-fluid svg-menu">
+            {# <div class="dropup"> #}
+
+            <a onclick="return false;" class="btn col-md-2 svg-menu-item left" href="" rel="popover" data-toggle="popover" title="" data-placement="top" data-content='adsf'><b class="caret"></b>{% trans "Options" %}</a>
+
+            <a onclick="return false;" href="" id="stop-{{cols}}"><div class="col-md-2 svg-menu-item">{% trans "Stop motion" %}
+            {% comment %}
+                        <div class="timeline-body">
+              <h3></h3>
+              <div class="btn-group btn-toggle">
+                <button class="btn btn-lg btn-default">ON</button>
+                <button class="btn btn-lg btn-primary active">OFF</button>
+              </div>
+            </div>
+            {% endcomment %}
+            </div></a>
+            <a onclick="return false;" class="text-muted" href=""><div class="col-md-2 svg-menu-item">{% trans "Unlock" %}</div></a>
+            <a onclick="return false;" class="text-muted" href=""><div class="col-md-2 svg-menu-item">{% trans "Show in Wordle" %}</div></a>
+            {% downloader %}
+        </div>
+    </div>
+    {% endwith %}
+{% endfor %}
