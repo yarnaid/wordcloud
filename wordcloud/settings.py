@@ -74,6 +74,7 @@ INSTALLED_APPS = (
     'django_extensions',
     'data_filter',
     'compare_vis',
+    'mod_wsgi.server',
 )
 
 
