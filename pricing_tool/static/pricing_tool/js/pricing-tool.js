@@ -1,4 +1,9 @@
 $(document).ready(function() {
+    var lastOpened = '';
+
+    var lastOpenedSelector = '';
+
+    var previousSelectedButton = null;
 
     $('.pt-options-list a').hover(
         function() {
@@ -15,58 +20,61 @@ $(document).ready(function() {
         }
     );
 
-    $('.pt-language-selector').click(
+    $('.pt-language-selector, .pt-sample-size-selector, .pt-questions-selector, .pt-verbatim-translation-selector, .pt-date-availability-selector, .pt-codebooks-selector, .pt-codebook-translation-selector').click(
         function() {
             // hide results
             $('.pt-results-wrapper').hide();
             // hide all other containers
-            $('.pt-sample-size-content').hide();
-            $('.pt-questions-content').hide();
-            // set the active class
-            $(this).toggleClass('pt-language-selector-active');
+            $(lastOpened).hide();
             // remove all other active classes
-            $('.pt-sample-size-selector').removeClass('pt-sample-size-selector-active');
-            $('.pt-questions-selector').removeClass('pt-questions-selector-active');
+            // alert(this);
+            $(lastOpenedSelector).removeClass(lastOpenedSelector.substring(1) + '-active');
+            // set the active class
+            $(this).toggleClass(this.className + '-active');
             // show current container and form controls
-            $('.pt-language-content').fadeIn();
+            var content_classname = '.' + this.className.split(' ')[0].substring(0, this.className.split(' ')[0].lastIndexOf('-selector')) + '-content';
+            $(content_classname).fadeIn();
             $('.buttons-wrapper').fadeIn();
+            lastOpened = content_classname;
+            lastOpenedSelector = '.' + this.className.split(' ')[0];
         }
     );
 
-    $('.pt-sample-size-selector').click(
+    $('.pt-progress-bar-wrapper').hover(
         function() {
-            // hide results
-            $('.pt-results-wrapper').hide();
-            // hide all other containers
-            $('.pt-language-content').hide();
-            $('.pt-questions-content').hide();
-            // set the active class
-            $(this).toggleClass('pt-sample-size-selector-active');
-            // remove all other active classes
-            $('.pt-language-selector').removeClass('pt-language-selector-active');
-            $('.pt-questions-selector').removeClass('pt-questions-selector-active');
-            // show current container and form controls
-            $('.pt-sample-size-content').fadeIn();
-            $('.buttons-wrapper').fadeIn();
+            $(this)
+                .css('border', '2px solid #00F');
+        },
+        function() {
+            $(this)
+                .css('border', '2px solid #AAA');
         }
     );
 
-    $('.pt-questions-selector').click(
+    $('.button-verbatim-translation').click(
         function() {
-            // hide results
-            $('.pt-results-wrapper').hide();
-            // hide all other containers
-            $('.pt-language-content').hide();
-            $('.pt-sample-size-content').hide();
-            // set the active class
-            $(this).toggleClass('pt-questions-selector-active');
-            // remove all other active classes
-            $('.pt-sample-size-selector').removeClass('pt-sample-size-selector-active');
-            $('.pt-language-selector').removeClass('pt-language-selector-active');
-            // show current container and form controls
-            $('.pt-questions-content').fadeIn();
-            $('.buttons-wrapper').fadeIn();
+            if (previousSelectedButton !== null) {
+                $(previousSelectedButton).removeClass("button-verbatim-translation-selected");
+            } else
+                $('#number').removeClass("button-verbatim-translation-selected");
+            $(this).toggleClass('button-verbatim-translation-selected');
+
+            if (this.id == 'number') {
+                $(".pt-verbatim-translation-languages").hide();
+                $(".pt-verbatim-translation-labels").fadeIn();
+            } else {
+                $(".pt-verbatim-translation-labels").hide();
+                $(".pt-verbatim-translation-languages").fadeIn();
+            }
+            previousSelectedButton = this;
         }
     );
+
+    $("#datepicker").datepicker({
+        firstDay: 1,
+        buttonImageOnly: true,
+        showOtherMonths: true,
+        selectOtherMonths: true,
+    });
 
 });
