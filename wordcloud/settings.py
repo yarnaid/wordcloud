@@ -27,7 +27,7 @@ SECRET_KEY = 't@dpxuj8i5&uh+&v#(z7+&x@$g#-^7%tk-$@ker9rc8_t#z#ph'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-DEBUG_PANEL = not False
+DEBUG_PANEL = False
 
 TEMPLATE_DEBUG = DEBUG
 
@@ -74,6 +74,7 @@ INSTALLED_APPS = (
     'django_extensions',
     'data_filter',
     'compare_vis',
+    'vis_widget',
     'mod_wsgi.server',
 )
 

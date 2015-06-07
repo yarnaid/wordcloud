@@ -1,13 +1,28 @@
 // @import "const";
 @import "compass/css3";
 
+$border-hight: 1.5px;
 $border-color: rgb(227, 227, 227);
-$menu-border: 1.5px solid $border-color;
+$menu-border: $border-hight solid $border-color;
 $hover-color: #f0f9ff;
+
+#svg_1,#svg_4,#svg_3,#svg_2 {
+    min-height: 300px;
+}
 
 .svg-menu {
     font-size: 0.8em;
-    // margin-top: -1.5px;
+    border: $menu-border;
+    margin-top: -$border-hight;
+    margin-bottom: 3em;
+    margin-left: 0;
+    margin-right: 0;
+    padding: 0
+}
+
+.options_menu {
+    background-color: yellow;
+    @include box-shadow(rgba(black, 0.4) 0 0 25px);
 }
 
 a div {
@@ -31,7 +46,7 @@ a.btn.svg-menu-item {
     overflow: hidden;
 
     border-bottom: $menu-border;
-    margin-bottom: 1em;
+    // margin-bottom: 1em;
     // border-top: $menu-border;
     &.right {
         border-right: $menu-border;
@@ -40,7 +55,6 @@ a.btn.svg-menu-item {
         border-left: $menu-border;
     }
     border-bottom: $menu-border;
-    margin-bottom: 1em;
     &:hover {
         border-bottom: $menu-border;
         border-top: $menu-border;

@@ -1,0 +1,27 @@
+{% load sekizai_tags staticfiles i18n dixit_downloader %}
+
+{% include "vis_widget/vis_menu.html" %}
+
+{% block window %}
+    <div id="window_{{ col }}">
+
+        <div class="bordered" id="svg_{{ col }}">svg</div>
+
+        <div class="row-flud svg-menu" id="menu_{{ col }}">
+            <a onclick="show_menu('#vis_menu_{{col}}', '#svg_{{ col }}')" class="btn col-md-2 svg-menu-item left" href="#" rel="popover" data-toggle="popover" title="" data-placement="top" data-content='adsf'><b class="caret"></b>{% trans "Options" %}</a>
+
+            <a onclick="return false;" href="" id="stop-{{cols}}"><div class="col-md-2 svg-menu-item">{% trans "Stop motion" %}
+            </div></a>
+            <a onclick="return false;" class="text-muted" href=""><div class="col-md-2 svg-menu-item">{% trans "Unlock" %}</div></a>
+            <a onclick="return false;" class="text-muted" href=""><div class="col-md-2 svg-menu-item">{% trans "Show in Wordle" %}</div></a>
+            {% downloader %}
+        </div>
+    </div>
+{% endblock window %}
+
+
+{% block js %}
+    {% addtoblock 'js' %}
+        <script type="text/javascript" src="{% static 'vis_widget/js/helpers.js' %}"></script>
+    {% endaddtoblock %}
+{% endblock js %}
