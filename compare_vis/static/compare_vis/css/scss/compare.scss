@@ -4,6 +4,7 @@
 $border-hight: 1.5px;
 $border-color: rgb(227, 227, 227);
 $menu-border: $border-hight solid $border-color;
+$transparent-border: $border-hight solid none;
 $hover-color: #f0f9ff;
 
 #svg_1,#svg_4,#svg_3,#svg_2 {
@@ -12,17 +13,21 @@ $hover-color: #f0f9ff;
 
 .svg-menu {
     font-size: 0.8em;
-    border: $menu-border;
+    // border: $menu-border;
     margin-top: -$border-hight;
     margin-bottom: 3em;
-    margin-left: 0;
-    margin-right: 0;
     padding: 0
 }
 
 .options_menu {
     background-color: yellow;
     @include box-shadow(rgba(black, 0.4) 0 0 25px);
+}
+
+.hidden_menu {
+    width: 0%;
+    opacity: 0;
+    height: 0px;
 }
 
 a div {
@@ -44,10 +49,10 @@ a.btn.svg-menu-item {
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
+    border-left: transparent-border;
+    border-right: transparent-border;
 
-    border-bottom: $menu-border;
-    // margin-bottom: 1em;
-    // border-top: $menu-border;
+    border-top: $menu-border;
     &.right {
         border-right: $menu-border;
     }
@@ -56,10 +61,7 @@ a.btn.svg-menu-item {
     }
     border-bottom: $menu-border;
     &:hover {
-        border-bottom: $menu-border;
-        border-top: $menu-border;
-        border-left: $menu-border;
-        border-right: $menu-border;
+        border: $menu-border;
         background-color: $hover-color;
     }
 }
