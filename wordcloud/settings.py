@@ -75,7 +75,7 @@ INSTALLED_APPS = (
     'data_filter',
     'compare_vis',
     'vis_widget',
-    'mod_wsgi.server',
+    # 'mod_wsgi.server',
 )
 
 
