@@ -8,9 +8,117 @@ bootstrap overrides
 .radio-inline input[type=radio] {
     margin: 3px 0 0 0;
 }
+
+.progress {
+    text-align: center;
+    box-shadow: none;
+    background: #aaaaaa;
+}
 /*
 END bootstrap overrides
  */
+/* datepicker override */
+
+#ui-datepicker-div {
+    display: none;
+}
+
+.ui-datepicker {
+    width: 80%;
+    margin: auto;
+    background-color: #dfdfdf;
+    padding: 5px;
+    border: 1px solid black;
+}
+
+.ui-datepicker-today {
+    background-color: #a90ef5;
+    color: white;
+}
+
+.ui-datepicker-calendar {
+    border-top: 1px solid #8c8c8c;
+    border-left: 1px solid #8c8c8c;
+    background-color: #f2f2f2;
+    width: 100%;
+    text-align: center;
+}
+
+.ui-datepicker tr td {
+    width: 12%;
+    border-right: 1px solid #8c8c8c;
+    border-bottom: 1px solid #8c8c8c;
+    height: 20px;
+}
+
+.ui-datepicker-calendar tr td:hover {
+    background-color: #337AB7;
+    color: white;
+}
+
+.ui-state-default {
+    font-weight: bold;
+    color: #5a595a;
+}
+
+.ui-state-default:hover,
+.ui-datepicker-today .ui-state-default {
+    color: white;
+}
+
+.ui-state-default:hover {
+    text-decoration: none;
+}
+
+.ui-state-hover {
+    font-style: normal;
+}
+
+.ui-datepicker-calendar thead {
+    display: none;
+}
+
+.ui-datepicker-header {
+    position: relative;
+    height: 30px;
+}
+
+.ui-datepicker-title {
+    left: 20%;
+    width: 60%;
+    text-align: center;
+    font-weight: bold;
+}
+
+.ui-datepicker-header>a,
+.ui-datepicker-header>.ui-datepicker-title {
+    position: absolute;
+}
+
+.ui-datepicker-next {
+    left: 80%;
+}
+
+.ui-datepicker-header>a {
+    width: 20%;
+}
+
+.ui-priority-secondary {
+    font-weight: normal;
+    color: #b7b7b7;
+}
+/* END datepicker override */
+
+.progress-value {
+    position: absolute;
+    right: 0;
+    left: 0;
+}
+
+.line {
+    border: 2px solid black;
+    margin: 20px 0;
+}
 
 .pt-aside-form .form-group {
     margin-bottom: 10px;
@@ -19,6 +127,41 @@ END bootstrap overrides
 
 .pt-wheel {
     position: relative;
+}
+
+.pt-progress-bar-container p {
+    text-align: center;
+    width: 100%;
+}
+
+.pt-progress-bar {
+    display: block;
+    border: 4px solid white;
+    border-radius: 20px;
+    height: 35px;
+    cursor: pointer;
+}
+
+.pt-progress-bar>.progress {
+    display: inline-block;
+    width: 23.70%;
+    text-align: center;
+    border-radius: 0px;
+    margin-bottom: 0;
+    height: 100%;
+}
+
+.pt-progress-bar>.progress:first-child {
+    border-radius: 15px 0px 0px 15px;
+}
+
+.pt-progress-bar>.progress:last-child {
+    border-radius: 0px 15px 15px 0px;
+}
+
+.pt-progress-bar-wrapper {
+    border-radius: 25px;
+    border: 2px solid #aaaaaa;
 }
 
 .pt-wheel-bg {
@@ -145,7 +288,6 @@ END bootstrap overrides
 }
 
 .pt-inner-circle {
-    display: none;
     position: absolute;
     top: 88px;
     left: 87px;
@@ -180,7 +322,7 @@ END bootstrap overrides
 .pt-row-bottom {
     position: absolute;
     bottom: 0;
-    left: 70px;
+    left: 60px;
     width: 140px;
     height: 86px;
 }
@@ -209,55 +351,32 @@ END bootstrap overrides
     height: 238px;
 }
 
-.pt-codebook-translation-selector {
+.pt-codebooks-selector {
     position: absolute;
     bottom: 1px;
     right: 73px;
     width: 220px;
     height: 148px;
-    background: url('../img/pt-codebook-translation-selector.png') 0 0 no-repeat;
 }
 
-.pt-codebook-translation-selector:hover {
-    background: url('../img/pt-codebook-translation-selector-hover.png') 0 0 no-repeat;
-}
-
-.pt-codebook-translation-active {
-    background: url('../img/pt-codebook-translation-active.png') 0 0 no-repeat;
-}
-
-.pt-verbatims-translation-selector {
+.pt-codebook-translation-selector {
     position: absolute;
     bottom: 2px;
     left: 72px;
     width: 221px;
     height: 146px;
-    background: url('../img/pt-verbatims-translation-selector.png') 0 0 no-repeat;
 }
 
-.pt-verbatims-translation-selector:hover {
-    background: url('../img/pt-verbatims-translation-selector-hover.png') 0 0 no-repeat;
-}
-
-.pt-verbatims-translation-active {
-    background: url('../img/pt-verbatims-translation-active.png') 0 0 no-repeat;
-}
-
-.pt-verbatims-extractions-selector {
+.pt-verbatim-translation-selector {
     position: absolute;
     bottom: 122px;
     left: 0px;
     width: 110px;
     height: 237px;
-    background: url('../img/pt-verbatims-extractions-selector.png') 0 0 no-repeat;
 }
 
-.pt-verbatims-extractions-selector:hover {
-    background: url('../img/pt-verbatims-extractions-selector-hover.png') 0 0 no-repeat;
-}
-
-.pt-verbatims-extractions-active {
-    background: url('../img/pt-verbatims-extractions-active.png') 0 0 no-repeat;
+.pt-codebooks-content select {
+    width: 50%;
 }
 
 .pt-date-availability-selector {
@@ -266,15 +385,11 @@ END bootstrap overrides
     left: 9px;
     width: 182px;
     height: 207px;
-    background: url('../img/pt-date-availability-selector.png') 0 0 no-repeat;
 }
 
-.pt-date-availability-selector:hover {
-    background: url('../img/pt-date-availability-selector-hover.png') 0 0 no-repeat;
-}
-
-.pt-date-availability-active {
-    background: url('../img/pt-date-availability-active.png') 0 0 no-repeat;
+.pt-choose-time-format {
+    margin: auto;
+    text-align: center;
 }
 /* svg hover state */
 
@@ -282,8 +397,8 @@ END bootstrap overrides
 .pt-sample-size-selector:hover g,
 .pt-questions-selector:hover g,
 .pt-codebook-translation-selector:hover g,
-.pt-verbatims-translation-selector:hover g,
-.pt-verbatims-extractions-selector:hover g,
+.pt-verbatim-translation-selector:hover g,
+.pt-codebooks-selector:hover g,
 .pt-date-availability-selector:hover g {
     fill: #0083e8;
 }
@@ -293,18 +408,18 @@ END bootstrap overrides
 .pt-sample-size-selector-active g,
 .pt-questions-selector-active g,
 .pt-codebook-translation-selector-active g,
-.pt-verbatims-translation-selector-active g,
-.pt-verbatims-extractions-selector-active g,
+.pt-verbatim-translation-selector-active g,
+.pt-codebooks-selector-active g,
 .pt-date-availability-selector-active g {
     fill: #6e0cad;
 }
 
 .pt-inner-circle-content-wrapper {
     position: absolute;
-    top: 150px;
-    left: 160px;
+    top: 130px;
+    left: 170px;
     width: 260px;
-    height: 330px;
+    height: 350px;
     z-index: 100;
 }
 
@@ -340,6 +455,7 @@ END bootstrap overrides
 
 .pt-questions-content {
     display: none;
+    margin: 5% auto;
 }
 
 .pt-questions-content .row {
@@ -355,13 +471,54 @@ END bootstrap overrides
     text-align: right;
 }
 
-.pt-codebook-translation-content {}
+.pt-codebook-translation-content {
+    display: none;
+}
 
-.pt-verbatims-translation-content {}
+.pt-verbatim-translation-content {
+    display: none;
+}
 
-.pt-verbatims-extractions-content {}
+.pt-verbatim-translation-labels {
+    margin-top: 25px;
+    display: table;
+    width: 100%;
+}
 
-.pt-date-availability-content {}
+.pt-verbatim-translation-labels>div {
+    display: table-row;
+    height: 25px;
+    text-align: right;
+}
+
+.pt-verbatim-translation-labels>div>p {
+    width: 100%;
+}
+
+.pt-verbatim-translation-languages {
+    display: none;
+}
+
+.pt-verbatim-translation-languages {
+    margin-left: 30%;
+}
+
+.pt-verbatim-translation-languages>div {
+    margin: 10px;
+}
+
+.pt-codebooks-content {
+    display: none;
+}
+
+.pt-codebooks-labels label {
+    text-align: left;
+}
+
+.pt-date-availability-content {
+    display: none;
+    margin-top: 30px;
+}
 
 .pt-results-wrapper {
     position: absolute;
@@ -413,12 +570,24 @@ END bootstrap overrides
 .pt-result-middle {
     font-style: italic;
 }
+
+.pt-top-buttons-wrapper {
+    width: 140px;
+    margin: auto;
+}
+
+.pt-top-buttons-wrapper input {
+    text-align: center;
+    margin-bottom: 10px;
+}
 /*
 buttons
  */
 
 .button-accept,
-.button-cancel {
+.button-cancel,
+.button-verbatim-translation {
+    width: 140px;
     padding: 8px 39px;
     font-size: 14px;
     color: #ffffff;
@@ -427,13 +596,27 @@ buttons
     border-radius: 15px;
 }
 
+.button-verbatim-translation {
+    background: #aaaaaa;
+    height: 30px;
+}
+
 .button-accept {
     background: #0083e8;
 }
 
-.button-accept:hover {
+.button-accept:hover,
+.button-verbatim-translation:hover {
     color: #ffffff;
     background: #6e0cad;
+}
+
+.button-verbatim-translation-selected {
+    background: #000cad;
+}
+
+.button-verbatim-translation-selected:focus {
+    color: white;
 }
 
 .button-cancel {
@@ -444,4 +627,3 @@ buttons
     color: #ffffff;
     background: #d24906;
 }
-/* 1700- 1830*/
