@@ -13,7 +13,7 @@
     <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
     <link rel="stylesheet" href="{% static 'css/bootstrap-theme.min.css' %}">
     <link rel="stylesheet" href="{% static 'css/spacelab.min.css' %}">
-    <link rel="stylesheet" href="{% static 'css/mmenu/jquery.mmenu.all.css' %}">
+    {# <link rel="stylesheet" href="{% static 'css/mmenu/jquery.mmenu.all.css' %}"> #}
     <link href="{% static 'css/screen.css' %}" media="screen, projection" rel="stylesheet" type="text/css">
     <link href="{% static 'css/print.css' %}" media="print" rel="stylesheet" type="text/css">
     <!--[if IE]>
@@ -24,7 +24,7 @@
     <script type="text/javascript" src="{% static 'js/bootstrap.min.js' %}"></script>
     <script type="text/javascript" src="{% static 'js/js.cookie.js' %}"></script>
     <script type="text/javascript" src="{% static 'js/ajax_setup.js' %}"></script>
-    <script type="text/javascript" src="{% static 'js/mmenu/jquery.mmenu.min.all.js' %}"></script>
+    {# // <script type="text/javascript" src="{% static 'js/mmenu/jquery.mmenu.min.all.js' %}"></script> #}
     <script type="text/javascript" src="{% static 'js/left_menu.js' %}"></script>
     {% render_block 'css' %}
     {% render_block 'js' %}
@@ -35,6 +35,7 @@
 </head>
 
 <body>
+{% comment %}
     <nav class="up_menu" id='left-nav'>
         <div>
             <div class="panel panel-default">
@@ -66,26 +67,28 @@
                 {# {% endblock %} #}
             </div>
         </div>
-    </div>
-</nav>
+    </nav>
+{% endcomment %}
 
 
 
 <div class="page-wrap">
     {% include 'wordcloud/nav_bar_auth.html' %}
 
+{% comment %}
    <script type="text/javascript">
     $(function() {
-   $("#left-nav").mmenu({
-          // configuration
-          offCanvas: {
-             pageNodetype: "section",
-             zposition : "front"
-          }
-       });
-       console.log('ready to menu!');
+   // $("#left-nav").mmenu({
+   //        // configuration
+   //        offCanvas: {
+   //           pageNodetype: "section",
+   //           zposition : "front"
+   //        }
+   //     });
     });
    </script>
+{% endcomment %}
+
     <div class="container" id="page">
         {% block page %}
                 {% block content %}
@@ -95,8 +98,20 @@
         </div>
     </div>
 
+    {% block footer %}
+    <footer class="site-footer">
+        <hr/>
+        <div class="container text-left">
+            {% block footnote %}
+            <p>Copyright 2015 Dixit </br> All right reserved</p>
+            {% endblock %}
+        </div>
+    </footer>
+    {% endblock footer %}
+
 {% block help_chat %}
-    <script data-cfasync="false" type='text/javascript'>/*<![CDATA[*/window.olark||(function(c){var f=window,d=document,l=f.location.protocol=="https:"?"https:":"http:",z=c.name,r="load";var nt=function(){
+<!-- begin olark code -->
+<script id="olark-wrapper" data-cfasync="false" type='text/javascript'>/*<![CDATA[*/window.olark||(function(c){var f=window,d=document,l=f.location.protocol=="https:"?"https:":"http:",z=c.name,r="load";var nt=function(){
 f[z]=function(){
 (a.s=a.s||[]).push(arguments)};var a=f[z]._={
 },q=c.methods.length;while(q--){(function(n){f[z][n]=function(){
@@ -112,20 +127,11 @@ c[e]=d[e];o="javascript:var d="+g+".open();d.domain='"+d.domain+"';";b[k]=o+"voi
 var t=b.contentWindow[g];t.write(p());t.close()}catch(x){
 b[k]=o+'d.write("'+p().replace(/"/g,String.fromCharCode(92)+'"')+'");d.close();'}a.P(2)};ld()};nt()})({
 loader: "static.olark.com/jsclient/loader0.js",name:"olark",methods:["configure","extend","declare","identify"]});
+/* custom configuration goes here (www.olark.com/documentation) */
 olark.identify('2958-324-10-5844');/*]]>*/</script><noscript><a href="https://www.olark.com/site/2958-324-10-5844/contact" title="Contact us" target="_blank">Questions? Feedback?</a> powered by <a href="http://www.olark.com?welcome" title="Olark live chat software">Olark live chat software</a></noscript>
-
+<!-- end olark code -->
 {% endblock help_chat %}
 
-    {% block footer %}
-    <footer class="site-footer">
-        <hr/>
-        <div class="container text-left">
-            {% block footnote %}
-            <p>Copyright 2015 Dixit </br> All right reserved</p>
-            {% endblock %}
-        </div>
-    </footer>
-    {% endblock footer %}
 </body>
 
 </html>
