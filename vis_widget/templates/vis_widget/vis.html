@@ -5,10 +5,10 @@
 {% block window %}
     <div id="window_{{ col }}">
 
-        <div class="bordered" id="svg_{{ col }}">svg</div>
+        <div class="bordered" id="svg_{{ col }}">{% lorem %}</div>
 
         <div class="row-flud svg-menu" id="menu_{{ col }}">
-            <a onclick="show_menu('#vis_menu_{{col}}', '#svg_{{ col }}')" class="btn col-md-2 svg-menu-item left" href="#" rel="popover" data-toggle="popover" title="" data-placement="top" data-content='adsf'><b class="caret"></b>{% trans "Options" %}</a>
+            <a onclick="show_menu('#vis_menu_{{col}}', '#svg_{{ col }}');" href="#"><div class="col-md-2 svg-menu-item left">{% trans "Options" %}</div></a>
 
             <a onclick="return false;" href="" id="stop-{{cols}}"><div class="col-md-2 svg-menu-item">{% trans "Stop motion" %}
             </div></a>

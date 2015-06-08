@@ -7,6 +7,12 @@
 GENERAL
 */
 /* line 8, scss/base.scss */
+select {
+  border: 1px solid #ccc;
+  background-color: lightgreen;
+}
+
+/* line 18, scss/base.scss */
 html,
 body {
   background: white;
@@ -16,13 +22,13 @@ body {
   height: 100%;
 }
 
-/* line 17, scss/base.scss */
+/* line 27, scss/base.scss */
 .mainpage {
   /* equal to header height */
   padding-top: 55px;
 }
 
-/* line 22, scss/base.scss */
+/* line 32, scss/base.scss */
 .wrap {
   height: auto !important;
   height: 100%;
@@ -30,14 +36,14 @@ body {
   position: relative;
 }
 
-/* line 29, scss/base.scss */
+/* line 39, scss/base.scss */
 .page-wrap {
   min-height: 100%;
   /* equal to footer height */
   margin-bottom: -100px;
 }
 
-/* line 35, scss/base.scss */
+/* line 45, scss/base.scss */
 h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
   font-family: "Klavika Regular", klavika-regular;
   font-weight: 500;
@@ -45,19 +51,19 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
   color: inherit;
 }
 
-/* line 42, scss/base.scss */
+/* line 52, scss/base.scss */
 h4, .h4, h5, .h5, h6, .h6 {
   margin-top: 10px;
   margin-bottom: 10px;
 }
 
-/* line 47, scss/base.scss */
+/* line 57, scss/base.scss */
 h2 {
   font-size: 24px;
   color: #0065b3;
 }
 
-/* line 52, scss/base.scss */
+/* line 62, scss/base.scss */
 h4 {
   font-size: 20px;
 }
@@ -68,17 +74,17 @@ END GENERAL
 /*
 Layout
 */
-/* line 62, scss/base.scss */
+/* line 72, scss/base.scss */
 section {
   padding: 60px 0;
 }
-/* line 64, scss/base.scss */
+/* line 74, scss/base.scss */
 section .section-title {
   margin: 0 0 30px;
   text-align: center;
   position: relative;
 }
-/* line 68, scss/base.scss */
+/* line 78, scss/base.scss */
 section .section-title:after {
   content: "";
   display: block;
@@ -88,26 +94,26 @@ section .section-title:after {
   top: 15px;
   width: 100%;
 }
-/* line 77, scss/base.scss */
+/* line 87, scss/base.scss */
 section .section-title span {
   background: #fff;
   padding: 0 10px;
   z-index: 1;
   position: relative;
 }
-/* line 84, scss/base.scss */
+/* line 94, scss/base.scss */
 section.section-hilite {
   background: #eee;
 }
-/* line 86, scss/base.scss */
+/* line 96, scss/base.scss */
 section.section-hilite span {
   background: #eee;
 }
-/* line 90, scss/base.scss */
+/* line 100, scss/base.scss */
 section.section-center {
   text-align: center;
 }
-/* line 93, scss/base.scss */
+/* line 103, scss/base.scss */
 section.section-nopadding {
   padding: 0 0 60px 0;
 }
@@ -118,29 +124,29 @@ END Layout
 /*
 Navigation
 */
-/* line 105, scss/base.scss */
+/* line 115, scss/base.scss */
 .navbar {
   background: #ffffff;
   border: none;
 }
 
-/* line 110, scss/base.scss */
+/* line 120, scss/base.scss */
 .navbar .navbar-nav {
   display: inline-block;
   float: none;
 }
 
-/* line 115, scss/base.scss */
+/* line 125, scss/base.scss */
 .navbar .navbar-collapse {
   text-align: center;
 }
 
-/* line 119, scss/base.scss */
+/* line 129, scss/base.scss */
 .logo {
   margin: 0;
   padding: 0;
 }
-/* line 122, scss/base.scss */
+/* line 132, scss/base.scss */
 .logo img {
   max-width: 100px;
   padding-top: 5px;
@@ -152,29 +158,29 @@ END Navigation
 /*
 Main page
 */
-/* line 135, scss/base.scss */
+/* line 145, scss/base.scss */
 .mainpage-image {
   margin-bottom: 50px;
 }
 
-/* line 140, scss/base.scss */
+/* line 150, scss/base.scss */
 .welcome-block p {
   font-size: 16px;
   line-height: 1.3;
   color: #1c2924;
 }
 
-/* line 148, scss/base.scss */
+/* line 158, scss/base.scss */
 .benefits-block .icon-wrap {
   height: 120px;
   width: 120px;
   margin: 10px auto;
 }
-/* line 152, scss/base.scss */
+/* line 162, scss/base.scss */
 .benefits-block .icon-wrap img {
   max-height: 120px;
 }
-/* line 156, scss/base.scss */
+/* line 166, scss/base.scss */
 .benefits-block p {
   max-height: 65px;
   overflow: hidden;
@@ -183,46 +189,46 @@ Main page
 /*
 END Main page
 */
-/* line 166, scss/base.scss */
+/* line 176, scss/base.scss */
 .mm-menu {
   background-color: white !important;
 }
 
-/* line 170, scss/base.scss */
+/* line 180, scss/base.scss */
 .empty {
   height: 4em;
 }
 
-/* line 174, scss/base.scss */
+/* line 184, scss/base.scss */
 .footer hr {
   max-width: 80%;
 }
 
-/* line 178, scss/base.scss */
+/* line 188, scss/base.scss */
 .page-wrap:after {
   content: "";
   display: block;
 }
 
-/* line 183, scss/base.scss */
+/* line 193, scss/base.scss */
 .site-footer,
 .page-wrap:after {
   height: 80px;
 }
 
-/* line 188, scss/base.scss */
+/* line 198, scss/base.scss */
 .site-footer {
   background: #aea0bc;
   color: #fbfafb;
 }
 
-/* line 194, scss/base.scss */
+/* line 204, scss/base.scss */
 table caption {
   color: #358acd;
   font-weight: bold;
 }
 
-/* line 203, scss/base.scss */
+/* line 213, scss/base.scss */
 .table-striped tbody tr:nth-child(odd) td, .table-striped tbody tr:nth-child(odd) th {
   background-color: #e8f5ff;
 }
@@ -230,7 +236,7 @@ table caption {
 /*
 Tooltip
 */
-/* line 214, scss/base.scss */
+/* line 224, scss/base.scss */
 div.tooltip {
   position: absolute;
   padding: 5px;
@@ -244,26 +250,26 @@ div.tooltip {
   opacity: 1;
 }
 
-/* line 225, scss/base.scss */
+/* line 235, scss/base.scss */
 .tooltip {
   -moz-box-shadow: rgba(0, 0, 0, 0.4) 0 0 25px;
   -webkit-box-shadow: rgba(0, 0, 0, 0.4) 0 0 25px;
   box-shadow: rgba(0, 0, 0, 0.4) 0 0 25px;
 }
-/* line 228, scss/base.scss */
+/* line 238, scss/base.scss */
 .tooltip div .table {
   margin: 0px;
 }
-/* line 231, scss/base.scss */
+/* line 241, scss/base.scss */
 .tooltip div .table tr td:nth-child(1) {
   text-align: right;
 }
-/* line 234, scss/base.scss */
+/* line 244, scss/base.scss */
 .tooltip div .table tr td:nth-child(2) {
   text-align: left;
   font-weight: bold;
 }
-/* line 239, scss/base.scss */
+/* line 249, scss/base.scss */
 .tooltip div .table th,
 .tooltip div .table td {
   border-top: none !important;

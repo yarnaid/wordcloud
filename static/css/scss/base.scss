@@ -5,6 +5,16 @@
 GENERAL
 */
 
+select {
+   border: 1px solid #ccc;
+   background-color: lightgreen;
+   // @include border-radius(0px);
+   // border-bottom-left-radius: 0px;
+   // border-top-left-radius: 0px;
+   // border-bottom-right-radius: 0px;
+   // border-top-right-radius: 0px;
+}
+
 html,
 body {
     background: $background;

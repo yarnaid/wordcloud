@@ -1,12 +1,13 @@
 {% load sekizai_tags static i18n %}
-<div class="container-fluid" id="sel-List">
-    {% include "data_filter/selector.html" with label="Job" options=job_numbers %} {% include "data_filter/selector.html" with label="Question" options=question_names %}
+<div class="container-fluid" id="sel-List-{{ id }}">
+    {% include "data_filter/selector.html" with label="Job" options=job_numbers id_=id %}
+    {% include "data_filter/selector.html" with label="Question" options=question_names id_=id %}
     <script type="text/javascript">
     var params_ids = [];
     var get_filter_params = function() {
         var res = {
-            job: $("select#sel-Job").val(),
-            question: $("select#sel-Question").val()
+            job: $("select#sel-Job-{{ id }}").val(),
+            question: $("select#sel-Question-{{ id }}").val()
         };
         for (i in params_ids) {
             res[params_ids[i]] = $("select#" + params_ids[i]).val();
@@ -22,16 +23,16 @@
         get_filter_event_handler = function() {
             return event_handler;
         };
-        $("select#sel-Job").change(function(event) {
+        $("select#sel-Job-{{ id }}").change(function(event) {
             $(event_handler).trigger('filter_menu_update');
         });
-        $("select#sel-Question").change(function(event) {
+        $("select#sel-Question-{{ id }}").change(function(event) {
             $(event_handler).trigger('filter_menu_update');
         });
 
         var update_questions = function(job_id) {
                 var questions = rest.get_short_questions(job_id);
-                var q_sel = $("#sel-Question");
+                var q_sel = $("#sel-Question-{{ id }}");
                 q_sel.find("option").remove();
                 for (q in questions) {
                     var quest = questions[q];
@@ -40,14 +41,15 @@
             }
             // RENDER VARIABLES
         var update_variables = function(job_id) {
-            $("#sel-List").find(".menu_variable").remove();
+            $("#sel-List-{{ id }}").find(".menu_variable").remove();
             var variables = rest.get_variable_codes(job_id);
             var sel_template = $("#sel-Template");
             for (var i = 0; i < variables.length; ++i) {
                 v = variables[i];
                 if (v.text.length > 0) {  // TODO: DIRTY HACK
                     var my_templ = sel_template.clone();
-                    my_templ.attr("id", "sel-" + v.text);
+                    var sel_id = "sel-" + v.text + "-{{ id }}";
+                    my_templ.attr("id", sel_id);
                     params_ids.push(my_templ.attr("id"));
                     my_templ.addClass("menu_variable");
                     my_templ.toggleClass("hidden");
@@ -56,7 +58,7 @@
                     sel.change(function() {
                         $(event_handler).trigger("filter_menu_update");
                     });
-                    sel.attr("id", "sel-" + v.text);
+                    sel.attr("id", sel_id);
                     sel.append("<option value=-1>{% trans 'Any' %}</option>");
                     for (var j = 0; j < v.code_book.children_codes.length; ++j) {
                         var code = v.code_book.children_codes[j];
@@ -65,17 +67,17 @@
                         }
                     }
                     label.html(v.text + ":");
-                    my_templ.appendTo("#sel-List");
+                    my_templ.appendTo("#sel-List-{{ id }}");
                 }
             }
         }
         var update_menu = function() {
-            var job_id = $("#sel-Job").val();
+            var job_id = $("#sel-Job-{{ id }}").val();
             update_questions(job_id);
             update_variables(job_id);
         }
         update_menu();
-        $("#sel-Job").change(function(event) {
+        $("#sel-Job-{{ id }}").change(function(event) {
             update_menu();
         });
 
@@ -85,6 +87,10 @@
 <div class="hidden" id="sel-Template">
     {% include "data_filter/selector.html" %}
 </div>
-{# MEDIA #} {% block js %} {% addtoblock 'js' %}
-<script type="text/javascript" src="{% static 'js/vis_helpers.js' %}"></script>
-{% endaddtoblock %} {% endblock %} {% block css %} {% addtoblock 'css' %} {% endaddtoblock %} {% endblock %}
+{# MEDIA #}
+{% block js %}
+{% addtoblock 'js' %}
+    <script type="text/javascript" src="{% static 'js/vis_helpers.js' %}"></script>
+{% endaddtoblock %}
+{% endblock %}
+{% block css %} {% addtoblock 'css' %} {% endaddtoblock %} {% endblock %}

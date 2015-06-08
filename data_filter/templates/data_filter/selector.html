@@ -1,7 +1,7 @@
 <div class="row">
-    <div class="col-md-6 col-xs-6 col-sm-6 text-right"><label for="sel-{{label}}">{{label}}:</label></div>
+    <div class="col-md-6 col-xs-6 col-sm-6 text-right"><label for="sel-{{label}}-{{id_}}">{{label}}:</label></div>
     <div class="col-md-6 col-xs-6 col-sm-6 text-left">
-        <select id="sel-{{label}}">
+        <select id="sel-{{label}}-{{id_}}">
             {% for id in options %}
                 <option value="{{id}}">{{id}}</option>
             {% endfor %}
