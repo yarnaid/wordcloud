@@ -1,8 +1,8 @@
 {% load sekizai_tags staticfiles i18n dixit_downloader disqus_tags %}
 {% for i in "x"|rjust:N %}
     {% with forloop.counter0|add:"1" as cols %}
-    <div class="col-md-{{w}}" id="vis-{{cols}}">
-        {% include "vis_widget/vis.html" with col=cols %}
-    </div>
+        <div class="col-md-{{w}}" id="vis-{{cols}}">
+            {% include "vis_widget/vis.html" with col=cols %}
+        </div>
     {% endwith %}
 {% endfor %}
