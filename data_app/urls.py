@@ -14,7 +14,7 @@ router.register(r'verbatims', views.VerbatimViewSet)
 router.register(r'variables', views.VariableViewSet)
 router.register(r'viz_data', views.VisDataViewSet)
 
-
 urlpatterns = (
     url(r'^', include(router.urls)),
+    url(r'visualization_data', views.VerbatimsFilteredSet.as_view()),
 )
