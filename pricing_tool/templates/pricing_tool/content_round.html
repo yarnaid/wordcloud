@@ -313,38 +313,36 @@
                             </div>
                             <div class="pt-row-top pt-codebooks-content">
                                 <div class="form_group row">
-                                    <input class="col-md-3" type="radio" name="choose-new-or-old" checked="true" />
-                                    <label class="col-md-9">Use previous code book:</label>
+                                    <input class="col-md-3" type="radio" id="codebook-use-previous" name="codebook-choose" checked="true">
+                                    <label for="codebook-use-previous" class="col-md-9">Use previous code book:</label>
                                 </div>
                                 <div class="form_group row">
-                                    <input class="col-md-3" type="radio" name="choose-new-or-old" />
-                                    <label class="col-md-9">Create new codebook:</label>
-                                </div>
-                                <div class="line"></div>
-                                <div class="form_group row">
-                                    <input class="col-md-3" type="radio" name="previous-or-other" checked="true" />
-                                    <label class="col-md-9">From previous job:</label>
-                                </div>
-                                <div class="form_group row">
-                                    <input class="col-md-3" type="radio" name="previous-or-other" />
-                                    <label class="col-md-9">From other cell:</label>
+                                    <input class="col-md-3" type="radio" id="codebook-choose" name="codebook-create-new">
+                                    <label for="codebook-create-new" class="col-md-9">Create new codebook:</label>
                                 </div>
                                 <div class="line"></div>
                                 <div class="form_group row">
-                                    <label class="col-md-6">Job number:</label>
+                                    <input class="col-md-3" type="radio" id="codebook-from-previous-job" name="codebook-cell-choose" checked="true">
+                                    <label for="codebook-from-previous-job" class="col-md-9">From previous job:</label>
+                                </div>
+                                <div class="form_group row">
+                                    <input class="col-md-3" type="radio" id="codebook-from-other-cell" name="codebook-cell-choose">
+                                    <label for="codebook-from-other-cell" class="col-md-9">From other cell:</label>
+                                </div>
+                                <div class="line"></div>
+                                <div class="form_group row">
+                                    <label for="codebook-job-number" class="col-md-6">Job number:</label>
                                     <select></select>
                                 </div>
                             </div>
                             <div class="pt-row-top pt-date-availability-content">
-                                <div>
-                                    <div class="form_group row pt-choose-time-format">
-                                        <label>AM:</label>
-                                        <input type="radio" name="am-or-pm" checked="true"></input>
-                                        <label>PM:</label>
-                                        <input type="radio" name="am-or-pm"></input>
-                                    </div>
-                                    <div id="datepicker" class="row"></div>
+                                <div class="form_group row pt-choose-time-format">
+                                    <input type="radio" id="date-availability-am" name="date-availability-choose" checked="true"></input>
+                                    <label for="date-availability-am">AM</label>
+                                    <input type="radio" id="date-availability-pm" name="date-availability-choose"></input>
+                                    <label for="date-availability-pm">PM</label>
                                 </div>
+                                <div id="datepicker" class="row"></div>
                             </div>
                             <div class="pt-row-bottom buttons-wrapper">
                                 <input type="submit" class="btn button-accept" value="Accept">

@@ -372,8 +372,12 @@ END bootstrap overrides
 }
 
 .pt-choose-time-format {
-    margin: auto;
+    margin: 0 auto 15px auto;
     text-align: center;
+}
+
+.pt-choose-time-format label {
+    margin-right: 15px;
 }
 /* svg text properties */
 
@@ -503,7 +507,7 @@ END bootstrap overrides
     margin-left: 30%;
 }
 
-.pt-verbatim-translation-languages>div {
+.pt-verbatim-translation-languages > div {
     margin: 10px;
 }
 
