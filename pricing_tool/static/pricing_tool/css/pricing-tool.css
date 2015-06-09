@@ -110,9 +110,29 @@ END bootstrap overrides
 /* END datepicker override */
 
 .progress-value {
+    height: 27px;
+    line-height: 27px;
+    font-ize: 14px;
+    color: #ffffff;
     position: absolute;
     right: 0;
     left: 0;
+}
+
+.pt-level-1 .progress-value {
+    left: -185px;
+}
+
+.pt-level-2 .progress-value {
+    left: -65px;
+}
+
+.pt-level-3 .progress-value {
+    left: 65px;
+}
+
+.pt-level-4 .progress-value {
+    left: 185px;
 }
 
 .line {
@@ -129,6 +149,10 @@ END bootstrap overrides
     position: relative;
 }
 
+.progress-bar {
+    background: #6e0cad;
+}
+
 .pt-progress-bar-container p {
     text-align: center;
     width: 100%;
@@ -142,42 +166,26 @@ END bootstrap overrides
     cursor: pointer;
 }
 
-.pt-progress-bar>.progress {
+.pt-progress-bar > .progress {
     display: inline-block;
-    width: 23.70%;
+    width: 59px;
     text-align: center;
     border-radius: 0px;
     margin-bottom: 0;
     height: 100%;
 }
 
-.pt-progress-bar>.progress:first-child {
+.pt-progress-bar > .progress:first-child {
     border-radius: 15px 0px 0px 15px;
 }
 
-.pt-progress-bar>.progress:last-child {
+.pt-progress-bar > .progress:last-child {
     border-radius: 0px 15px 15px 0px;
 }
 
 .pt-progress-bar-wrapper {
     border-radius: 25px;
     border: 2px solid #aaaaaa;
-}
-
-.pt-wheel-bg {
-    position: absolute;
-    /*
-    for _pricing-tool-wheel-2.png
-    top: -20px;
-    left: -25px;*/
-
-    top: 0;
-    left: 0;
-    width: 646px;
-    height: 678px;
-    background: url(../img/_pricing-tool-wheel.png) 0 0 no-repeat;
-    opacity: 0.5;
-    z-index: -1;
 }
 
 .pt-outher-circle {
@@ -388,8 +396,24 @@ END bootstrap overrides
 }
 
 .pt-choose-time-format {
-    margin: auto;
+    margin: 0 auto 15px auto;
     text-align: center;
+}
+
+.pt-choose-time-format label {
+    margin-right: 15px;
+}
+/* svg text properties */
+
+#language-text,
+#sample-size-text,
+#questions-text,
+#codebooks-text,
+#codebook-translation-text,
+#verbatim-translation-text,
+#date-availability-text {
+    font: 24px/24px Arial, Verdana, sans-serif;
+    fill: #ffffff;
 }
 /* svg hover state */
 
@@ -480,19 +504,23 @@ END bootstrap overrides
 }
 
 .pt-verbatim-translation-labels {
-    margin-top: 25px;
+    margin-top: 10px;
     display: table;
     width: 100%;
 }
 
-.pt-verbatim-translation-labels>div {
+.pt-verbatim-translation-labels .row {
     display: table-row;
     height: 25px;
     text-align: right;
 }
 
-.pt-verbatim-translation-labels>div>p {
+.pt-verbatim-translation-labels .row > p {
     width: 100%;
+}
+
+.pt-verbatim-translation-labels .row input[type="number"] {
+    margin-bottom: 10px;
 }
 
 .pt-verbatim-translation-languages {
@@ -503,7 +531,7 @@ END bootstrap overrides
     margin-left: 30%;
 }
 
-.pt-verbatim-translation-languages>div {
+.pt-verbatim-translation-languages > div {
     margin: 10px;
 }
 
@@ -588,42 +616,35 @@ buttons
 .button-cancel,
 .button-verbatim-translation {
     width: 140px;
-    padding: 8px 39px;
+    padding: 8px 25px;
     font-size: 14px;
     color: #ffffff;
+    background: #aaaaaa;
     text-transform: uppercase;
     text-align: center;
     border-radius: 15px;
+    text-shadow: none;
 }
 
 .button-verbatim-translation {
-    background: #aaaaaa;
-    height: 30px;
-}
-
-.button-accept {
-    background: #0083e8;
+    text-transform: none;
 }
 
 .button-accept:hover,
-.button-verbatim-translation:hover {
+.button-accept:focus,
+.button-verbatim-translation:hover,
+.button-verbatim-translation:focus,
+.button-verbatim-translation-selected:focus {
     color: #ffffff;
-    background: #6e0cad;
+    background: #0083e8;
 }
 
 .button-verbatim-translation-selected {
-    background: #000cad;
+    background: #6e0cad;
 }
 
-.button-verbatim-translation-selected:focus {
-    color: white;
-}
-
-.button-cancel {
-    background: #e84c00;
-}
-
-.button-cancel:hover {
+.button-cancel:hover,
+.button-cancel:focus {
     color: #ffffff;
-    background: #d24906;
+    background: #e84c00;
 }
