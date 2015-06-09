@@ -257,51 +257,57 @@
                             <div class="pt-row-top pt-codebook-translation-content"></div>
                             <div class="pt-row-top pt-verbatim-translation-content">
                                 <div class="pt-top-buttons-wrapper">
-                                    <input id="languages" type="button" class="btn button-verbatim-translation" value="Language" />
-                                    <input id="number" type="button" class="btn button-verbatim-translation button-verbatim-translation-selected" value="Number" />
-                                </div>
-                                <div class="pt-verbatim-translation-labels form_group">
-                                    <div class="form_group row">
-                                        <label class="col-md-9">Long questions</label>
-                                        <input class="col-md-3" type="number" />
-                                    </div>
-                                    <div class="form_group row">
-                                        <label class="col-md-9">Story questions</label>
-                                        <input class="col-md-3" type="number" />
-                                    </div>
-                                    <div class="form_group row">
-                                        <label class="col-md-9">Feeling/likes questions</label>
-                                        <input class="col-md-3" type="number" />
-                                    </div>
+                                    <input id="languages" type="button" class="btn button-verbatim-translation" value="Language">
+                                    <input id="number" type="button" class="btn button-verbatim-translation button-verbatim-translation-selected" value="Number">
                                 </div>
                                 <div class="pt-verbatim-translation-languages form_group">
                                     <div class="checkbox form-group row">
-                                        <input type="checkbox" name="pt-language-choose" id="pt-language-german">
-                                        <label class="control-label" for="pt-language-german">German</label>
+                                        <input type="checkbox" name="pt-verbatim-translation-language-german" id="pt-verbatim-translation-language-german">
+                                        <label class="control-label" for="pt-verbatim-translation-language-german">German</label>
                                     </div>
                                     <div class="checkbox form-group row">
-                                        <input type="checkbox" name="pt-language-choose" id="pt-language-spanish">
-                                        <label class="control-label" for="pt-language-spanish">Spanish</label>
+                                        <input type="checkbox" name="pt-verbatim-translation-language-spanish" id="pt-verbatim-translation-language-spanish">
+                                        <label class="control-label" for="pt-verbatim-translation-language-spanish">Spanish</label>
                                     </div>
                                     <div class="checkbox form-group row">
-                                        <input type="checkbox" name="pt-language-choose" id="pt-language-english" checked>
-                                        <label class="control-label" for="pt-language-english">English</label>
+                                        <input type="checkbox" name="pt-verbatim-translation-language-english" id="pt-verbatim-translation-language-english" checked>
+                                        <label class="control-label" for="pt-verbatim-translation-language-english">English</label>
                                     </div>
                                     <div class="checkbox form-group row">
-                                        <input type="checkbox" name="pt-language-choose" id="pt-language-french">
-                                        <label class="control-label" for="pt-language-french">French</label>
+                                        <input type="checkbox" name="pt-verbatim-translation-language-french" id="pt-verbatim-translation-language-french">
+                                        <label class="control-label" for="pt-verbatim-translation-language-french">French</label>
                                     </div>
                                     <div class="checkbox form-group row">
-                                        <input type="checkbox" name="pt-language-choose" id="pt-language-mandarin">
-                                        <label class="control-label" for="pt-language-mandarin">Mandarin</label>
+                                        <input type="checkbox" name="pt-verbatim-translation-language-mandarin" id="pt-verbatim-translation-language-mandarin">
+                                        <label class="control-label" for="pt-verbatim-translation-language-mandarin">Mandarin</label>
                                     </div>
                                     <div class="checkbox form-group row">
-                                        <input type="checkbox" name="pt-language-choose" id="pt-language-italian">
-                                        <label class="control-label" for="pt-language-italian">Italian</label>
+                                        <input type="checkbox" name="pt-verbatim-translation-language-italian" id="pt-verbatim-translation-language-italian">
+                                        <label class="control-label" for="pt-verbatim-translation-language-italian">Italian</label>
                                     </div>
                                     <div class="checkbox form-group row">
-                                        <input type="checkbox" name="pt-language-choose" id="pt-language-portuguese">
-                                        <label class="control-label" for="pt-language-portuguese">Portuguese</label>
+                                        <input type="checkbox" name="pt-verbatim-translation-language-portuguese" id="pt-verbatim-translation-language-portuguese">
+                                        <label class="control-label" for="pt-verbatim-translation-language-portuguese">Portuguese</label>
+                                    </div>
+                                </div>
+                                <div class="pt-verbatim-translation-labels form_group">
+                                    <div class="form_group row">
+                                        <label for="verbatim-translation-long-questions" class="col-md-7">Long questions</label>
+                                        <div class="col-md-5">
+                                            <input type="number" class="form-control" id="verbatim-translation-long-questions" name="verbatim-translation-long-questions" min="0" value="38">
+                                        </div>
+                                    </div>
+                                    <div class="form_group row">
+                                        <label for="verbatim-translation-story-questions" class="col-md-7">Story questions</label>
+                                        <div class="col-md-5">
+                                            <input type="number" class="form-control" id="verbatim-translation-story-questions" name="verbatim-translation-story-questions" min="0" value="560">
+                                        </div>
+                                    </div>
+                                    <div class="form_group row">
+                                        <label for="verbatim-translation-feeling-likes-questions" class="col-md-7">Feeling/likes questions</label>
+                                        <div class="col-md-5">
+                                            <input type="number" class="form-control" id="verbatim-translation-feeling-likes-questions" name="verbatim-translation-feeling-likes-questions" min="0" value="5">
+                                        </div>
                                     </div>
                                 </div>
                             </div>
