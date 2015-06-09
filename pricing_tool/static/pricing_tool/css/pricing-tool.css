@@ -375,15 +375,15 @@ END bootstrap overrides
     margin: auto;
     text-align: center;
 }
-
 /* svg text properties */
+
 #language-text,
 #sample-size-text,
 #questions-text,
 #codebooks-text,
 #codebook-translation-text,
 #verbatim-translation-text,
-#date-availability-text{
+#date-availability-text {
     font: 24px/24px Arial, Verdana, sans-serif;
     fill: #ffffff;
 }
@@ -584,7 +584,7 @@ buttons
 .button-cancel,
 .button-verbatim-translation {
     width: 140px;
-    padding: 8px 39px;
+    padding: 8px 25px;
     font-size: 14px;
     color: #ffffff;
     text-transform: uppercase;
@@ -594,7 +594,7 @@ buttons
 
 .button-verbatim-translation {
     background: #aaaaaa;
-    height: 30px;
+    text-transform: none;
 }
 
 .button-accept {
