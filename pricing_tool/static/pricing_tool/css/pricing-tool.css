@@ -164,22 +164,6 @@ END bootstrap overrides
     border: 2px solid #aaaaaa;
 }
 
-.pt-wheel-bg {
-    position: absolute;
-    /*
-    for _pricing-tool-wheel-2.png
-    top: -20px;
-    left: -25px;*/
-
-    top: 0;
-    left: 0;
-    width: 646px;
-    height: 678px;
-    background: url(../img/_pricing-tool-wheel.png) 0 0 no-repeat;
-    opacity: 0.5;
-    z-index: -1;
-}
-
 .pt-outher-circle {
     position: absolute;
     top: 33px;
@@ -390,6 +374,18 @@ END bootstrap overrides
 .pt-choose-time-format {
     margin: auto;
     text-align: center;
+}
+
+/* svg text properties */
+#language-text,
+#sample-size-text,
+#questions-text,
+#codebooks-text,
+#codebook-translation-text,
+#verbatim-translation-text,
+#date-availability-text{
+    font: 24px/24px Arial, Verdana, sans-serif;
+    fill: #ffffff;
 }
 /* svg hover state */
 
