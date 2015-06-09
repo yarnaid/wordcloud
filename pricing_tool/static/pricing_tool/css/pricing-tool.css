@@ -110,9 +110,29 @@ END bootstrap overrides
 /* END datepicker override */
 
 .progress-value {
+    height: 27px;
+    line-height: 27px;
+    font-ize: 14px;
+    color: #ffffff;
     position: absolute;
     right: 0;
     left: 0;
+}
+
+.pt-level-1 .progress-value {
+    left: -185px;
+}
+
+.pt-level-2 .progress-value {
+    left: -65px;
+}
+
+.pt-level-3 .progress-value {
+    left: 65px;
+}
+
+.pt-level-4 .progress-value {
+    left: 185px;
 }
 
 .line {
@@ -129,6 +149,10 @@ END bootstrap overrides
     position: relative;
 }
 
+.progress-bar {
+    background: #6e0cad;
+}
+
 .pt-progress-bar-container p {
     text-align: center;
     width: 100%;
@@ -142,20 +166,20 @@ END bootstrap overrides
     cursor: pointer;
 }
 
-.pt-progress-bar>.progress {
+.pt-progress-bar > .progress {
     display: inline-block;
-    width: 23.70%;
+    width: 59px;
     text-align: center;
     border-radius: 0px;
     margin-bottom: 0;
     height: 100%;
 }
 
-.pt-progress-bar>.progress:first-child {
+.pt-progress-bar > .progress:first-child {
     border-radius: 15px 0px 0px 15px;
 }
 
-.pt-progress-bar>.progress:last-child {
+.pt-progress-bar > .progress:last-child {
     border-radius: 0px 15px 15px 0px;
 }
 
