@@ -4,7 +4,7 @@
     {% include "data_filter/selector.html" with label="Question" options=question_names id_=id %}
     <script type="text/javascript">
     var params_ids = [];
-    var get_filter_params = function() {
+    var get_filter_params_{{ id }} = function() {
         var res = {
             job: $("select#sel-Job-{{ id }}").val(),
             question: $("select#sel-Question-{{ id }}").val()

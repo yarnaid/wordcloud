@@ -1,10 +1,10 @@
 $(document).ready(function() {
-   // $("#left_nav").mmenu({
+   $("#left_nav").mmenu({
       // options
-   // }, {
+   }, {
       // configuration
-      // offCanvas: {
-         // pageNodetype: "section"
-      // }
-   // });
+      offCanvas: {
+         pageNodetype: "section"
+      }
+   });
 });
