@@ -317,22 +317,28 @@
                                     <label for="codebook-use-previous" class="col-md-9">Use previous code book:</label>
                                 </div>
                                 <div class="form_group row">
-                                    <input class="col-md-3" type="radio" id="codebook-choose" name="codebook-create-new">
+                                    <input class="col-md-3" type="radio" name="codebook-choose" id="codebook-create-new">
                                     <label for="codebook-create-new" class="col-md-9">Create new codebook:</label>
                                 </div>
-                                <div class="line"></div>
-                                <div class="form_group row">
-                                    <input class="col-md-3" type="radio" id="codebook-from-previous-job" name="codebook-cell-choose" checked="true">
-                                    <label for="codebook-from-previous-job" class="col-md-9">From previous job:</label>
-                                </div>
-                                <div class="form_group row">
-                                    <input class="col-md-3" type="radio" id="codebook-from-other-cell" name="codebook-cell-choose">
-                                    <label for="codebook-from-other-cell" class="col-md-9">From other cell:</label>
-                                </div>
-                                <div class="line"></div>
-                                <div class="form_group row">
-                                    <label for="codebook-job-number" class="col-md-6">Job number:</label>
-                                    <select></select>
+                                <div class="pt-codebook-use-previous-content">
+                                    <div class="line"></div>
+                                    <div class="form_group row">
+                                        <input class="col-md-3" type="radio" id="codebook-from-previous-job" name="codebook-cell-choose" checked="true">
+                                        <label for="codebook-from-previous-job" class="col-md-9">From previous job:</label>
+                                    </div>
+                                    <div class="form_group row">
+                                        <input class="col-md-3" type="radio" id="codebook-from-other-cell" name="codebook-cell-choose">
+                                        <label for="codebook-from-other-cell" class="col-md-9">From other cell:</label>
+                                    </div>
+                                    <div class="line"></div>
+                                    <div id="codebook-job-number-combobox" class="form_group row">
+                                        <label for="codebook-job-number" class="col-md-6">Job number:</label>
+                                        <select></select>
+                                    </div>
+                                    <div id="codebook-cell-number-combobox" class="form_group row">
+                                        <label for="codebook-cell-number" class="col-md-6">Cell number:</label>
+                                        <select></select>
+                                    </div>
                                 </div>
                             </div>
                             <div class="pt-row-top pt-date-availability-content">

@@ -70,6 +70,26 @@ $(document).ready(function() {
         }
     );
 
+    $("input[name='codebook-choose']").change(
+		function() {
+			if(this.id == 'codebook-use-previous') {
+				$('.pt-codebook-use-previous-content').show();
+			} else {
+				$('.pt-codebook-use-previous-content').hide();
+			}
+		}    
+    )
+
+    $("input[name='codebook-cell-choose']").change(
+		function() {
+			if(this.id == 'codebook-use-previous') {
+				$('.pt-codebook-use-previous-content').show();
+			} else {
+				$('.pt-codebook-use-previous-content').hide();
+			}
+		}    
+    )
+
     $("#datepicker").datepicker({
         firstDay: 1,
         buttonImageOnly: true,

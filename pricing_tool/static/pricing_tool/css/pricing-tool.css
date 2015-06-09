@@ -453,6 +453,15 @@ END bootstrap overrides
     margin: 10% auto 10% 35%;
 }
 
+.pt-codebook-use-previous-content {
+    display: none;
+}
+
+#codebook-cell-number-combobox,
+#codebook-job-number-combobox {
+    display: none;
+}
+
 .radio > label:hover {
     color: #0083e8;
 }
