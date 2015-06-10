@@ -23,6 +23,10 @@ END bootstrap overrides
     display: none;
 }
 
+input[disabled] {
+    color: red;
+}
+
 .ui-datepicker {
     width: 80%;
     margin: auto;
@@ -457,11 +461,6 @@ END bootstrap overrides
     display: none;
 }
 
-#codebook-cell-number-combobox,
-#codebook-job-number-combobox {
-    display: none;
-}
-
 .radio > label:hover {
     color: #0083e8;
 }
@@ -546,10 +545,15 @@ END bootstrap overrides
 
 .pt-codebooks-content {
     display: none;
+    margin: 40% auto;
 }
 
 .pt-codebooks-labels label {
     text-align: left;
+}
+
+#codebook-cell-number-combobox {
+    display: none;
 }
 
 .pt-date-availability-content {

@@ -5,7 +5,16 @@ $(document).ready(function() {
 
     var previousSelectedButton = null;
 
-    $('.pt-options-list a').hover(
+	var getSourceLang = function() {
+		var checked_radio = 
+					$("input[name='pt-language-choose']:checked")[0].id;
+
+		var source_lang = $("label[for='"+checked_radio+"']").text();
+
+		return source_lang
+    }
+   
+	$('.pt-options-list a').hover(
         function() {
             $('.pt-outher-circle').toggleClass('pt-outher-circle-hover');
         }
@@ -73,19 +82,102 @@ $(document).ready(function() {
     $("input[name='codebook-choose']").change(
 		function() {
 			if(this.id == 'codebook-use-previous') {
-				$('.pt-codebook-use-previous-content').show();
+				$('.pt-codebooks-content').animate({ margin : '20% auto'})
+				$('.pt-codebook-use-previous-content').slideDown();
 			} else {
+				$('.pt-codebooks-content').animate({ margin : '40% auto'})
 				$('.pt-codebook-use-previous-content').hide();
 			}
 		}    
     )
 
-    $("input[name='codebook-cell-choose']").change(
+    $("#perform-calculations").click(
+    	function() {
+
+    		var codebookFormHandler = function() {
+    			var usePrevious = false;
+
+    			var id = $("input[name='codebook-choose']:checked")[0].id;
+    			if(id == 'codebook-use-previous')
+    				usePrevious = true;
+
+    			if(!usePrevious) {
+    				return { uses: false};
+    			} else {
+    				if($("input[name='codebook-cell-or-job-choose']:checked")[0].id == "codebook-from-other-cell") {
+    					var cell_num = $("#select-cell-number").val()
+    					
+    					return {
+    						uses: true,
+    						from: "cell",
+    						cell_number: cell_num
+    					}
+    				} else {
+    					var job_num = $("#select-job-number").val();
+    					return {
+							uses: true,
+							from: "job",
+							job_number: job_num
+						}
+					}
+    			}
+    		}
+
+    		var cell_num = $('#cells-number')[0].valueAsNumber;
+    		var sample_sz = $("#sample-size")[0].valueAsNumber;
+    		var brand_q = $("#brand-question")[0].valueAsNumber;
+    		var short_q = $("#one-word-question")[0].valueAsNumber;
+    		var likes_q = $("#feeling-likes-question")[0].valueAsNumber;
+    		var story_q = $("#story-question")[0].valueAsNumber;
+    		var long_q  = $("#long-questions")[0].valueAsNumber;
+
+    		var prev_codebook = codebookFormHandler();
+
+    		var source_lang = getSourceLang();
+
+    		var formArray = {
+    			cells_number: cell_num,
+    			source_language: source_lang,
+    			sample_size: sample_sz,
+    			previous_codebook: prev_codebook,
+    			questions: {
+    				brand_questions: brand_q,
+    				short_questions: short_q,
+    				like_questions : likes_q,
+    				story_questions: story_q,
+    				long_questions : long_q,
+    			}
+    		}
+
+    		$(".pt-result-cost p").text(calculator.countCodingCost(formArray)+" Euro");
+    		$(".pt-result-timing p").text((calculator.timeCalculation(formArray)));
+
+    		$(lastOpened).fadeOut();
+    		$(".buttons-wrapper").fadeOut();
+    		$(".pt-results-wrapper").fadeIn();
+    	}
+    )
+
+   $("input[name='pt-language-choose']").change(
+    	function() {
+    		$(".pt-verbatim-translation-languages input[type='checkbox']").removeAttr("disabled");
+    		var source_lang = getSourceLang();
+
+    		var checkboxId = source_lang.toLowerCase();
+
+    		$('#pt-verbatim-translation-language-'+checkboxId).attr("disabled", true)
+    	}
+    )
+
+    $("input[name='codebook-cell-or-job-choose']").change(
 		function() {
-			if(this.id == 'codebook-use-previous') {
-				$('.pt-codebook-use-previous-content').show();
+			if(this.id == 'codebook-from-previous-job') {
+
+				$('#codebook-cell-number-combobox').hide();
+				$('#codebook-job-number-combobox').fadeIn()
 			} else {
-				$('.pt-codebook-use-previous-content').hide();
+				$('#codebook-job-number-combobox').hide()
+				$('#codebook-cell-number-combobox').fadeIn();
 			}
 		}    
     )
@@ -98,3 +190,4 @@ $(document).ready(function() {
     });
 
 });
+
