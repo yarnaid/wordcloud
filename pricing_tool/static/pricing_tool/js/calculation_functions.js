@@ -95,10 +95,3 @@ var calculator = {
 		return (A*B*C)*(D1*1+D2*1.5+D3*3+D4*4+D5*8+D6*12)*Ht*9.5;
 	}
 }
-
-function format_time(seconds) {
-	var hour_count = seconds/3600;
-	var days = hour_count/24;
-	var hours_left = hour_count-days*24
-	return days+" days "+hour_count+" hours";
-}

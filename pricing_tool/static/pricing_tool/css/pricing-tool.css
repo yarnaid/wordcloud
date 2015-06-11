@@ -151,6 +151,8 @@ input[disabled] {
 
 .pt-wheel {
     position: relative;
+    width: 644px;
+    display: table;
 }
 
 .progress-bar {
@@ -200,6 +202,7 @@ input[disabled] {
     margin: 0;
     width: 644px;
     height: 644px;
+    background-color: #FFF;
     border: 9px solid #50677e;
     border-radius: 50%;
     -webkit-transition: 0.3s all;
@@ -217,39 +220,50 @@ input[disabled] {
 }
 
 .pt-options-wrapper {
-    position: absolute;
+    margin: auto;
+    display: table;
     top: -10px;
     bottom: 0;
     left: 29%;
     width: 155px;
-    height: 50px;
+    height: 90px;
     z-index: 90;
 }
 
 .pt-options-list {
     list-style: none;
+    position: relative;
     width: 155px;
-    height: 50px;
+    height: 70px;
     margin: 0;
     padding: 0;
 }
 
-.pt-options-list li {
+.pt-options-tab {
     position: absolute;
-    bottom: -3px;
-    left: 0;
-    display: table;
+    top:10px;
     width: 40px;
-    height: 36px;
+    height: 80px;
     background: #50677e;
-    text-align: center;
     font-size: 18px;
     font-weight: 100;
     border-radius: 19px 19px 0 0;
     cursor: pointer;
+    padding: 16px; 
+    padding-top: 5px;
 }
 
-.pt-options-list li > a {
+
+.pt-options-tab:hover {
+    background-color: #0083E8;
+}
+
+.pt-options-tab-active {
+    background-color: #6E0CAD;
+}
+
+
+.pt-options-tab > a {
     display: table-cell;
     margin: 0;
     padding: 0;
@@ -264,25 +278,6 @@ input[disabled] {
 .pt-options-list-active {
     height: 58px;
     background: #6e0cad;
-}
-
-.pt-options-list a:hover {
-    height: 58px;
-    background: #0083e8;
-    text-decoration: none;
-}
-
-.pt-options-list li:nth-child(1) {
-    left: -2px;
-}
-
-.pt-options-list li:nth-child(2) {
-    bottom: 4px;
-    left: 55px;
-}
-
-.pt-options-list li:nth-child(3) {
-    left: 114px;
 }
 
 .pt-inner-circle-wrapper {
@@ -564,7 +559,7 @@ input[disabled] {
 .pt-results-wrapper {
     position: absolute;
     top: 200px;
-    left: 27%;
+    left: 35%;
     width: 183px;
     height: 285px;
     z-index: 100;

@@ -13,18 +13,67 @@ $(document).ready(function() {
 
 		return source_lang
     }
-   
-	$('.pt-options-list a').hover(
-        function() {
-            $('.pt-outher-circle').toggleClass('pt-outher-circle-hover');
-        }
+   	
+    $('#cells-number').change(
+    	function(){
+    		var diff = {
+    			4: "65px",
+    			3: "35px",
+    			2: "18px",
+    			1: "5px",
+    			0: "0px",
+    		}
+
+    		$('.pt-options-list li').remove();
+    		var number_of_cells = $('#cells-number')[0].valueAsNumber;
+    		var width = number_of_cells * 47;
+    		var percents_per_cell = 100.0/number_of_cells;
+
+ 			var mid = Math.floor(number_of_cells/2)+1;
+ 			if(number_of_cells%2==0)
+ 				mid = mid-1;
+
+    		$('.pt-options-wrapper').css("width", width+"px");
+    		$('.pt-options-list').css("width", width+"px");
+    		for(var i=1; i<=number_of_cells; i++)
+    			$('.pt-options-list').append(
+    				"<li id='cell_"+i
+    				+"' class='pt-options-tab' style='left:"+percents_per_cell*(i-1)+"%;top:"+diff[Math.abs(mid-i)]+";'><a href='#'>"+i+"</a></li>");
+    	}
     );
 
-    $('.pt-options-list a').click(
+    $('.pt-options-wrapper').on("mouseover",'.pt-options-tab',
+    	function() {
+    		var prev_top = $(this).css("top");
+			
+			if(this.className.indexOf('pt-options-tab-active')==-1) {
+	    		$(this).css("top", parseInt(prev_top)-10+"px");
+	    		$('.pt-outher-circle').toggleClass('pt-outher-circle-hover');
+    		}
+    	}
+    );
+
+    $('.pt-options-wrapper').on("mouseout",'.pt-options-tab',
+    	function() {
+    		var prev_top = $(this).css("top");
+    		if(this.className.indexOf('pt-options-tab-active')==-1) {
+	    		$(this).css("top", parseInt(prev_top)+10+"px");
+	    		$('.pt-outher-circle').toggleClass('pt-outher-circle-hover');
+	    	}
+    	}
+    );
+
+    $('.pt-options-wrapper').on("click",'.pt-options-tab',
         function() {
-            $('.pt-options-list a').removeClass('pt-options-list-active');
-            $(this).addClass('pt-options-list-active');
+            var prev_top = $('.pt-options-tab-active').css("top") 
+            $('.pt-options-tab-active').css("top", parseInt(prev_top)+20+"px");;
+            $('.pt-options-tab-active').removeClass('pt-options-tab-active');
+            
+            prev_top = $(this).css("top");
+    		$(this).css("top", parseInt(prev_top)-10+"px");
+            $(this).addClass('pt-options-tab-active');
             $('.pt-inner-circle').addClass('pt-inner-circle-show');
+           	$('.pt-outher-circle').toggleClass('pt-outher-circle-hover');
             $('.pt-outher-circle').addClass('pt-outher-circle-active');
         }
     );
