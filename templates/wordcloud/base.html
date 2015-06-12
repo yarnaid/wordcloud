@@ -13,7 +13,7 @@
     <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
     <link rel="stylesheet" href="{% static 'css/bootstrap-theme.min.css' %}">
     <link rel="stylesheet" href="{% static 'css/spacelab.min.css' %}">
-    {# <link rel="stylesheet" href="{% static 'css/mmenu/jquery.mmenu.all.css' %}"> #}
+    <link rel="stylesheet" href="{% static 'css/mmenu/jquery.mmenu.all.css' %}">
     <link href="{% static 'css/screen.css' %}" media="screen, projection" rel="stylesheet" type="text/css">
     <link href="{% static 'css/print.css' %}" media="print" rel="stylesheet" type="text/css">
     <!--[if IE]>
@@ -24,7 +24,7 @@
     <script type="text/javascript" src="{% static 'js/bootstrap.min.js' %}"></script>
     <script type="text/javascript" src="{% static 'js/js.cookie.js' %}"></script>
     <script type="text/javascript" src="{% static 'js/ajax_setup.js' %}"></script>
-    {# // <script type="text/javascript" src="{% static 'js/mmenu/jquery.mmenu.min.all.js' %}"></script> #}
+    <script type="text/javascript" src="{% static 'js/mmenu/jquery.mmenu.min.all.js' %}"></script>
     <script type="text/javascript" src="{% static 'js/left_menu.js' %}"></script>
     {% render_block 'css' %}
     {% render_block 'js' %}
@@ -35,7 +35,7 @@
 </head>
 
 <body>
-{% comment %}
+
     <nav class="up_menu" id='left-nav'>
         <div>
             <div class="panel panel-default">
@@ -68,26 +68,26 @@
             </div>
         </div>
     </nav>
-{% endcomment %}
+
 
 
 
 <div class="page-wrap">
     {% include 'wordcloud/nav_bar_auth.html' %}
 
-{% comment %}
+
    <script type="text/javascript">
     $(function() {
-   // $("#left-nav").mmenu({
-   //        // configuration
-   //        offCanvas: {
-   //           pageNodetype: "section",
-   //           zposition : "front"
-   //        }
-   //     });
+   $("#left-nav").mmenu({
+          // configuration
+          offCanvas: {
+             pageNodetype: "section",
+             zposition : "front"
+          }
+       });
     });
    </script>
-{% endcomment %}
+
 
     <div class="container" id="page">
         {% block page %}

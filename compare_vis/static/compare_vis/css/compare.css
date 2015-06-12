@@ -21,7 +21,7 @@
 
 /* line 27, scss/compare.scss */
 .hidden_menu {
-  width: 0%;
+  width: 0px;
   opacity: 0;
   height: 0px;
 }

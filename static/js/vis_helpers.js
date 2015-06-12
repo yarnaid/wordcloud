@@ -212,7 +212,8 @@ var tooltip_html = function(d) {
     return res;
 };
 
-var get_vis_data = function(job_id, question_name) {
+var get_vis_data = function(job_id, question_name, col) {
+    col = col || 1;
     var overcodes = {},
         codes = [],
         verbatims = {},
@@ -249,7 +250,7 @@ var get_vis_data = function(job_id, question_name) {
             url: base_url + '&overcode=False',
             success: function(_codes) {
                 var tmp = _codes;
-                var filter_params = get_filter_params();
+                var filter_params = eval('get_filter_params_'+col+'()');
                 // console.log(filter_params);
 
                 _.map(tmp, function(value, key, list) {
@@ -301,7 +302,8 @@ var get_vis_data = function(job_id, question_name) {
 }
 
 
-var make_svg = function(Vis, toggle_motion_id, svg_parent_id_) {
+var make_svg = function(Vis, toggle_motion_id, svg_parent_id_, col) {
+    var col = col || 1;
     var data = {};
     var rest = new Rest();
     var event_handler = get_filter_event_handler();
@@ -338,7 +340,7 @@ var make_svg = function(Vis, toggle_motion_id, svg_parent_id_) {
 
     var path = window.location.href;
     var start = function() {
-        var params = get_filter_params();
+        var params = eval('get_filter_params_'+col+'()');
         var vis_data = get_vis_data(params.job, params.question);
         data_loaded(null, vis_data);
     };

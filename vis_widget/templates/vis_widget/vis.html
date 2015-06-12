@@ -5,7 +5,15 @@
 {% block window %}
     <div id="window_{{ col }}">
 
-        <div class="bordered" id="svg_{{ col }}">{% lorem %}</div>
+        <div class="bordered" id="svg_{{ col }}"></div>
+        <script type="text/javascript">$(function() {
+            var visualizations = [Cluster, Tree];
+            make_svg(visualizations[{{col|add:"-1"}} % visualizations.length], "#stop-{{col}}", "#svg_{{col}}", "{{col}}");
+
+            $('[data-toggle=popover]').popover({html:true});
+        });
+        </script>
+
 
         <div class="row-flud svg-menu" id="menu_{{ col }}">
             <a onclick="show_menu('#vis_menu_{{col}}', '#svg_{{ col }}');" href="#"><div class="col-md-2 svg-menu-item left">{% trans "Options" %}</div></a>
