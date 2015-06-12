@@ -36,6 +36,7 @@
 
 <body>
 
+{% comment %}
     <nav class="up_menu" id='left-nav'>
         <div>
             <div class="panel panel-default">
@@ -68,15 +69,7 @@
             </div>
         </div>
     </nav>
-
-
-
-
-<div class="page-wrap">
-    {% include 'wordcloud/nav_bar_auth.html' %}
-
-
-   <script type="text/javascript">
+       <script type="text/javascript">
     $(function() {
    $("#left-nav").mmenu({
           // configuration
@@ -88,6 +81,13 @@
     });
    </script>
 
+{% endcomment %}
+
+
+
+
+<div class="page-wrap">
+    {% include 'wordcloud/nav_bar_auth.html' %}
 
     <div class="container" id="page">
         {% block page %}
