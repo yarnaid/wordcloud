@@ -1,394 +1,376 @@
-{% extends 'wordcloud/base.html' %}
-{% load i18n sekizai_tags staticfiles %}
-{% block page_header %}
-    <h1>Pricing Tool</h1>
-{% endblock %}
-{% block content %}
-    <div class="row-fluid">
-        <div class="col-md-1 pull-right">
-            <p><a href="{% url 'pricing_tool' %}">Old version</a></p>
-        </div>
+{% extends 'wordcloud/base.html' %} {% load i18n sekizai_tags staticfiles %} {% block page_header %}
+<h1>Pricing Tool</h1> {% endblock %} {% block content %}
+<div class="row-fluid">
+    <div class="col-md-1 pull-right">
+        <p><a href="{% url 'pricing_tool' %}">Old version</a></p>
     </div>
-    <section class="container pt-wrapper">
-        <div class="row">
-            <aside class="col-md-3 col-sm-12 pt-left-menu">
-                <form action="#" method="post" class="pt-aside-form form-inline">
-                     {% csrf_token %}
-                    <div class="row form-group">
-                        <label for="study-type" class="col-sm-7">Study type:</label>
-                        <select name="study-type" id="study-type" class="col-sm-5 form-control">
-                            <option value="Choice 1">Choice 1</option>
-                            <option value="Choice 2">Choice 2</option>
-                            <option value="Choice 3">Choice 3</option>
-                        </select>
-                    </div>
-                    <div class="row form-group">
-                        <label for="cels-number" class="col-sm-7">Number of cels:</label>
-                        <input type="number" name="cels-number" id="cels-number" class="col-sm-5 form-control" min="0" max="9" step="1" value="1">
-                    </div>
-                    <div class="row form-group">
-                        <label for="identical-cells-yes" class="col-sm-7">Identical cells:</label>
-                        <div>
-                            <label for="identical-cells-yes">
-                                <input type="radio" name="identical-cells" id="identical-cells-yes" value="Yes" checked> Yes
-                            </label>
-                            <label for="identical-cells-no">
-                                <input type="radio" name="identical-cells" id="identical-cells-no" value="No"> No
-                            </label>
-                        </div>
-                    </div>
-                </form>
-            </aside>
-            <aside class="pt-progress-bar-container col-md-3 col-md-offset-6">
-                <p>Current pricings level:</p>
-                <div class="pt-progress-bar-wrapper">
-                    <div class="pt-progress-bar">
-                        <div class="progress pt-level-1">
-                            <span class="progress-value">1</span>
-                            <div class="progress-bar" role="progressbar" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100" style="width:70%"></div>
-                        </div>
-                        <div class="progress pt-level-2">
-                            <span class="progress-value">2</span>
-                            <div class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100"></div>
-                        </div>
-                        <div class="progress pt-level-3">
-                            <span class="progress-value">3</span>
-                            <div class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100"></div>
-                        </div>
-                        <div class="progress pt-level-4">
-                            <span class="progress-value">1</span>
-                            <div class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100"></div>
-                        </div>
+</div>
+<section class="container pt-wrapper">
+    <div class="row">
+        <aside class="col-md-3 col-sm-12 pt-left-menu">
+            <form action="#" method="post" class="pt-aside-form form-inline">
+                {% csrf_token %}
+                <div class="row form-group">
+                    <label for="study-type" class="col-sm-7">Study type:</label>
+                    <select name="study-type" id="study-type" class="col-sm-5 form-control">
+                        <option value="Choice 1">Choice 1</option>
+                        <option value="Choice 2">Choice 2</option>
+                        <option value="Choice 3">Choice 3</option>
+                    </select>
+                </div>
+                <div class="row form-group">
+                    <label for="cels-number" class="col-sm-7">Number of cels:</label>
+                    <input type="number" name="cels-number" id="cels-number" class="col-sm-5 form-control" min="0" max="9" step="1" value="1">
+                </div>
+                <div class="row form-group">
+                    <label for="identical-cells-yes" class="col-sm-7">Identical cells:</label>
+                    <div>
+                        <label for="identical-cells-yes">
+                            <input type="radio" name="identical-cells" id="identical-cells-yes" value="Yes" checked> Yes
+                        </label>
+                        <label for="identical-cells-no">
+                            <input type="radio" name="identical-cells" id="identical-cells-no" value="No"> No
+                        </label>
                     </div>
                 </div>
-            </aside>
-            <section class="col-md-9 cols-sm-12 pt-body">s
-                <h6>Choose cell to fill the data:</h6>
-                <div class="pt-wheel">
-                    <!-- <div class="pt-wheel-bg"></div> -->
-                    <div class="pt-outher-circle"></div>
-                    <div class="pt-options-wrapper">
-                        <ul class="pt-options-list">
-                            <li><a href="#">1</a>
-                            </li>
-                            <li><a href="#">2</a>
-                            </li>
-                            <li><a href="#">3</a>
-                            </li>
-                        </ul>
+            </form>
+        </aside>
+        <aside class="pt-progress-bar-container col-md-3 col-md-offset-6">
+            <p>Current pricings level:</p>
+            <div class="pt-progress-bar-wrapper">
+                <div class="pt-progress-bar">
+                    <div class="progress pt-level-1">
+                        <span class="progress-value">1</span>
+                        <div class="progress-bar" role="progressbar" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100" style="width:70%"></div>
                     </div>
-                    <div class="pt-inner-circle-wrapper">
-                        <div class="pt-inner-circle"></div>
-                        <div class="pt-inner-circle-selector-wrapper">
-                            <div class="pt-language-selector">
-                                <svg width="243" height="85">
-                                    <g transform="translate(0.000000,85.000000) scale(0.100000,-0.100000)" fill="#50677e" stroke="none">
-                                        <path d="M920 839 c-129 -13 -310 -44 -438 -75 -199 -48 -488 -152 -480 -173 1 -5 59 -137 127 -293 l125 -285 85 34 c503 197 1077 213 1592 42 65 -21 143 -50 173 -63 l56 -25 14 27 c8 15 55 119 106 232 51 113 105 233 120 267 l28 61 -127 50 c-223 89 -471 154 -711 187 -138 19 -535 28 -670 14z " />
-                                    </g>
-                                    <defs>
-                                        <path id="language-textpath" fill="none" stroke="none" d="M 60,50 Q 150,20 330,100" />
-                                    </defs>
-                                    <use xlink:href="#language-textpath" fill="none" stroke="none" />
-                                    <text x="45" y="45" font-size="24px" fill="#ffffff">
-                                        <textPath xlink:href="#language-textpath">Languages</textPath>
-                                    </text>
-                                    </sgv>
-                            </div>
-                            <div class="pt-sample-size-selector">
-                                <svg width="181" height="206">
-                                    <g transform="translate(0.000000,206.000000) scale(0.100000,-0.100000)" fill="#50677e" stroke="none">
-                                        <path d="M146 1778 c-104 -203 -142 -285 -133 -291 6 -4 61 -36 121 -72 475 -285 851 -759 1016 -1280 18 -55 35 -107 38 -116 6 -14 46 -6 312 64 168 43 307 81 309 83 7 7 -56 207 -104 329 -223 572 -627 1073 -1138 1408 -104 69 -256 157 -270 157 -3 0 -71 -127 -151 -282z" />
-                                    </g>
-                                    <defs>
-                                        <path id="sample-size-textpath" fill="none" stroke="none" d="M 45,60 Q 180,140 140,400" />
-                                    </defs>
-                                    <use xlink:href="#sample-size-textpath" fill="none" stroke="none" />
-                                    <text x="45" y="45" font-size="24px" fill="#ffffff">
-                                        <textPath xlink:href="#sample-size-textpath">Sample size</textPath>
-                                    </text>
-                                    </sgv>
-                            </div>
-                            <div class="pt-questions-selector">
-                                <svg width="111" height="238">
-                                    <g transform="translate(0.000000,238.000000) scale(0.100000,-0.100000)" fill="#50677e" stroke="none">
-                                        <path d="M 705 2308 c -159 -33 -291 -61 -292 -62 -1 -1 4 -38 12 -81 78 -437 14 -935 -172 -1349 -51 -113 -144 -280 -208 -373 l-43 -61 256 -189 c141 -103 258 -188 261 -188 12 0 159 229 223 347 164 304 273 635 330 998 19 124 22 185 22 425 0 240 -3 300 -22 422 -26 169 -28 173 -56 172 -11 0 -151 -28 -311 -61z" />
-                                    </g>
-                                    <defs>
-                                        <path id="questions-textpath" fill="none" stroke="none" d="M 60,175 Q 100,100 70,0" />
-                                    </defs>
-                                    <use xlink:href="#questions-textpath" fill="none" stroke="none" />
-                                    <text x="45" y="45" font-size="24px" fill="#ffffff">
-                                        <textPath xlink:href="#questions-textpath">Questions</textPath>
-                                    </text>
-                                    </sgv>
-                            </div>
-                            <div class="pt-codebooks-selector">
-                                <svg viewBox="0 0 220.000000 148.000000" preserveAspectRatio="xMidYMid meet">
-                                    <g transform="translate(0.000000,148.000000) scale(0.100000,-0.100000)" fill="#50677e" stroke="none">
-                                        <path d="M1605 1362 c-403 -417 -911 -652 -1534 -708 l-74 -6 6 -226 c4 -124
+                    <div class="progress pt-level-2">
+                        <span class="progress-value">2</span>
+                        <div class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                    <div class="progress pt-level-3">
+                        <span class="progress-value">3</span>
+                        <div class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                    <div class="progress pt-level-4">
+                        <span class="progress-value">4</span>
+                        <div class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                </div>
+            </div>
+        </aside>
+        <section class="col-md-9 cols-sm-12 pt-body">s
+            <h6>Choose cell to fill the data:</h6>
+            <div class="pt-wheel">
+                <div class="pt-outher-circle"></div>
+                <div class="pt-options-wrapper">
+                    <ul class="pt-options-list">
+                        <li><a href="#">1</a></li>
+                        <li><a href="#">2</a></li>
+                        <li><a href="#">3</a></li>
+                    </ul>
+                </div>
+                <div class="pt-inner-circle-wrapper">
+                    <div class="pt-inner-circle"></div>
+                    <div class="pt-inner-circle-selector-wrapper">
+                        <div class="pt-language-selector">
+                            <svg width="243" height="85">
+                                <g transform="translate(0.000000,85.000000) scale(0.100000,-0.100000)" fill="#50677e" stroke="none">
+                                    <path d="M920 839 c-129 -13 -310 -44 -438 -75 -199 -48 -488 -152 -480 -173 1 -5 59 -137 127 -293 l125 -285 85 34 c503 197 1077 213 1592 42 65 -21 143 -50 173 -63 l56 -25 14 27 c8 15 55 119 106 232 51 113 105 233 120 267 l28 61 -127 50 c-223 89 -471 154 -711 187 -138 19 -535 28 -670 14z " />
+                                </g>
+                                <defs>
+                                    <path id="language-textpath" fill="none" stroke="none" d="M 60,50 Q 150,20 330,100" />
+                                </defs>
+                                <use xlink:href="#language-textpath" fill="none" stroke="none" />
+                                <text id="language-text">
+                                    <textPath xlink:href="#language-textpath">Languages</textPath>
+                                </text>
+                                </sgv>
+                        </div>
+                        <div class="pt-sample-size-selector">
+                            <svg width="181" height="206">
+                                <g transform="translate(0.000000,206.000000) scale(0.100000,-0.100000)" fill="#50677e" stroke="none">
+                                    <path d="M146 1778 c-104 -203 -142 -285 -133 -291 6 -4 61 -36 121 -72 475 -285 851 -759 1016 -1280 18 -55 35 -107 38 -116 6 -14 46 -6 312 64 168 43 307 81 309 83 7 7 -56 207 -104 329 -223 572 -627 1073 -1138 1408 -104 69 -256 157 -270 157 -3 0 -71 -127 -151 -282z" />
+                                </g>
+                                <defs>
+                                    <path id="sample-size-textpath" fill="none" stroke="none" d="M 45,60 Q 180,140 140,400" />
+                                </defs>
+                                <use xlink:href="#sample-size-textpath" fill="none" stroke="none" />
+                                <text id="sample-size-text">
+                                    <textPath xlink:href="#sample-size-textpath">Sample size</textPath>
+                                </text>
+                                </sgv>
+                        </div>
+                        <div class="pt-questions-selector">
+                            <svg width="111" height="238">
+                                <g transform="translate(0.000000,238.000000) scale(0.100000,-0.100000)" fill="#50677e" stroke="none">
+                                    <path d="M 705 2308 c -159 -33 -291 -61 -292 -62 -1 -1 4 -38 12 -81 78 -437 14 -935 -172 -1349 -51 -113 -144 -280 -208 -373 l-43 -61 256 -189 c141 -103 258 -188 261 -188 12 0 159 229 223 347 164 304 273 635 330 998 19 124 22 185 22 425 0 240 -3 300 -22 422 -26 169 -28 173 -56 172 -11 0 -151 -28 -311 -61z" />
+                                </g>
+                                <defs>
+                                    <path id="questions-textpath" fill="none" stroke="none" d="M 60,175 Q 100,100 70,0" />
+                                </defs>
+                                <use xlink:href="#questions-textpath" fill="none" stroke="none" />
+                                <text id="questions-text">
+                                    <textPath xlink:href="#questions-textpath">Questions</textPath>
+                                </text>
+                                </sgv>
+                        </div>
+                        <div class="pt-codebooks-selector">
+                            <svg viewBox="0 0 220.000000 148.000000" preserveAspectRatio="xMidYMid meet">
+                                <g transform="translate(0.000000,148.000000) scale(0.100000,-0.100000)" fill="#50677e" stroke="none">
+                                    <path d="M1605 1362 c-403 -417 -911 -652 -1534 -708 l-74 -6 6 -226 c4 -124
                                             7 -268 7 -320 l0 -95 103 7 c649 45 1250 287 1747 704 96 80 340 324 340 340
                                             0 7 -351 310 -460 397 l-25 21 -110 -114z" />
-                                    </g>
-                                    <defs>
-                                        <path id="codebooks-textpath" fill="none" stroke="none" d="M 50,120 Q 200,100 260,-150" />
-                                    </defs>
-                                    <use xlink:href="#codebooks-textpath" fill="none" stroke="none" />
-                                    <text x="45" y="45" font-size="24px" fill="#ffffff">
-                                        <textPath xlink:href="#codebooks-textpath">Codebook</textPath>
-                                    </text>
-                                </svg>
-                            </div>
-                            <div class="pt-codebook-translation-selector">
-                                <svg viewBox="0 0 221.000000 146.000000" preserveAspectRatio="xMidYMid meet">
-                                    <g transform="translate(0.000000,146.000000) scale(0.100000,-0.100000)" fill="#50677e" stroke="none">
-                                        <path d="M239 1252 c-131 -113 -239 -210 -239 -216 0 -17 295 -304 390 -380
+                                </g>
+                                <defs>
+                                    <path id="codebooks-textpath" fill="none" stroke="none" d="M 50,120 Q 200,100 260,-150" />
+                                </defs>
+                                <use xlink:href="#codebooks-textpath" fill="none" stroke="none" />
+                                <text id="codebooks-text">
+                                    <textPath xlink:href="#codebooks-textpath">Codebook</textPath>
+                                </text>
+                            </svg>
+                        </div>
+                        <div class="pt-codebook-translation-selector">
+                            <svg viewBox="0 0 221.000000 146.000000" preserveAspectRatio="xMidYMid meet">
+                                <g transform="translate(0.000000,146.000000) scale(0.100000,-0.100000)" fill="#50677e" stroke="none">
+                                    <path d="M239 1252 c-131 -113 -239 -210 -239 -216 0 -17 295 -304 390 -380
                                             481 -383 1082 -615 1686 -652 l112 -7 6 174 c11 327 12 469 1 469 -73 1 -281
                                             27 -395 50 -455 91 -849 302 -1189 636 l-133 131 -239 -205z" />
-                                    </g>
-                                    <defs>
-                                        <path id="codebook-translation-textpath" fill="none" stroke="none" d="M 25,35 Q 150,180 450,80" />
-                                    </defs>
-                                    <use xlink:href="#codebook-translation-textpath" fill="none" stroke="none" />
-                                    <text x="45" y="45" font-size="24px" fill="#ffffff">
-                                        <textPath xlink:href="#codebook-translation-textpath">Codebook translation</textPath>
-                                    </text>
-                                </svg>
-                            </div>
-                            <div class="pt-verbatim-translation-selector">
-                                <svg viewBox="0 0 110.000000 237.000000" preserveAspectRatio="xMidYMid meet">
-                                    <g transform="translate(0.000000,237.000000) scale(0.100000,-0.100000)" fill="#50677e" stroke="none">
-                                        <path d="M37 2258 c-64 -428 -45 -828 58 -1223 63 -244 157 -480 270 -687 67
+                                </g>
+                                <defs>
+                                    <path id="codebook-translation-textpath" fill="none" stroke="none" d="M 25,35 Q 150,180 450,80" />
+                                </defs>
+                                <use xlink:href="#codebook-translation-textpath" fill="none" stroke="none" />
+                                <text id="codebook-translation-text">
+                                    <textPath xlink:href="#codebook-translation-textpath">Codebook translation</textPath>
+                                </text>
+                            </svg>
+                        </div>
+                        <div class="pt-verbatim-translation-selector">
+                            <svg viewBox="0 0 110.000000 237.000000" preserveAspectRatio="xMidYMid meet">
+                                <g transform="translate(0.000000,237.000000) scale(0.100000,-0.100000)" fill="#50677e" stroke="none">
+                                    <path d="M37 2258 c-64 -428 -45 -828 58 -1223 63 -244 157 -480 270 -687 67
                                             -122 216 -349 226 -346 16 7 508 374 508 380 1 4 -19 35 -43 70 -330 477 -472
                                             1079 -391 1657 9 58 17 113 20 121 5 14 -164 52 -611 138 -19 3 -22 -5 -37
                                             -110z" />
-                                    </g>
-                                    <defs>
-                                        <path id="verbatim-translation-textpath" fill="none" stroke="none" d="M 25,10 Q 0,145 110,260" />
-                                    </defs>
-                                    <use xlink:href="#codebook-translation-textpath" fill="none" stroke="none" />
-                                    <text x="45" y="45" font-size="24px" fill="#ffffff">
-                                        <textPath xlink:href="#verbatim-translation-textpath">Verbatim translation</textPath>
-                                    </text>
-                                </svg>
-                            </div>
-                            <div class="pt-date-availability-selector">
-                                <svg viewBox="0 0 182.000000 207.000000" preserveAspectRatio="xMidYMid meet">
-                                    <g transform="translate(0.000000,207.000000) scale(0.100000,-0.100000)" fill="#50677e" stroke="none">
-                                        <path d="M1415 2014 c-581 -331 -1051 -873 -1294 -1494 -46 -115 -123 -352
+                                </g>
+                                <defs>
+                                    <path id="verbatim-translation-textpath" fill="none" stroke="none" d="M 25,10 Q 0,145 110,260" />
+                                </defs>
+                                <use xlink:href="#codebook-translation-textpath" fill="none" stroke="none" />
+                                <text id="verbatim-translation-text">
+                                    <textPath xlink:href="#verbatim-translation-textpath">Verbatim translation</textPath>
+                                </text>
+                            </svg>
+                        </div>
+                        <div class="pt-date-availability-selector">
+                            <svg viewBox="0 0 182.000000 207.000000" preserveAspectRatio="xMidYMid meet">
+                                <g transform="translate(0.000000,207.000000) scale(0.100000,-0.100000)" fill="#50677e" stroke="none">
+                                    <path d="M1415 2014 c-581 -331 -1051 -873 -1294 -1494 -46 -115 -123 -352
                                             -117 -358 2 -1 135 -36 297 -77 162 -42 301 -78 310 -80 12 -4 20 9 34 62 63
                                             239 214 540 385 768 94 127 326 359 451 453 86 64 290 194 320 204 13 4 -279
                                             568 -295 568 -6 0 -47 -21 -91 -46z" />
-                                    </g>
-                                    <defs>
-                                        <path id="date-availability-textpath" fill="none" stroke="none" d="M 50,175 Q 75,65 300,-50" />
-                                    </defs>
-                                    <use xlink:href="#date-availability-textpath" fill="none" stroke="none" />
-                                    <text x="45" y="45" font-size="24px" fill="#ffffff">
-                                        <textPath xlink:href="#date-availability-textpath">Date availability</textPath>
-                                    </text>
-                                </svg>
-                            </div>
-                        </div>
-                        <div class="pt-inner-circle-content-wrapper">
-                            <form action="" method="post" class="pt-pricing-form">
-                                {% csrf_token %}
-                                <div class="pt-row-top pt-language-content">
-                                    <div class="radio form-group">
-                                        <input type="radio" name="pt-language-choose" id="pt-language-german">
-                                        <label class="control-label" for="pt-language-german">German</label>
-                                    </div>
-                                    <div class="radio form-group">
-                                        <input type="radio" name="pt-language-choose" id="pt-language-spanish">
-                                        <label class="control-label" for="pt-language-spanish">Spanish</label>
-                                    </div>
-                                    <div class="radio form-group">
-                                        <input type="radio" name="pt-language-choose" id="pt-language-english" checked>
-                                        <label class="control-label" for="pt-language-english">English</label>
-                                    </div>
-                                    <div class="radio form-group">
-                                        <input type="radio" name="pt-language-choose" id="pt-language-french">
-                                        <label class="control-label" for="pt-language-french">French</label>
-                                    </div>
-                                    <div class="radio form-group">
-                                        <input type="radio" name="pt-language-choose" id="pt-language-mandarin">
-                                        <label class="control-label" for="pt-language-mandarin">Mandarin</label>
-                                    </div>
-                                    <div class="radio form-group">
-                                        <input type="radio" name="pt-language-choose" id="pt-language-italian">
-                                        <label class="control-label" for="pt-language-italian">Italian</label>
-                                    </div>
-                                    <div class="radio form-group">
-                                        <input type="radio" name="pt-language-choose" id="pt-language-portuguese">
-                                        <label class="control-label" for="pt-language-portuguese">Portuguese</label>
-                                    </div>
-                                </div>
-                                <div class="pt-row-top pt-sample-size-content">
-                                    <div class="form-group row">
-                                        <label for="sample-size" class="col-md-8">Sample size for Cell 1:</label>
-                                        <div class="col-md-4">
-                                            <input type="number" id="sample-size" class="form-control" name="sample-size" min="0" value="150">
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="pt-row-top pt-questions-content form-group">
-                                    <div class="form-group row">
-                                        <label for="brand-question" class="col-md-7">Brand question:</label>
-                                        <div class="col-md-5">
-                                            <input type="number" id="brand-question" class="form-control col-md-6" name="brand-question" min="0" value="10">
-                                        </div>
-                                    </div>
-                                    <div class="form-group row">
-                                        <label for="one-word-question" class="col-md-7">One word question:</label>
-                                        <div class="col-md-5">
-                                            <input type="number" id="one-word-question" class="form-control" name="one-word-question" min="0" value="8">
-                                        </div>
-                                    </div>
-                                    <div class="form-group row">
-                                        <label for="feeling-likes-question" class="col-md-7">Feeling / likes question:</label>
-                                        <div class="col-md-5">
-                                            <input type="number" id="feeling-likes-question" class="form-control" name="feeling-likes-question" min="0" value="38">
-                                        </div>
-                                    </div>
-                                    <div class="form-group row">
-                                        <label for="story-question" class="col-md-7">Story question:</label>
-                                        <div class="col-md-5">
-                                            <input type="number" id="story-question" class="form-control" name="story-question" min="0" value="1098">
-                                        </div>
-                                    </div>
-                                    <div class="form-group row">
-                                        <label for="long-questions" class="col-md-7">Long questions:</label>
-                                        <div class="col-md-5">
-                                            <input type="number" id="long-questions" class="form-control" name="long-questions" min="0" value="1">
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="pt-row-top pt-codebook-translation-content"></div>
-                                <div class="pt-row-top pt-verbatim-translation-content">
-                                    <div class="pt-top-buttons-wrapper">
-                                        <input id="languages" type="button" class="btn button-verbatim-translation" value="Language" />
-                                        <input id="number" type="button" class="btn button-verbatim-translation button-verbatim-translation-selected" value="Number" />
-                                    </div>
-                                    <div class="pt-verbatim-translation-labels form_group">
-                                        <div class="form_group row">
-                                            <label class="col-md-9">Long questions</label>
-                                            <input class="col-md-3" type="number" />
-                                        </div>
-                                        <div class="form_group row">
-                                            <label class="col-md-9">Story questions</label>
-                                            <input class="col-md-3" type="number" />
-                                        </div>
-                                        <div class="form_group row">
-                                            <label class="col-md-9">Feeling/likes questions</label>
-                                            <input class="col-md-3" type="number" />
-                                        </div>
-                                    </div>
-                                    <div class="pt-verbatim-translation-languages form_group">
-                                        <div class="checkbox form-group row">
-                                            <input type="checkbox" name="pt-language-choose" id="pt-language-german">
-                                            <label class="control-label" for="pt-language-german">German</label>
-                                        </div>
-                                        <div class="checkbox form-group row">
-                                            <input type="checkbox" name="pt-language-choose" id="pt-language-spanish">
-                                            <label class="control-label" for="pt-language-spanish">Spanish</label>
-                                        </div>
-                                        <div class="checkbox form-group row">
-                                            <input type="checkbox" name="pt-language-choose" id="pt-language-english" checked>
-                                            <label class="control-label" for="pt-language-english">English</label>
-                                        </div>
-                                        <div class="checkbox form-group row">
-                                            <input type="checkbox" name="pt-language-choose" id="pt-language-french">
-                                            <label class="control-label" for="pt-language-french">French</label>
-                                        </div>
-                                        <div class="checkbox form-group row">
-                                            <input type="checkbox" name="pt-language-choose" id="pt-language-mandarin">
-                                            <label class="control-label" for="pt-language-mandarin">Mandarin</label>
-                                        </div>
-                                        <div class="checkbox form-group row">
-                                            <input type="checkbox" name="pt-language-choose" id="pt-language-italian">
-                                            <label class="control-label" for="pt-language-italian">Italian</label>
-                                        </div>
-                                        <div class="checkbox form-group row">
-                                            <input type="checkbox" name="pt-language-choose" id="pt-language-portuguese">
-                                            <label class="control-label" for="pt-language-portuguese">Portuguese</label>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="pt-row-top pt-codebooks-content">
-                                    <div class="form_group row">
-                                        <input class="col-md-3" type="radio" name="choose-new-or-old" checked="true" />
-                                        <label class="col-md-9">Use previous code book:</label>
-                                    </div>
-                                    <div class="form_group row">
-                                        <input class="col-md-3" type="radio" name="choose-new-or-old" />
-                                        <label class="col-md-9">Create new codebook:</label>
-                                    </div>
-                                    <div class="line"></div>
-                                    <div class="form_group row">
-                                        <input class="col-md-3" type="radio" name="previous-or-other" checked="true" />
-                                        <label class="col-md-9">From previous job:</label>
-                                    </div>
-                                    <div class="form_group row">
-                                        <input class="col-md-3" type="radio" name="previous-or-other" />
-                                        <label class="col-md-9">From other cell:</label>
-                                    </div>
-                                    <div class="line"></div>
-                                    <div class="form_group row">
-                                        <label class="col-md-6">Job number:</label>
-                                        <select></select>
-                                    </div>
-                                </div>
-                                <div class="pt-row-top pt-date-availability-content">
-                                    <div>
-                                        <div class="form_group row pt-choose-time-format">
-                                            <label>AM:</label>
-                                            <input type="radio" name="am-or-pm" checked="true"></input>
-                                            <label>PM:</label>
-                                            <input type="radio" name="am-or-pm"></input>
-                                        </div>
-                                        <div id="datepicker" class="row"></div>
-                                    </div>
-                                </div>
-                                <div class="pt-row-bottom buttons-wrapper">
-                                    <input type="submit" class="btn button-accept" value="Accept">
-                                    <input type="submit" class="btn button-cancel" value="Cancel">
-                                </div>
-                            </form>
+                                </g>
+                                <defs>
+                                    <path id="date-availability-textpath" fill="none" stroke="none" d="M 50,175 Q 75,65 300,-50" />
+                                </defs>
+                                <use xlink:href="#date-availability-textpath" fill="none" stroke="none" />
+                                <text id="date-availability-text">
+                                    <textPath xlink:href="#date-availability-textpath">Date availability</textPath>
+                                </text>
+                            </svg>
                         </div>
                     </div>
-                    <div class="pt-results-wrapper">
-                        <div class="pt-result-cost">
-                            <h2>Cost</h2>
-                            <p class="pt-result-middle">[Fill all segments]</p>
-                        </div>
-                        <div class="pt-result-timing">
-                            <h2>Timing</h2>
-                            <p class="pt-result-middle">[Fill all segments]</p>
-                        </div>
-                        <div class="pt-result-data-delivery">
-                            <h2>Data delivery</h2>
-                            <p class="pt-result-middle">[Fill all segments]</p>
-                        </div>
+                    <div class="pt-inner-circle-content-wrapper">
+                        <form action="" method="post" class="pt-pricing-form">
+                            {% csrf_token %}
+                            <div class="pt-row-top pt-language-content">
+                                <div class="radio form-group">
+                                    <input type="radio" name="pt-language-choose" id="pt-language-german">
+                                    <label class="control-label" for="pt-language-german">German</label>
+                                </div>
+                                <div class="radio form-group">
+                                    <input type="radio" name="pt-language-choose" id="pt-language-spanish">
+                                    <label class="control-label" for="pt-language-spanish">Spanish</label>
+                                </div>
+                                <div class="radio form-group">
+                                    <input type="radio" name="pt-language-choose" id="pt-language-english" checked>
+                                    <label class="control-label" for="pt-language-english">English</label>
+                                </div>
+                                <div class="radio form-group">
+                                    <input type="radio" name="pt-language-choose" id="pt-language-french">
+                                    <label class="control-label" for="pt-language-french">French</label>
+                                </div>
+                                <div class="radio form-group">
+                                    <input type="radio" name="pt-language-choose" id="pt-language-mandarin">
+                                    <label class="control-label" for="pt-language-mandarin">Mandarin</label>
+                                </div>
+                                <div class="radio form-group">
+                                    <input type="radio" name="pt-language-choose" id="pt-language-italian">
+                                    <label class="control-label" for="pt-language-italian">Italian</label>
+                                </div>
+                                <div class="radio form-group">
+                                    <input type="radio" name="pt-language-choose" id="pt-language-portuguese">
+                                    <label class="control-label" for="pt-language-portuguese">Portuguese</label>
+                                </div>
+                            </div>
+                            <div class="pt-row-top pt-sample-size-content">
+                                <div class="form-group row">
+                                    <label for="sample-size" class="col-md-8">Sample size for Cell 1:</label>
+                                    <div class="col-md-4">
+                                        <input type="number" id="sample-size" class="form-control" name="sample-size" min="0" value="150">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="pt-row-top pt-questions-content form-group">
+                                <div class="form-group row">
+                                    <label for="brand-question" class="col-md-7">Brand question:</label>
+                                    <div class="col-md-5">
+                                        <input type="number" id="brand-question" class="form-control col-md-6" name="brand-question" min="0" value="10">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="one-word-question" class="col-md-7">One word question:</label>
+                                    <div class="col-md-5">
+                                        <input type="number" id="one-word-question" class="form-control" name="one-word-question" min="0" value="8">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="feeling-likes-question" class="col-md-7">Feeling / likes question:</label>
+                                    <div class="col-md-5">
+                                        <input type="number" id="feeling-likes-question" class="form-control" name="feeling-likes-question" min="0" value="38">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="story-question" class="col-md-7">Story question:</label>
+                                    <div class="col-md-5">
+                                        <input type="number" id="story-question" class="form-control" name="story-question" min="0" value="1098">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="long-questions" class="col-md-7">Long questions:</label>
+                                    <div class="col-md-5">
+                                        <input type="number" id="long-questions" class="form-control" name="long-questions" min="0" value="1">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="pt-row-top pt-codebook-translation-content"></div>
+                            <div class="pt-row-top pt-verbatim-translation-content">
+                                <div class="pt-top-buttons-wrapper">
+                                    <input id="languages" type="button" class="btn button-verbatim-translation" value="Language">
+                                    <input id="number" type="button" class="btn button-verbatim-translation button-verbatim-translation-selected" value="Number">
+                                </div>
+                                <div class="pt-verbatim-translation-languages form_group">
+                                    <div class="checkbox form-group row">
+                                        <input type="checkbox" name="pt-verbatim-translation-language-german" id="pt-verbatim-translation-language-german">
+                                        <label class="control-label" for="pt-verbatim-translation-language-german">German</label>
+                                    </div>
+                                    <div class="checkbox form-group row">
+                                        <input type="checkbox" name="pt-verbatim-translation-language-spanish" id="pt-verbatim-translation-language-spanish">
+                                        <label class="control-label" for="pt-verbatim-translation-language-spanish">Spanish</label>
+                                    </div>
+                                    <div class="checkbox form-group row">
+                                        <input type="checkbox" name="pt-verbatim-translation-language-english" id="pt-verbatim-translation-language-english" checked>
+                                        <label class="control-label" for="pt-verbatim-translation-language-english">English</label>
+                                    </div>
+                                    <div class="checkbox form-group row">
+                                        <input type="checkbox" name="pt-verbatim-translation-language-french" id="pt-verbatim-translation-language-french">
+                                        <label class="control-label" for="pt-verbatim-translation-language-french">French</label>
+                                    </div>
+                                    <div class="checkbox form-group row">
+                                        <input type="checkbox" name="pt-verbatim-translation-language-mandarin" id="pt-verbatim-translation-language-mandarin">
+                                        <label class="control-label" for="pt-verbatim-translation-language-mandarin">Mandarin</label>
+                                    </div>
+                                    <div class="checkbox form-group row">
+                                        <input type="checkbox" name="pt-verbatim-translation-language-italian" id="pt-verbatim-translation-language-italian">
+                                        <label class="control-label" for="pt-verbatim-translation-language-italian">Italian</label>
+                                    </div>
+                                    <div class="checkbox form-group row">
+                                        <input type="checkbox" name="pt-verbatim-translation-language-portuguese" id="pt-verbatim-translation-language-portuguese">
+                                        <label class="control-label" for="pt-verbatim-translation-language-portuguese">Portuguese</label>
+                                    </div>
+                                </div>
+                                <div class="pt-verbatim-translation-labels form_group">
+                                    <div class="form_group row">
+                                        <label for="verbatim-translation-long-questions" class="col-md-7">Long questions</label>
+                                        <div class="col-md-5">
+                                            <input type="number" class="form-control" id="verbatim-translation-long-questions" name="verbatim-translation-long-questions" min="0" value="38">
+                                        </div>
+                                    </div>
+                                    <div class="form_group row">
+                                        <label for="verbatim-translation-story-questions" class="col-md-7">Story questions</label>
+                                        <div class="col-md-5">
+                                            <input type="number" class="form-control" id="verbatim-translation-story-questions" name="verbatim-translation-story-questions" min="0" value="560">
+                                        </div>
+                                    </div>
+                                    <div class="form_group row">
+                                        <label for="verbatim-translation-feeling-likes-questions" class="col-md-7">Feeling/likes questions</label>
+                                        <div class="col-md-5">
+                                            <input type="number" class="form-control" id="verbatim-translation-feeling-likes-questions" name="verbatim-translation-feeling-likes-questions" min="0" value="5">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="pt-row-top pt-codebooks-content">
+                                <div class="form_group row">
+                                    <input class="col-md-3" type="radio" id="codebook-use-previous" name="codebook-choose" checked="true">
+                                    <label for="codebook-use-previous" class="col-md-9">Use previous code book:</label>
+                                </div>
+                                <div class="form_group row">
+                                    <input class="col-md-3" type="radio" id="codebook-choose" name="codebook-create-new">
+                                    <label for="codebook-create-new" class="col-md-9">Create new codebook:</label>
+                                </div>
+                                <div class="line"></div>
+                                <div class="form_group row">
+                                    <input class="col-md-3" type="radio" id="codebook-from-previous-job" name="codebook-cell-choose" checked="true">
+                                    <label for="codebook-from-previous-job" class="col-md-9">From previous job:</label>
+                                </div>
+                                <div class="form_group row">
+                                    <input class="col-md-3" type="radio" id="codebook-from-other-cell" name="codebook-cell-choose">
+                                    <label for="codebook-from-other-cell" class="col-md-9">From other cell:</label>
+                                </div>
+                                <div class="line"></div>
+                                <div class="form_group row">
+                                    <label for="codebook-job-number" class="col-md-6">Job number:</label>
+                                    <select></select>
+                                </div>
+                            </div>
+                            <div class="pt-row-top pt-date-availability-content">
+                                <div class="form_group row pt-choose-time-format">
+                                    <input type="radio" id="date-availability-am" name="date-availability-choose" checked="true"></input>
+                                    <label for="date-availability-am">AM</label>
+                                    <input type="radio" id="date-availability-pm" name="date-availability-choose"></input>
+                                    <label for="date-availability-pm">PM</label>
+                                </div>
+                                <div id="datepicker" class="row"></div>
+                            </div>
+                            <div class="pt-row-bottom buttons-wrapper">
+                                <input type="submit" class="btn button-accept" value="Accept">
+                                <input type="submit" class="btn button-cancel" value="Cancel">
+                            </div>
+                        </form>
                     </div>
                 </div>
-            </section>
-        </div>
-    </section>
-{% endblock %}
-
-{% if not settings.DEBUG %}
-{% block footer %}
-{% endblock footer %}
-{% endif %}
-
-{% block css %}
-{% addtoblock 'css' %}
-<link rel="stylesheet" href="{% static 'pricing_tool/css/pricing-tool.css' %}" />
-{% endaddtoblock %}
-{% endblock %}
-
-{% block js %}
-{% addtoblock 'js' %}
+                <div class="pt-results-wrapper">
+                    <div class="pt-result-cost">
+                        <h2>Cost</h2>
+                        <p class="pt-result-middle">[Fill all segments]</p>
+                    </div>
+                    <div class="pt-result-timing">
+                        <h2>Timing</h2>
+                        <p class="pt-result-middle">[Fill all segments]</p>
+                    </div>
+                    <div class="pt-result-data-delivery">
+                        <h2>Data delivery</h2>
+                        <p class="pt-result-middle">[Fill all segments]</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</section>
+{% endblock %} {% if not settings.DEBUG %} {% block footer %} {% endblock footer %} {% endif %} {% block css %} {% addtoblock 'css' %}
+<link rel="stylesheet" href="{% static 'pricing_tool/css/pricing-tool.css' %}" /> {% endaddtoblock %} {% endblock %} {% block js %} {% addtoblock 'js' %}
 <script src="http://code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
 <script type="text/javascript" src="{% static 'pricing_tool/js/pricing-tool.js' %}"></script>
-{% endaddtoblock %}
-{% endblock %}
+{% endaddtoblock %} {% endblock %}
