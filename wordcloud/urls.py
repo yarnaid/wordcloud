@@ -10,6 +10,7 @@ from filebrowser.sites import site
 
 urlpatterns = patterns('', (r'^i18n/', include('django.conf.urls.i18n')))
 
+
 urlpatterns += i18n_patterns('',
                              url(r'^admin_tools/', include('admin_tools.urls')),
                              url(r'^admin/filebrowser/', include(site.urls)),

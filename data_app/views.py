@@ -1,9 +1,12 @@
 from django.shortcuts import render
 
+from django.db.models import Count
 from data_app import models
 from rest_framework import viewsets
 from data_app import serializers
 import rest_framework_filters as filters
+from rest_framework.views import APIView
+from rest_framework.response import Response
 
 # Create your views here.
 
@@ -57,7 +60,8 @@ class VerbatimFilter(filters.FilterSet):
 
 
 class CodeFilter(filters.FilterSet):
-    queryset = models.Code.objects.all().prefetch_related('job', 'code_book', 'parent', 'children_verbatims__question', 'children_verbatims', 'children_verbatims__variable')
+    queryset = models.Code.objects.all().prefetch_related('job', 'code_book', 'parent', 'children_verbatims__question',
+                                                          'children_verbatims', 'children_verbatims__variable')
 
     children_verbatims = filters.RelatedFilter(VerbatimFilter)
 
@@ -67,7 +71,8 @@ class CodeFilter(filters.FilterSet):
 
 
 class CodeViewSet(viewsets.ModelViewSet):
-    queryset = models.Code.objects.all().prefetch_related('job', 'code_book', 'parent', 'children_verbatims__question', 'children_verbatims', 'children_verbatims__variable')
+    queryset = models.Code.objects.all().prefetch_related('job', 'code_book', 'parent', 'children_verbatims__question',
+                                                          'children_verbatims', 'children_verbatims__variable')
     serializer_class = serializers.CodeSerializer
     filter_fields = ('overcode', 'code_book', 'id', 'job', 'children_verbatims')
     filter_class = CodeFilter
@@ -89,3 +94,117 @@ class VisDataViewSet(viewsets.ModelViewSet):
     queryset = models.Job.objects.all()
     serializer_class = serializers.VisDataSerializer
     filter_fields = ('id', 'children_questions')
+
+class VerbatimsFilteredSet(APIView):
+    ''' Class appointed to fast access to Verbatims statistics and data
+
+    Supports GET method with URL query parameters format:
+    /visualization_data?job={job Id}&id={question Id}[&{field name of Variable}={restriction value for field}]
+
+    For example:
+    /visualization_data?job=126&id=3&age_bands=3&csp_quota=2
+    '''
+    #TODO: Is there any possibility to simplify names of fields in Variable class (such as 'reg_quota' to 'reg', 'csp_quota' to csp, etc)?
+
+    def get(self, request, format=None):
+        query_parameters_dict = {key: int(value) for key, value in request.query_params.iteritems()}
+        job = models.Job.objects.get(pk=int(query_parameters_dict['job']))
+
+        question = models.Question.objects.get(pk=int(query_parameters_dict['id']))
+        code_book = question.code_book
+
+        response_body = {
+            'job_number': job.number,
+            'job_name': job.name,
+            'question': {
+                'codebook_name': code_book.name,
+                'title': question.title,
+                'text': question.text,
+                'name': question.name,
+                'kind': question.kind
+            }
+        }
+
+        query_parameters_dict.pop('id')
+        query_parameters_dict.pop('job')
+
+        overcodes_array = self.go_through_children( question, query_parameters_dict)
+
+        response_body['question']['children'] = overcodes_array
+        return Response(response_body)
+
+    def go_through_children(self, question, query_parameters_dict):
+        ''' Represents all children overcodes of the question as dict for serializing tp JSON
+
+        Arguments:
+        ---------
+            question: Question
+
+            query_parameters_dict: dict{String:int}
+                query parameters got from request
+        Returns:
+        --------
+            dict of JSON-like data about children of the question
+        '''
+        variables = []
+        if len(query_parameters_dict) != 0:
+            print(query_parameters_dict)
+            variables = models.Variable.objects.filter(**query_parameters_dict)
+        unprocessed = [q for q in models.Code.objects.filter(code_book=question.code_book, overcode=True)]
+        children = list()
+
+        for code in unprocessed:
+            child = self.hierarchy_dfs(question, code, variables)
+            if child is not None:
+                children.append(child)
+
+        return children
+
+    def hierarchy_dfs(self, question, parent_code, variables, depth=0):
+        ''' Builds tree-like hierarchy for children codes and returns its JSON-like representation
+
+        Arguments:
+        ----------
+            question: Question
+
+            parent_code: Code
+                code, that is parent for current ones
+            variables: Variable
+                subset of variables, restricted by request parameters
+            depth: int
+                level of current code in children hierarchy
+        Returns:
+        --------
+            The code with information about its children and level in hierarchy represented in dict
+        '''
+        if len(variables) != 0:
+            count = models.Verbatim.objects.filter(parent=parent_code,
+                                                   question=question,
+                                                   variable__in=variables).aggregate(Count('id'))
+        else:
+            count = models.Verbatim.objects.filter(parent=parent_code,
+                                                   question=question,).aggregate(Count('id'))
+        code_dict = {
+            'title': parent_code.title,
+            'code': parent_code.code,
+            'text': parent_code.text,
+            'code_depth': depth,
+            'verbatim_count': count['id__count']
+        }
+
+        codes = models.Code.objects.filter(parent=parent_code)
+
+        if count['id__count'] == 0 and len(codes) == 0:
+            return None
+
+        children_list = list()
+        for code in codes:
+            child = self.hierarchy_dfs(question, code, variables, depth+1)
+            if child is not None:
+                children_list.append(child)
+
+        if len(children_list) == 0 and count['id__count'] == 0:
+            return None
+        else:
+            code_dict['children'] = children_list
+        return code_dict
