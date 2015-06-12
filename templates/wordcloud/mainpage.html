@@ -3,7 +3,8 @@
     <div class="container">
         <div class="row">
             <div class="col-md-12">
-                <div class="mainpage-image"><img src="{% static "img/main.png" %}"></div>
+                {# <div class="mainpage-image"><img src="{% static "img/main.png" %}"></div> #}
+                {% include "wordcloud/image.html" %}
             </div>
             <div class="col-md-5 col-sm-12">
                 <h2>Lorem ipsum dolor sit amet</h2>
