@@ -214,13 +214,16 @@ $(document).ready(function() {
         function() {
 
         	var data = saveDataFromCurrentForm();
+        	var new_number = parseInt(this.id.substring(this.id.indexOf('_')+1));
+
 			if($('.pt-options-tab-active')[0] != undefined) {
 	            var cell_number = parseInt($('.pt-options-tab-active')[0].id.substring(this.id.indexOf('_')+1));
-	            saveToBuffer(cell_number, data);
+	        	saveToBuffer(cell_number, data);
+	        } else {
+            	saveToBuffer(new_number, data);
 	        }
 
             var prev_top = $('.pt-options-tab-active').css("top");
-            var new_number = parseInt(this.id.substring(this.id.indexOf('_')+1))
             
             if(cell_number != new_number) {
 	        	$('.pt-options-tab-active').css("top", parseInt(prev_top)+20+"px");;
@@ -233,7 +236,7 @@ $(document).ready(function() {
 	           	$('.pt-outher-circle').toggleClass('pt-outher-circle-hover');
 	            $('.pt-outher-circle').addClass('pt-outher-circle-active');
 				$('#datepicker tr td').removeClass('ui-datepicker-current-day');
-				
+
 	            $('.pt-verbatim-translation-languages input').prop("checked", false);
 	            if(formData[new_number] != undefined)
 	            	retainFormData(new_number, data);
@@ -305,11 +308,15 @@ $(document).ready(function() {
 
     $("#perform-calculations").click(
     	function() {
-    		var formArray = saveDataFromCurrentForm();
+    		//var formArray = saveDataFromCurrentForm();
+    		var data = saveDataFromCurrentForm();
+    		var cell_number = parseInt($('.pt-options-tab-active')[0].id.substring(this.id.indexOf('_')+1));
+	        saveToBuffer(cell_number, data);
+    		var cell_amount = $("#cells-number")[0].valueAsNumber;
 
-    		$(".pt-result-cost p").text(calculator.countCodingCost(formArray)+" Euro");
-    		$(".pt-result-timing p").text((calculator.timeCalculation(formArray)));
-
+    		$(".pt-result-cost p").text("€"+calculator.formatCurrency(calculator.countCodingCost(formData, cell_amount).total));
+    		$(".pt-result-timing p").text(calculator.timeCalculation(formData, cell_amount).total);
+    		
     		$(lastOpened).fadeOut();
     		$(".buttons-wrapper").fadeOut();
     		$(".pt-results-wrapper").fadeIn();
