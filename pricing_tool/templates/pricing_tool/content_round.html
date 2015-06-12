@@ -19,8 +19,8 @@
                     </select>
                 </div>
                 <div class="row form-group">
-                    <label for="cels-number" class="col-sm-7">Number of cels:</label>
-                    <input type="number" name="cels-number" id="cels-number" class="col-sm-5 form-control" min="0" max="9" step="1" value="1">
+                    <label for="cells-number" class="col-sm-7">Number of cels:</label>
+                    <input type="number" name="cells-number" id="cells-number" class="col-sm-5 form-control" min="1" max="9" step="1" value="1">
                 </div>
                 <div class="row form-group">
                     <label for="identical-cells-yes" class="col-sm-7">Identical cells:</label>
@@ -64,9 +64,9 @@
                 <div class="pt-outher-circle"></div>
                 <div class="pt-options-wrapper">
                     <ul class="pt-options-list">
-                        <li><a href="#">1</a></li>
-                        <li><a href="#">2</a></li>
-                        <li><a href="#">3</a></li>
+                        <li id="cell_1"><a href="#">1</a></li>
+                        <!--<li><a href="#">2</a></li>
+                        <li><a href="#">3</a></li>-->
                     </ul>
                 </div>
                 <div class="pt-inner-circle-wrapper">
@@ -194,7 +194,7 @@
                                     <label class="control-label" for="pt-language-spanish">Spanish</label>
                                 </div>
                                 <div class="radio form-group">
-                                    <input type="radio" name="pt-language-choose" id="pt-language-english" checked>
+                                    <input type="radio" name="pt-language-choose" id="pt-language-english" checked='true'>
                                     <label class="control-label" for="pt-language-english">English</label>
                                 </div>
                                 <div class="radio form-group">
@@ -218,7 +218,7 @@
                                 <div class="form-group row">
                                     <label for="sample-size" class="col-md-8">Sample size for Cell 1:</label>
                                     <div class="col-md-4">
-                                        <input type="number" id="sample-size" class="form-control" name="sample-size" min="0" value="150">
+                                        <input type="number" max='2000' min='150' id="sample-size" class="form-control" name="sample-size" min="0" value="150">
                                     </div>
                                 </div>
                             </div>
@@ -226,31 +226,31 @@
                                 <div class="form-group row">
                                     <label for="brand-question" class="col-md-7">Brand question:</label>
                                     <div class="col-md-5">
-                                        <input type="number" id="brand-question" class="form-control col-md-6" name="brand-question" min="0" value="10">
+                                        <input type="number" max='20' min='0' id="brand-question" class="form-control col-md-6" name="brand-question" value="10">
                                     </div>
                                 </div>
                                 <div class="form-group row">
                                     <label for="one-word-question" class="col-md-7">One word question:</label>
                                     <div class="col-md-5">
-                                        <input type="number" id="one-word-question" class="form-control" name="one-word-question" min="0" value="8">
+                                        <input type="number" max='20' min='0' id="one-word-question" class="form-control" name="one-word-question" min="0" value="8">
                                     </div>
                                 </div>
                                 <div class="form-group row">
                                     <label for="feeling-likes-question" class="col-md-7">Feeling / likes question:</label>
                                     <div class="col-md-5">
-                                        <input type="number" id="feeling-likes-question" class="form-control" name="feeling-likes-question" min="0" value="38">
+                                        <input type="number" max='20' min='0' id="feeling-likes-question" class="form-control" name="feeling-likes-question" value="10">
                                     </div>
                                 </div>
                                 <div class="form-group row">
                                     <label for="story-question" class="col-md-7">Story question:</label>
                                     <div class="col-md-5">
-                                        <input type="number" id="story-question" class="form-control" name="story-question" min="0" value="1098">
+                                        <input type="number" max='20' min='0' id="story-question" class="form-control" name="story-question" value="10">
                                     </div>
                                 </div>
                                 <div class="form-group row">
                                     <label for="long-questions" class="col-md-7">Long questions:</label>
                                     <div class="col-md-5">
-                                        <input type="number" id="long-questions" class="form-control" name="long-questions" min="0" value="1">
+                                        <input type="number" max='20' min='0' id="long-questions" class="form-control" name="long-questions" value="1">
                                     </div>
                                 </div>
                             </div>
@@ -294,45 +294,59 @@
                                     <div class="form_group row">
                                         <label for="verbatim-translation-long-questions" class="col-md-7">Long questions</label>
                                         <div class="col-md-5">
-                                            <input type="number" class="form-control" id="verbatim-translation-long-questions" name="verbatim-translation-long-questions" min="0" value="38">
+                                            <input type="number" class="form-control" id="verbatim-translation-long-questions" name="verbatim-translation-long-questions" min="0" max="20" value="0">
                                         </div>
                                     </div>
                                     <div class="form_group row">
                                         <label for="verbatim-translation-story-questions" class="col-md-7">Story questions</label>
                                         <div class="col-md-5">
-                                            <input type="number" class="form-control" id="verbatim-translation-story-questions" name="verbatim-translation-story-questions" min="0" value="560">
+                                            <input type="number" class="form-control" id="verbatim-translation-story-questions" name="verbatim-translation-story-questions" min="0" max="20" value="0">
                                         </div>
                                     </div>
                                     <div class="form_group row">
                                         <label for="verbatim-translation-feeling-likes-questions" class="col-md-7">Feeling/likes questions</label>
                                         <div class="col-md-5">
-                                            <input type="number" class="form-control" id="verbatim-translation-feeling-likes-questions" name="verbatim-translation-feeling-likes-questions" min="0" value="5">
+                                            <input type="number" class="form-control" id="verbatim-translation-feeling-likes-questions" name="verbatim-translation-feeling-likes-questions" min="0" max="20" value="0">
                                         </div>
                                     </div>
                                 </div>
                             </div>
                             <div class="pt-row-top pt-codebooks-content">
                                 <div class="form_group row">
-                                    <input class="col-md-3" type="radio" id="codebook-use-previous" name="codebook-choose" checked="true">
+                                    <input class="col-md-3" type="radio" id="codebook-use-previous" name="codebook-choose">
                                     <label for="codebook-use-previous" class="col-md-9">Use previous code book:</label>
                                 </div>
                                 <div class="form_group row">
-                                    <input class="col-md-3" type="radio" id="codebook-choose" name="codebook-create-new">
+                                    <input class="col-md-3" type="radio" name="codebook-choose" id="codebook-create-new" >
                                     <label for="codebook-create-new" class="col-md-9">Create new codebook:</label>
                                 </div>
-                                <div class="line"></div>
-                                <div class="form_group row">
-                                    <input class="col-md-3" type="radio" id="codebook-from-previous-job" name="codebook-cell-choose" checked="true">
-                                    <label for="codebook-from-previous-job" class="col-md-9">From previous job:</label>
-                                </div>
-                                <div class="form_group row">
-                                    <input class="col-md-3" type="radio" id="codebook-from-other-cell" name="codebook-cell-choose">
-                                    <label for="codebook-from-other-cell" class="col-md-9">From other cell:</label>
-                                </div>
-                                <div class="line"></div>
-                                <div class="form_group row">
-                                    <label for="codebook-job-number" class="col-md-6">Job number:</label>
-                                    <select></select>
+                                <div class="pt-codebook-use-previous-content">
+                                    <div class="line"></div>
+                                    <div class="form_group row">
+                                        <input class="col-md-3" type="radio" id="codebook-from-previous-job" name="codebook-cell-or-job-choose" >
+                                        <label for="codebook-from-previous-job" class="col-md-9">From previous job:</label>
+                                    </div>
+                                    <div class="form_group row">
+                                        <input class="col-md-3" type="radio" id="codebook-from-other-cell" name="codebook-cell-or-job-choose">
+                                        <label for="codebook-from-other-cell" class="col-md-9">From other cell:</label>
+                                    </div>
+                                    <div class="line"></div>
+                                    <div id="codebook-job-number-combobox" class="form_group row">
+                                        <label for="codebook-job-number" class="col-md-6">Job number:</label>
+                                        <select id="select-job-number">
+                                            <option>1</option>
+                                            <option>2</option>
+                                            <option>3</option>
+                                        </select>
+                                    </div>
+                                    <div id="codebook-cell-number-combobox" class="form_group row">
+                                        <label for="codebook-cell-number" class="col-md-6">Cell number:</label>
+                                        <select id="select-cell-number">
+                                            <option>1</option>
+                                            <option>2</option>
+                                            <option>3</option>
+                                        </select>
+                                    </div>
                                 </div>
                             </div>
                             <div class="pt-row-top pt-date-availability-content">
@@ -345,8 +359,8 @@
                                 <div id="datepicker" class="row"></div>
                             </div>
                             <div class="pt-row-bottom buttons-wrapper">
-                                <input type="submit" class="btn button-accept" value="Accept">
-                                <input type="submit" class="btn button-cancel" value="Cancel">
+                                <input type="button" id="perform-calculations" class="btn button-accept" value="Accept">
+                                <input type="button" class="btn button-cancel" value="Cancel">
                             </div>
                         </form>
                     </div>
@@ -373,4 +387,5 @@
 <link rel="stylesheet" href="{% static 'pricing_tool/css/pricing-tool.css' %}" /> {% endaddtoblock %} {% endblock %} {% block js %} {% addtoblock 'js' %}
 <script src="http://code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
 <script type="text/javascript" src="{% static 'pricing_tool/js/pricing-tool.js' %}"></script>
+<script type="text/javascript" src="{% static 'pricing_tool/js/calculation_functions.js' %}"></script>
 {% endaddtoblock %} {% endblock %}
