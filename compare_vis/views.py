@@ -1,10 +1,11 @@
 from django.shortcuts import render
 from django.views.generic import TemplateView
+from helpers import views
 
 # Create your views here.
 
 
-class CompareView(TemplateView):
+class CompareView(views.LoginMixin, TemplateView):
     """
     Description
     -----------
