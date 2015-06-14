@@ -26,8 +26,9 @@ BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 SECRET_KEY = 't@dpxuj8i5&uh+&v#(z7+&x@$g#-^7%tk-$@ker9rc8_t#z#ph'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 DEBUG_PANEL = False
+COMPRESS_ENABLED = not DEBUG
 
 TEMPLATE_DEBUG = DEBUG
 
@@ -75,6 +76,7 @@ INSTALLED_APPS = (
     'data_filter',
     'compare_vis',
     'vis_widget',
+    'compressor',
     # 'mod_wsgi.server',
 )
 
@@ -168,7 +170,7 @@ STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
     # 'djangobower.finders.BowerFinder',
-    # 'compressor.finders.CompressorFinder',
+    'compressor.finders.CompressorFinder',
 )
 
 # Parse database configuration from $DATABASE_URL

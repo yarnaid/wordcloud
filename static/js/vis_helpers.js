@@ -237,7 +237,7 @@ var get_vis_data = function(job_id, question_name, col) {
     });
 
     return res;
-}
+};
 
 
 var make_svg = function(vis_list, toggle_motion_id, svg_parent_id_, col) {
@@ -254,7 +254,6 @@ var make_svg = function(vis_list, toggle_motion_id, svg_parent_id_, col) {
 
     function init(vis_) {
         var svg_parent_id = svg_parent_id_ || '#svg';
-        console.log(vis_list, vis_);
         var cluster = new vis_list[vis_](svg_parent_id, data);
         if (toggle_motion_id) {
             $(toggle_motion_id).click(function() {
@@ -275,7 +274,7 @@ var make_svg = function(vis_list, toggle_motion_id, svg_parent_id_, col) {
         } else {
             console.log(err);
         }
-    }
+    };
 
     var path = window.location.href;
     var start = function() {
@@ -285,4 +284,4 @@ var make_svg = function(vis_list, toggle_motion_id, svg_parent_id_, col) {
         data_loaded(null, vis_data, vis_type);
     };
     start();
-}
+};
