@@ -34,7 +34,7 @@
     <script type="text/javascript" src="{% static 'js/ajax_setup.js' %}"></script>
     {# // <script type="text/javascript" src="{% static 'js/mmenu/jquery.mmenu.min.all.js' %}"></script> #}
     <script type="text/javascript" src="{% static 'js/left_menu.js' %}"></script>
-    {% render_block 'js' postprocessor "compressor.contrib.sekizai.compress" %}
+    {% render_block 'js' %}
     {% block js %} {% endblock %}
 
 
@@ -116,7 +116,7 @@
     {% endblock footer %}
 
 {% block help_chat %}
-{% if not debug %}
+{% if not debug or debug %}
 <!-- begin olark code -->
 <script id="olark-wrapper" data-cfasync="false" type='text/javascript'>/*<![CDATA[*/window.olark||(function(c){var f=window,d=document,l=f.location.protocol=="https:"?"https:":"http:",z=c.name,r="load";var nt=function(){
 f[z]=function(){
