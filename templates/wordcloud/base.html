@@ -116,7 +116,7 @@
     {% endblock footer %}
 
 {% block help_chat %}
-{% if not debug or debug %}
+{% if not debug and debug %}
 <!-- begin olark code -->
 <script id="olark-wrapper" data-cfasync="false" type='text/javascript'>/*<![CDATA[*/window.olark||(function(c){var f=window,d=document,l=f.location.protocol=="https:"?"https:":"http:",z=c.name,r="load";var nt=function(){
 f[z]=function(){
