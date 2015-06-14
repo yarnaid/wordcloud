@@ -101,12 +101,12 @@ Rest.prototype.get_last_question = function(job_id) {
 };
 
 
-Rest.prototype.get_verbatims = function(code_id) {
+Rest.prototype.get_verbatims = function(code_id, question_id) {
     var self = this;
     var verbatims;
     $.ajax({
         async: false,
-        url: '/data/verbatims/?format=json&parent=' + code_id,
+        url: '/data/verbatims/?format=json&parent=' + code_id + '&question=' + question_id,
         success: function(v) {
             verbatims = v;
         }
@@ -130,7 +130,7 @@ var show_verbatims = function(d) {
     if (d.overcode)
         return;
     var rest = new Rest();
-    var verbatims = rest.get_verbatims(d.code_id);
+    var verbatims = rest.get_verbatims(d.id, d.question_id);
     verbatims = verbatims.filter(function(v) {return parseInt(v.variable.uid) >= 0;});
     verbatims.forEach(function(v) {
         v.uid = v.variable.uid;
@@ -192,7 +192,7 @@ var tooltip_html = function(d) {
     '<tbody>' +
     '<tr>' +
     '<td><i>Effectif:</i></td>' +
-    '<td>' + d.radius + '</td>' +
+    '<td>' + d.verbatim_count + '</td>' +
     '</tr>' +
     '<tr>' +
     '<td><i>Code Title:</i></td>' +
@@ -220,103 +220,42 @@ var get_vis_data = function(job_id, question_name, col) {
         res;
     var rest = new Rest();
     var question = rest.get_short_questions(job_id, "&name="+question_name)[0];
-    var code_book_id = question.code_book.id;
-    var base_url = '/data/codes/?format=json&job=' + job_id +'&code_book=' + code_book_id;
-    var clusters_by_id = {};
-        $.ajax({
-            async: false,
-            url: base_url + '&overcode=True',
-            success: function(_overcodes) {
-                var tmp = _overcodes;
-                _.map(tmp, function(value, key, list) {
-                    if (value && value.text.length > 0) {
-                        overcodes[value.text] = {
-                            effecif: 0,
-                            repondants: -0.1,
-                            total: -0.1,
-                            cluster: value.text,
-                            cluster_id: value.id,
-                            title: value.title,
-                            question: value.text,
-                            id: value.id
-                        };
-                        clusters_by_id[value.id] = overcodes[value.text];
-                    }
-                });
-            }
-        });
-        $.ajax({
-            async: false,
-            url: base_url + '&overcode=False',
-            success: function(_codes) {
-                var tmp = _codes;
-                var filter_params = eval('get_filter_params_'+col+'()');
-                // console.log(filter_params);
+    var filter_params = eval('get_filter_params_'+col+'()');
+    var url_ = '/data/visualization_data/?format=json';
+    $.each(filter_params, function(k, v) {
+        if (v !== '-1') {
+            url_ += '&' + k + '=' + v;
+        }
+    });
 
-                _.map(tmp, function(value, key, list) {
-                    if (value.text.length > 0) {
-                        var cluster_id = value.parent.id;
-                        value.children_verbatims = value.children_verbatims.filter(function(verbatim) {
-                            var sel_val;
-                            var res = true;
-                            var selectors = {
-                                Age: 'age_bands',
-                                Region: 'reg_quota',
-                                Csp: 'csp_quota',
-                                Sexe: 'sex'
-                            };
-                            for (var k in selectors) {
-                                sel_val = $('select#sel-'+k).val();
-                                if (sel_val > -1 && verbatim.variable[selectors[k]] == sel_val) {
-                                    console.log(sel_val, k, verbatim.variable, selectors[k]);
-                                    res = false;
-                                }
-                            }
-                            return res;
-                        });
-                        if (value.children_verbatims.length > 0) {
-                            codes.push({
-                                cluster: clusters_by_id[cluster_id].cluster,
-                                code: value.code,
-                                code_id: value.id,
-                                title: value.title,
-                                question: value.text,
-                                verbatims: value.children_verbatims,
-                                effecif: value.children_verbatims.length,
-                                total: -0.1,
-                                repondants: -0.1,
-                                id: value.id
-                            });
-                        }
-                        clusters_by_id[cluster_id].effecif += value.children_verbatims.length;
-                    }
-                });
+    $.ajax({
+        async: false,
+        url: url_,
+        success: function(data_) {
+            res = data_;
+        }
+    });
 
-                res = {
-                    clusters: overcodes,
-                    nodes: codes
-                };
-            }
-        });
-    return res
+    return res;
 }
 
 
-var make_svg = function(Vis, toggle_motion_id, svg_parent_id_, col) {
+var make_svg = function(vis_list, toggle_motion_id, svg_parent_id_, col) {
     var col = col || 1;
     var data = {};
     var rest = new Rest();
-    var event_handler = get_filter_event_handler();
+    var event_handler = eval('get_filter_event_handler_'+col+'()');
 
-    var on1 = $(event_handler).on('filter_menu_update')
+    // var on1 = $(event_handler).on('filter_menu_update')
     $(event_handler).on('filter_menu_update', function() {
-        $(svg_parent_id_ || '#svg' + ' svg').remove();
+        $((svg_parent_id_ || '#svg') + ' svg').remove();
         start();
     });
 
-    function init() {
+    function init(vis_) {
         var svg_parent_id = svg_parent_id_ || '#svg';
-        var cluster = new Vis(svg_parent_id, data);
+        console.log(vis_list, vis_);
+        var cluster = new vis_list[vis_](svg_parent_id, data);
         if (toggle_motion_id) {
             $(toggle_motion_id).click(function() {
                 $(svg_parent_id).toggleClass('motion');
@@ -329,10 +268,10 @@ var make_svg = function(Vis, toggle_motion_id, svg_parent_id_, col) {
         }
     };
 
-    function data_loaded(err, _data) {
+    function data_loaded(err, _data, vis_) {
         if (!err) {
             data = _data;
-            init();
+            init(vis_);
         } else {
             console.log(err);
         }
@@ -341,8 +280,9 @@ var make_svg = function(Vis, toggle_motion_id, svg_parent_id_, col) {
     var path = window.location.href;
     var start = function() {
         var params = eval('get_filter_params_'+col+'()');
-        var vis_data = get_vis_data(params.job, params.question);
-        data_loaded(null, vis_data);
+        var vis_data = get_vis_data(params.job, params.question, col);
+        var vis_type = params.visualization;
+        data_loaded(null, vis_data, vis_type);
     };
     start();
 }

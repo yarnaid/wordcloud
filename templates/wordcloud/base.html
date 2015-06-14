@@ -110,6 +110,7 @@
     {% endblock footer %}
 
 {% block help_chat %}
+{% if not debug %}
 <!-- begin olark code -->
 <script id="olark-wrapper" data-cfasync="false" type='text/javascript'>/*<![CDATA[*/window.olark||(function(c){var f=window,d=document,l=f.location.protocol=="https:"?"https:":"http:",z=c.name,r="load";var nt=function(){
 f[z]=function(){
@@ -130,6 +131,7 @@ loader: "static.olark.com/jsclient/loader0.js",name:"olark",methods:["configure"
 /* custom configuration goes here (www.olark.com/documentation) */
 olark.identify('2958-324-10-5844');/*]]>*/</script><noscript><a href="https://www.olark.com/site/2958-324-10-5844/contact" title="Contact us" target="_blank">Questions? Feedback?</a> powered by <a href="http://www.olark.com?welcome" title="Olark live chat software">Olark live chat software</a></noscript>
 <!-- end olark code -->
+{% endif %}
 {% endblock help_chat %}
 
 </body>

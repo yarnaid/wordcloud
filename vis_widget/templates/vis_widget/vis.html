@@ -8,9 +8,7 @@
         <div class="bordered" id="svg_{{ col }}"></div>
         <script type="text/javascript">$(function() {
             var visualizations = [Cluster, Tree];
-            make_svg(visualizations[{{col|add:"-1"}} % visualizations.length], "#stop-{{col}}", "#svg_{{col}}", "{{col}}");
-
-            $('[data-toggle=popover]').popover({html:true});
+            make_svg(visualizations, "#stop-{{col}}", "#svg_{{col}}", "{{col}}");
         });
         </script>
 

@@ -31,9 +31,8 @@ var Cluster = function(_parent_id, _data, _eventHandler, _fps) {
     this.height = Math.max(window.innerHeight, this.height);
     this.height = this.height - this.margin.top - this.margin.bottom;
 
-    this.radius = function(node, key) {
-        key = key || 'effecif';
-        return self.raduis_scale(node[key] * 2);
+    this.radius = function(node) {
+        return self.raduis_scale(node.verbatim_count * 2);
     };
 
     this.duration = 1000 / this.fps;
@@ -49,9 +48,9 @@ var Cluster = function(_parent_id, _data, _eventHandler, _fps) {
             return -30 * self.radius(node);
         });
 
-    this.links = this.force.links();
+    this.links = [];
     this.zoom = d3.behavior.zoom();
-    this.venn = venn.VennDiagram();
+    // this.venn = venn.VennDiagram();
     this.pack = d3.layout.pack().size([this.width, this.height]);
 
     this.init();
@@ -87,25 +86,36 @@ Cluster.prototype.init = function() {
     this.wrangle();
 
 
-    this.nodes = this.display_data.nodes;
-    var clusters = this.display_data.clusters;
+    this.nodes = [];
+    var clusters = this.display_data.question.children;
 
+    function add_nodes(root) {
+        $.each(root.children, function(k, v) {
+            v.overcode = false;
+            v.parent = root;
+            self.nodes.push(v);
+            add_nodes(v);
+        });
+    };
     $.each(clusters, function(k, v) {
         v.overcode = true;
         self.nodes.push(v);
+        add_nodes(v);
     });
 
     this.nodes.forEach(function(n) {
         n.radius = self.radius(n);
-        if (!n.overcode)
-            n.overcode = false;
+        n.weight = n.radius;
 
-        var link = {
-            source: n,
-            target: clusters[n.cluster]
-        };
-        self.links.push(link);
+        if (n.parent) {
+            var link = {
+                source: n.parent,
+                target: n
+            };
+            self.links.push(link);
+        }
     });
+    this.force.links(this.links);
 
     this.link = this.svg.selectAll('.link').data(this.links);
 
@@ -300,17 +310,15 @@ Cluster.prototype.update = function() {};
 
 
 Cluster.prototype.wrangle = function() {
-    // var self = this;
-    this.display_data = this.data;
+    var self = this;
+    self.display_data = self.data;
 };
 
 Cluster.prototype.toggle_motion = function() {
     var self = this;
     var parent_id = '#svg';
-    console.log('toggle', $(parent_id).hasClass('motion'), $(parent_id), parent_id);
     $(parent_id).toggleClass('motion');
     if ($(parent_id).hasClass('motion')) {
         self.force.start();
-        console.log('starting motion');
     }
 };

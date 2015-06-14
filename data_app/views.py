@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from collections import deque
 
 from django.db.models import Count
 from data_app import models
@@ -7,8 +7,6 @@ from data_app import serializers
 import rest_framework_filters as filters
 from rest_framework.views import APIView
 from rest_framework.response import Response
-
-# Create your views here.
 
 
 class JobViewSet(viewsets.ModelViewSet):
@@ -107,10 +105,14 @@ class VerbatimsFilteredSet(APIView):
     #TODO: Is there any possibility to simplify names of fields in Variable class (such as 'reg_quota' to 'reg', 'csp_quota' to csp, etc)?
 
     def get(self, request, format=None):
-        query_parameters_dict = {key: int(value) for key, value in request.query_params.iteritems()}
+        params = dict(request.query_params)
+        params.pop('format', None)
+        params.pop('visualization', None)
+        print params
+        query_parameters_dict = {key: int(value[0]) for key, value in params.iteritems()}
         job = models.Job.objects.get(pk=int(query_parameters_dict['job']))
 
-        question = models.Question.objects.get(pk=int(query_parameters_dict['id']))
+        question = models.Question.objects.get(pk=int(query_parameters_dict['question']))
         code_book = question.code_book
 
         response_body = {
@@ -125,16 +127,28 @@ class VerbatimsFilteredSet(APIView):
             }
         }
 
-        query_parameters_dict.pop('id')
+        query_parameters_dict.pop('question')
         query_parameters_dict.pop('job')
+        query_parameters_dict.pop('visualization', None)
 
-        overcodes_array = self.go_through_children( question, query_parameters_dict)
+        overcodes_array = self.go_through_children(question, query_parameters_dict)
 
         response_body['question']['children'] = overcodes_array
         return Response(response_body)
 
+    # def verbatims_count_evaluate(self, root):
+    #     ''' Evaluates number of children verbatims to root
+    #     '''
+    #     queue = deque()
+    #     queue.push(root)
+    #     while len(queue) > 0:
+    #         root_ = queue.pop()
+    #         for child in queue['children']:
+    #             root_
+
     def go_through_children(self, question, query_parameters_dict):
-        ''' Represents all children overcodes of the question as dict for serializing tp JSON
+        ''' Represents all children overcodes of the question as dict
+            for serializing tp JSON
 
         Arguments:
         ---------
@@ -148,7 +162,6 @@ class VerbatimsFilteredSet(APIView):
         '''
         variables = []
         if len(query_parameters_dict) != 0:
-            print(query_parameters_dict)
             variables = models.Variable.objects.filter(**query_parameters_dict)
         unprocessed = [q for q in models.Code.objects.filter(code_book=question.code_book, overcode=True)]
         children = list()
@@ -161,7 +174,8 @@ class VerbatimsFilteredSet(APIView):
         return children
 
     def hierarchy_dfs(self, question, parent_code, variables, depth=0):
-        ''' Builds tree-like hierarchy for children codes and returns its JSON-like representation
+        ''' Builds tree-like hierarchy for children codes and returns
+            its JSON-like representation
 
         Arguments:
         ----------
@@ -180,21 +194,24 @@ class VerbatimsFilteredSet(APIView):
         if len(variables) != 0:
             count = models.Verbatim.objects.filter(parent=parent_code,
                                                    question=question,
-                                                   variable__in=variables).aggregate(Count('id'))
+                                                   variable__in=variables).count()
         else:
             count = models.Verbatim.objects.filter(parent=parent_code,
-                                                   question=question,).aggregate(Count('id'))
+                                                   question=question,
+                                                   ).count()
         code_dict = {
+            'id': parent_code.id,
             'title': parent_code.title,
             'code': parent_code.code,
             'text': parent_code.text,
             'code_depth': depth,
-            'verbatim_count': count['id__count']
+            'question_id': question.id,
+            'verbatim_count': count
         }
 
-        codes = models.Code.objects.filter(parent=parent_code)
+        codes = parent_code.get_children()
 
-        if count['id__count'] == 0 and len(codes) == 0:
+        if count == 0 and codes.count() == 0:
             return None
 
         children_list = list()
@@ -202,8 +219,9 @@ class VerbatimsFilteredSet(APIView):
             child = self.hierarchy_dfs(question, code, variables, depth+1)
             if child is not None:
                 children_list.append(child)
+                code_dict['verbatim_count'] += child['verbatim_count']
 
-        if len(children_list) == 0 and count['id__count'] == 0:
+        if len(children_list) == 0 and count == 0:
             return None
         else:
             code_dict['children'] = children_list

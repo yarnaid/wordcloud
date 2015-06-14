@@ -109,7 +109,7 @@ class CodesSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = CodeBook
         depth = 1
-        fields = ('id', 'children_codes')
+        fields = ('id', 'children_codes', 'name')
 
 
 class QuestionSerializer(serializers.HyperlinkedModelSerializer):

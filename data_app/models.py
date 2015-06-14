@@ -87,6 +87,7 @@ class Code(MPTTModel, helpers.TimeMixin):
                                   related_name='children_codes')
     job = models.ForeignKey('Job')
     overcode = models.BooleanField()
+    verbatim_count = 0
 
     def __str__(self):
         return '{}'.format(self.title)

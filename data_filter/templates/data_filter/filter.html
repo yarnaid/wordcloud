@@ -1,28 +1,44 @@
 {% load sekizai_tags static i18n %}
 <div class="container-fluid" id="sel-List-{{ id }}">
+
+    <div class="row">
+        <div class="col-md-6 col-xs-6 col-sm-6 text-right"><label for="sel-Visualization-{{id}}">Visualization:</label></div>
+        <div class="col-md-6 col-xs-6 col-sm-6 text-left">
+            <select id="sel-Visualization-{{id}}">
+                    <option value="0">Cloud</option>
+                    <option value="1">Tree</option>
+            </select>
+        </div>
+    </div>
+
     {% include "data_filter/selector.html" with label="Job" options=job_numbers id_=id %}
     {% include "data_filter/selector.html" with label="Question" options=question_names id_=id %}
     <script type="text/javascript">
-    var params_ids = [];
+    var params_ids_{{ id }} = [];
+    var params_names_{{ id }} = [];
     var get_filter_params_{{ id }} = function() {
         var res = {
+            visualization: $("select#sel-Visualization-{{ id }}").val(),
             job: $("select#sel-Job-{{ id }}").val(),
             question: $("select#sel-Question-{{ id }}").val()
         };
-        for (i in params_ids) {
-            res[params_ids[i]] = $("select#" + params_ids[i]).val();
+        for (i in params_ids_{{ id }}) {
+            res[params_names_{{ id }}[i]] = $("select#" + params_ids_{{ id }}[i]).val();
         }
         return res;
     };
-    var get_filter_event_handler;
+    var get_filter_event_handler_{{id}};
 
     $(function() {
         var rest = new Rest();
         var update_event = new $.Event('filter_menu_update');
         var event_handler = new Object();
-        get_filter_event_handler = function() {
+        get_filter_event_handler_{{id}} = function() {
             return event_handler;
         };
+        $("select#sel-Visualization-{{ id }}").change(function(event) {
+            $(event_handler).trigger('filter_menu_update');
+        });
         $("select#sel-Job-{{ id }}").change(function(event) {
             $(event_handler).trigger('filter_menu_update');
         });
@@ -36,7 +52,7 @@
                 q_sel.find("option").remove();
                 for (q in questions) {
                     var quest = questions[q];
-                    q_sel.append("<option value=" + quest.name + ">" + quest.name + "</option>");
+                    q_sel.append("<option value=" + quest.id + ">" + quest.name + "</option>");
                 }
             }
             // RENDER VARIABLES
@@ -50,7 +66,9 @@
                     var my_templ = sel_template.clone();
                     var sel_id = "sel-" + v.text + "-{{ id }}";
                     my_templ.attr("id", sel_id);
-                    params_ids.push(my_templ.attr("id"));
+                    params_ids_{{ id }}.push(my_templ.attr("id"));
+                    var name_ = v.name.replace(/([a-z])([A-Z])/, '$1_$2').toLowerCase();
+                    params_names_{{ id }}.push(name_);
                     my_templ.addClass("menu_variable");
                     my_templ.toggleClass("hidden");
                     var label = my_templ.find("label");
