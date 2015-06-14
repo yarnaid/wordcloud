@@ -42,26 +42,16 @@
         <script type="text/javascript" src="{% static 'js/vis_helpers.js' %}"></script>
         {% if debug %}
             <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script>
-        {% else %}
-            <script type="text/javascript" src="{% static 'js/d3.v3.min.js' %}"></script>
-        {% endif %}
-        {% if debug %}
             <script type="text/javascript" src="{% static 'js/underscore.js' %}"></script>
-        {% else %}
-            <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
-        {% endif %}
-        <script type="text/javascript" src="{% static 'c_tree/js/tree.js' %}"></script>
-        {% if debug %}
-        <script type="text/javascript" src="{% static 'js/bootstrap-table.min.js' %}"></script>
-        {% else %}
-        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.8.1/bootstrap-table.min.js"></script>
-        {% endif %}
-        {% if debug %}
+            <script type="text/javascript" src="{% static 'js/bootstrap-table.min.js' %}"></script>
             <script type="text/javascript" src="{% static 'js/bootbox.min.js' %}"></script>
         {% else %}
+            <script type="text/javascript" src="{% static 'js/d3.v3.min.js' %}"></script>
+            <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
+            <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.8.1/bootstrap-table.min.js"></script>
             <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/4.4.0/bootbox.min.js"></script>
         {% endif %}
-        <script type="text/javascript" src="{% static 'js/bootbox.min.js' %}"></script>
+        <script type="text/javascript" src="{% static 'c_tree/js/tree.js' %}"></script>
         <script type="text/javascript" src="{% static 'js/tableExport.js' %}"></script>
         <script type="text/javascript" src="{% static 'js/FileSaver.js' %}"></script>
         <script type="text/javascript" src="{% static 'js/bootstrap-table-export.js' %}"></script>
