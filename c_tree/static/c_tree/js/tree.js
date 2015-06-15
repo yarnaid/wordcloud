@@ -256,6 +256,6 @@ Tree.prototype.update = function(source) {
     });
 };
 
-// Tree.prototype.tooltip_html = tooltip_html;
+Tree.prototype.tooltip_html = tooltip_html;
 Tree.prototype.show_verbatims = show_verbatims;
 Tree.prototype.helpers_init = helpers_init;
