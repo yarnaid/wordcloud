@@ -1,7 +1,7 @@
 $(document).ready(function() {
 	var formData = {}
     var lastOpened = '';
-
+    var isIdentical = false;
     var lastOpenedSelector = '';
 
     var previousSelectedButton = null;
@@ -62,6 +62,12 @@ $(document).ready(function() {
 			return result;
 		} 
 
+		var am_pm = $("input[name='date-availability-choose']:checked")[0].id;
+		if(am_pm == 'date-availability-am')
+			am_pm = "AM";
+		else 
+			am_pm = "PM";
+
 		var cell_num = $('#cells-number')[0].valueAsNumber;
 		var sample_sz = $("#sample-size")[0].valueAsNumber;
 		var brand_q = $("#brand-question")[0].valueAsNumber;
@@ -93,6 +99,7 @@ $(document).ready(function() {
 			story_question_translation: story_q_trans,
 			long_question_translation: long_q_trans,
 			verbatim_translation_languages: verb_trans_langs,
+			am_or_pm: am_pm,
 			questions: {
 				brand_questions: brand_q,
 				short_questions: short_q,
@@ -105,30 +112,38 @@ $(document).ready(function() {
     };
 
     var renderCellTabs = function(){
-    		var diff = {
-    			4: "65px",
-    			3: "35px",
-    			2: "18px",
-    			1: "5px",
-    			0: "0px",
-    		}
+    	if(!isIdentical) {
+			var diff = {
+				4: "65px",
+				3: "35px",
+				2: "18px",
+				1: "5px",
+				0: "0px",
+			}
 
-    		$('.pt-options-list li').remove();
-    		var number_of_cells = $('#cells-number')[0].valueAsNumber;
-    		var width = number_of_cells * 47;
-    		var percents_per_cell = 100.0/number_of_cells;
+			$('.pt-options-list li').remove();
+			var number_of_cells = $('#cells-number')[0].valueAsNumber;
+			var width = number_of_cells * 47;
+			var percents_per_cell = 100.0/number_of_cells;
 
- 			var mid = Math.floor(number_of_cells/2)+1;
- 			if(number_of_cells%2==0)
- 				mid = mid-1;
+			var mid = Math.floor(number_of_cells/2)+1;
+			
+			if(number_of_cells == 1)
+				$("#identical-cells-field").hide();
+			else 
+				$("#identical-cells-field").show();
 
-    		$('.pt-options-wrapper').css("width", width+"px");
-    		$('.pt-options-list').css("width", width+"px");
-    		for(var i=1; i<=number_of_cells; i++)
-    			$('.pt-options-list').append(
-    				"<li id='cell_"+i
-    				+"' class='pt-options-tab' style='left:"+percents_per_cell*(i-1)+"%;top:"+diff[Math.abs(mid-i)]+";'><a href='#'>"+i+"</a></li>");
-    	}
+			if(number_of_cells%2==0)
+				mid = mid-1;
+
+			$('.pt-options-wrapper').css("width", width+"px");
+			$('.pt-options-list').css("width", width+"px");
+			for(var i=1; i<=number_of_cells; i++)
+				$('.pt-options-list').append(
+					"<li id='cell_"+i
+					+"' class='pt-options-tab' style='left:"+percents_per_cell*(i-1)+"%;top:"+diff[Math.abs(mid-i)]+";'><a href='#'>"+i+"</a></li>");
+		}
+	}
 
 
     var retainFormData = function(index) {
@@ -152,7 +167,11 @@ $(document).ready(function() {
 		$("#long-questions").val(data.questions.long_questions);
 		if(data.date_availability != undefined) {
 			$('#datepicker').datepicker("setDate", data.date_availability);
+
+			var checkboxId = "#date-availability-"+data.am_or_pm.toLowerCase();
+			$(checkboxId).prop("checked", true);
 		}
+
 
 		$("#verbatim-translation-long-questions").val(data.long_question_translation);
 		$("#verbatim-translation-story-questions").val(data.story_question_translation);
@@ -213,34 +232,35 @@ $(document).ready(function() {
     $('.pt-options-wrapper').on("click",'.pt-options-tab',
         function() {
 
-        	var data = saveDataFromCurrentForm();
-        	var new_number = parseInt(this.id.substring(this.id.indexOf('_')+1));
+			if($('.pt-options-tab-active')[0] != undefined ) {
+	 	       	var cell_number = parseInt($('.pt-options-tab-active')[0].id.substring(this.id.indexOf('_')+1));
 
-			if($('.pt-options-tab-active')[0] != undefined) {
-	            var cell_number = parseInt($('.pt-options-tab-active')[0].id.substring(this.id.indexOf('_')+1));
+	 	       	if(cell_number==NaN) return;
+        		var data = saveDataFromCurrentForm();
 	        	saveToBuffer(cell_number, data);
-	        } else {
-            	saveToBuffer(new_number, data);
-	        }
 
-            var prev_top = $('.pt-options-tab-active').css("top");
-            
-            if(cell_number != new_number) {
-	        	$('.pt-options-tab-active').css("top", parseInt(prev_top)+20+"px");;
-	            $('.pt-options-tab-active').removeClass('pt-options-tab-active');
+	        	var new_number = parseInt(this.id.substring(this.id.indexOf('_')+1));
+	            var prev_top = $('.pt-options-tab-active').css("top");
 	            
-	            prev_top = $(this).css("top");
-	    		$(this).css("top", parseInt(prev_top)-10+"px");
-	            $(this).addClass('pt-options-tab-active');
-	            $('.pt-inner-circle').addClass('pt-inner-circle-show');
-	           	$('.pt-outher-circle').toggleClass('pt-outher-circle-hover');
-	            $('.pt-outher-circle').addClass('pt-outher-circle-active');
-				$('#datepicker tr td').removeClass('ui-datepicker-current-day');
+	            if(cell_number == new_number) {
+	            	return;
+	            } else {
+		        	$('.pt-options-tab-active').css("top", parseInt(prev_top)+20+"px");;
+		            $('.pt-options-tab-active').removeClass('pt-options-tab-active');
+		        }
+		    } 
+            prev_top = $(this).css("top");
+    		$(this).css("top", parseInt(prev_top)-10+"px");
+            $(this).addClass('pt-options-tab-active');
+            $('.pt-inner-circle').addClass('pt-inner-circle-show');
+           	$('.pt-outher-circle').toggleClass('pt-outher-circle-hover');
+            $('.pt-outher-circle').addClass('pt-outher-circle-active');
+			$('#datepicker tr td').removeClass('ui-datepicker-current-day');
 
-	            $('.pt-verbatim-translation-languages input').prop("checked", false);
-	            if(formData[new_number] != undefined)
-	            	retainFormData(new_number, data);
-	        }
+            $('.pt-verbatim-translation-languages input').prop("checked", false);
+            if(formData[new_number] != undefined) {
+            	retainFormData(new_number, data);
+            }
         }
     );
 
@@ -251,7 +271,7 @@ $(document).ready(function() {
             // hide all other containers
             $(lastOpened).hide();
             // remove all other active classes
-            // alert(this);
+
             $(lastOpenedSelector).removeClass(lastOpenedSelector.substring(1) + '-active');
             // set the active class
             $(this).toggleClass(this.className + '-active');
@@ -306,12 +326,29 @@ $(document).ready(function() {
 		}    
     )
 
+    $("input[name='identical-cells']").change(
+    	function() {
+    		var checkedId = this.id;
+    		isIdentical = (checkedId == "identical-cells-yes") ? true: false;
+    		if(isIdentical)
+    		 	$('.pt-options-list li').remove();
+    		else renderCellTabs();
+    	}
+    );
+
     $("#perform-calculations").click(
     	function() {
-    		//var formArray = saveDataFromCurrentForm();
     		var data = saveDataFromCurrentForm();
-    		var cell_number = parseInt($('.pt-options-tab-active')[0].id.substring(this.id.indexOf('_')+1));
-	        saveToBuffer(cell_number, data);
+    		
+    		if(isIdentical) {
+    			for(var i = 1; i<=$("#cells-number")[0].valueAsNumber; i++)
+    				saveToBuffer(i, data);
+    		} else {
+    			var activeCellString = $('.pt-options-tab-active')[0].id;
+    			var cell_number = parseInt(activeCellString.substring(activeCellString.indexOf("_")+1));
+
+	        	saveToBuffer(cell_number, data);
+    		}
     		var cell_amount = $("#cells-number")[0].valueAsNumber;
 
     		$(".pt-result-cost p").text("€"+calculator.formatCurrency(calculator.countCodingCost(formData, cell_amount).total));
