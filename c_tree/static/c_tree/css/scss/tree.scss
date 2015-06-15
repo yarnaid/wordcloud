@@ -3,6 +3,12 @@
 
 
 .tree * {
+  circle {
+    stroke: none;
+  }
+  text {
+    stroke: none;
+  }
   .node {
   text {
     font: $vis-font;
@@ -13,6 +19,9 @@
     fill: white;
   }
   &.overcode {
+    circle {
+      fill: $vis-pink;
+    }
     rect {
       stroke: $vis-pink;
       &:hover {
@@ -24,6 +33,9 @@
     }
   }
   &.code {
+    circle {
+      fill: $vis-blue;
+    }
     text {
       fill: $code-blue;
     }
