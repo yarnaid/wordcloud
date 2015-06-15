@@ -455,6 +455,7 @@ input[disabled] {
     z-index: 100;
 }
 
+.pt-codebook-translation-content,
 .pt-language-content {
     display: none;
     width: 50%;
@@ -507,9 +508,6 @@ input[disabled] {
     text-align: right;
 }
 
-.pt-codebook-translation-content {
-    display: none;
-}
 
 .pt-verbatim-translation-content {
     display: none;

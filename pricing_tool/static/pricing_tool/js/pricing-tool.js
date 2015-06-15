@@ -70,8 +70,8 @@ $(document).ready(function() {
 			}
 		};
 
-		var verbatim_translation_arr = function(source_lang) {
-			var arr = $(".pt-verbatim-translation-languages input");
+		var translation_arr = function(prefix, source_lang) {
+			var arr = $(prefix+" input");
 			var result = [];
 			for (var i = 0; i < arr.length; i++) {
 				var lang = $('label[for="'+ arr[i].id+'"]').text();
@@ -99,8 +99,8 @@ $(document).ready(function() {
 		var prev_codebook = codebookFormHandler();
 		var source_lang = getSourceLang();
 		var date_avl = undefined;
-		var verb_trans_langs = verbatim_translation_arr(source_lang);
-
+		var verb_trans_langs = translation_arr(".pt-verbatim-translation-languages", source_lang);
+		var cb_trans_langs = translation_arr(".pt-codebook-translation-content", source_lang);
 		var long_q_trans = $("#verbatim-translation-long-questions")[0].valueAsNumber;
 		var story_q_trans = $("#verbatim-translation-story-questions")[0].valueAsNumber;
 		var likes_q_trans = $("#verbatim-translation-feeling-likes-questions")[0].valueAsNumber;
@@ -115,9 +115,12 @@ $(document).ready(function() {
 			previous_codebook: prev_codebook,
 			date_availability: date_avl,
 			verbatim_translation_languages: verb_trans_langs, 
-			likes_question_translation: likes_q_trans,
-			story_question_translation: story_q_trans,
-			long_question_translation: long_q_trans,
+			codebook_translation_languages: cb_trans_langs,
+			verbatims_translation: {
+				likes_question_translation: likes_q_trans,
+				story_question_translation: story_q_trans,
+				long_question_translation: long_q_trans,
+			},
 			verbatim_translation_languages: verb_trans_langs,
 			am_or_pm: am_pm,
 			questions: {
@@ -161,7 +164,8 @@ $(document).ready(function() {
 			$('.pt-options-list').append(
 				"<li id='cell_"+i
 				+"' class='pt-options-tab pt-options-identical-tabs' style='left:"+percents_per_cell*(i-1)+"%;top:"+diff[Math.abs(mid-i)]+";'><a href='#'>"+i+"</a></li>");
-	} 
+	};
+
     var renderCellTabs = function(){
     	if(!isIdentical) {
 			var diff = {
@@ -205,10 +209,13 @@ $(document).ready(function() {
     	var prev_source_lang = "#pt-language-"+getSourceLang().toLowerCase();
     	$(prev_source_lang).prop("checked", false);
     	var source_lang = "#pt-language-"+data.source_language.toLowerCase();
-		var disabled_lang = "#pt-verbatim-translation-language-"+data.source_language.toLowerCase();
-		//alert(source_lang);
+		var disabled_lang_1 = "#pt-verbatim-translation-language-"+data.source_language.toLowerCase();
+		var disabled_lang_2 = "#pt-codebook-translation-content-"+data.source_language.toLowerCase();
+		
 		$(source_lang).prop("checked", true);
-		$(disabled_lang).attr("disabled", true);
+		
+		$(disabled_lang_1).attr("disabled", true);
+		$(disabled_lang_2).attr("disabled", true);
 		
     	$("#sample-size").val(data.sample_size);
 		$("#brand-question").val(data.questions.brand_questions);
@@ -224,9 +231,9 @@ $(document).ready(function() {
 		}
 
 
-		$("#verbatim-translation-long-questions").val(data.long_question_translation);
-		$("#verbatim-translation-story-questions").val(data.story_question_translation);
-		$("#verbatim-translation-feeling-likes-questions").val(data.likes_question_translation);
+		$("#verbatim-translation-long-questions").val(data.verbatims_translation.long_question_translation);
+		$("#verbatim-translation-story-questions").val(data.verbatims_translation.story_question_translation);
+		$("#verbatim-translation-feeling-likes-questions").val(data.verbatims_translation.likes_question_translation);
 
 		for(var i = 0; i<data.verbatim_translation_languages.length; i++) {
 			$("#pt-verbatim-translation-language-"
