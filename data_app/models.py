@@ -11,7 +11,7 @@ from django.db import models
 from django.db import transaction
 from mptt.models import MPTTModel
 from mptt.models import TreeForeignKey
-from silk.profiling.profiler import silk_profile
+# from silk.profiling.profiler import silk_profile
 from django.core.files.storage import FileSystemStorage
 from django.conf import settings
 
@@ -87,6 +87,7 @@ class Code(MPTTModel, helpers.TimeMixin):
                                   related_name='children_codes')
     job = models.ForeignKey('Job')
     overcode = models.BooleanField()
+    verbatim_count = 0
 
     def __str__(self):
         return '{}'.format(self.title)
@@ -492,7 +493,7 @@ class UploadFile(helpers.TimeMixin):
 
 
     @transaction.atomic
-    @silk_profile(name='Save File')
+    # @silk_profile(name='Save File')
     def save(self, force_insert=False, force_update=False, using=None,
              update_fields=None):
 

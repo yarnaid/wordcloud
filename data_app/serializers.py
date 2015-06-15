@@ -109,7 +109,7 @@ class CodesSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = CodeBook
         depth = 1
-        fields = ('id', 'children_codes')
+        fields = ('id', 'children_codes', 'name')
 
 
 class QuestionSerializer(serializers.HyperlinkedModelSerializer):
@@ -121,6 +121,18 @@ class QuestionSerializer(serializers.HyperlinkedModelSerializer):
         depth = 1
         fields = (
             'name', 'text', 'title', 'kind', 'parent', 'code_book', 'id',
+            'url')
+        filter_fields = ('parent', )
+
+class QuestionSerializer(serializers.HyperlinkedModelSerializer):
+    parent = JobSerializer()
+    code_book = CodeBookSerializer()
+
+    class Meta:
+        model = Question
+        depth = 1
+        fields = (
+            'name', 'text', 'title', 'kind', 'code_book', 'id',
             'url')
         filter_fields = ('parent', )
 
@@ -143,7 +155,6 @@ class ShortQuestionSerializer(serializers.HyperlinkedModelSerializer):
         depth = 1
         fields = ('name', 'text', 'title', 'kind', 'id', 'code_book')
 
-
 class VisDataSerializer(serializers.HyperlinkedModelSerializer):
     children_questions = QuestionSerializer(many=True)
 
@@ -151,4 +162,3 @@ class VisDataSerializer(serializers.HyperlinkedModelSerializer):
         model = Question
         depth = 1
         fields = ('name', 'text', 'title', 'id', 'children_questions', )
-

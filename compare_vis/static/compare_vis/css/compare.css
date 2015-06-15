@@ -1,9 +1,24 @@
 /* line 10, scss/compare.scss */
+select {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  width: 100px;
+  white-space: nowrap;
+}
+
+/* line 17, scss/compare.scss */
+select option {
+  width: 100px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+/* line 23, scss/compare.scss */
 #svg_1, #svg_4, #svg_3, #svg_2 {
   min-height: 300px;
 }
 
-/* line 14, scss/compare.scss */
+/* line 27, scss/compare.scss */
 .svg-menu {
   font-size: 0.8em;
   margin-top: -1.5px;
@@ -11,27 +26,27 @@
   padding: 0;
 }
 
-/* line 22, scss/compare.scss */
+/* line 35, scss/compare.scss */
 .options_menu {
-  background-color: yellow;
+  background-color: white;
   -moz-box-shadow: rgba(0, 0, 0, 0.4) 0 0 25px;
   -webkit-box-shadow: rgba(0, 0, 0, 0.4) 0 0 25px;
   box-shadow: rgba(0, 0, 0, 0.4) 0 0 25px;
 }
 
-/* line 27, scss/compare.scss */
+/* line 40, scss/compare.scss */
 .hidden_menu {
-  width: 0%;
+  width: 0px;
   opacity: 0;
   height: 0px;
 }
 
-/* line 33, scss/compare.scss */
+/* line 46, scss/compare.scss */
 a div {
   cursor: pointer;
 }
 
-/* line 37, scss/compare.scss */
+/* line 50, scss/compare.scss */
 a.btn.svg-menu-item {
   padding: 0px;
   -moz-border-radius: 0px;
@@ -40,12 +55,12 @@ a.btn.svg-menu-item {
   height: 1.4em;
 }
 
-/* line 43, scss/compare.scss */
+/* line 56, scss/compare.scss */
 .bordered {
   border: 1.5px solid #e3e3e3;
 }
 
-/* line 47, scss/compare.scss */
+/* line 60, scss/compare.scss */
 .svg-menu-item {
   text-align: center;
   text-overflow: ellipsis;
@@ -56,15 +71,15 @@ a.btn.svg-menu-item {
   border-top: 1.5px solid #e3e3e3;
   border-bottom: 1.5px solid #e3e3e3;
 }
-/* line 56, scss/compare.scss */
+/* line 69, scss/compare.scss */
 .svg-menu-item.right {
   border-right: 1.5px solid #e3e3e3;
 }
-/* line 59, scss/compare.scss */
+/* line 72, scss/compare.scss */
 .svg-menu-item.left {
   border-left: 1.5px solid #e3e3e3;
 }
-/* line 63, scss/compare.scss */
+/* line 76, scss/compare.scss */
 .svg-menu-item:hover {
   border: 1.5px solid #e3e3e3;
   background-color: #f0f9ff;

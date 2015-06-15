@@ -1,0 +1,44 @@
+{% load sekizai_tags staticfiles %}
+
+<canvas id="canvas" width="1120" height="800" style="background-color:#666666"></canvas>
+
+
+{% block js %}
+{% addtoblock 'js' %}
+    <script src="http://code.createjs.com/easeljs-0.7.1.min.js"></script>
+    <script src="http://code.createjs.com/tweenjs-0.5.1.min.js"></script>
+    <script src="http://code.createjs.com/movieclip-0.7.1.min.js"></script>
+    <script src="http://code.createjs.com/preloadjs-0.4.1.min.js"></script>
+    <script src="{% static '01_6.js' %}"></script>
+
+    <script>
+    var canvas, stage, exportRoot;
+
+    function init() {
+        canvas = document.getElementById("canvas");
+        images = images||{};
+
+        var loader = new createjs.LoadQueue(false);
+        loader.addEventListener("fileload", handleFileLoad);
+        loader.addEventListener("complete", handleComplete);
+        loader.loadManifest(lib.properties.manifest);
+    }
+
+    function handleFileLoad(evt) {
+        if (evt.item.type == "image") { images[evt.item.id] = evt.result; }
+    }
+
+    function handleComplete() {
+        exportRoot = new lib._01_6();
+
+        stage = new createjs.Stage(canvas);
+        stage.addChild(exportRoot);
+        stage.update();
+
+        createjs.Ticker.setFPS(lib.properties.fps);
+        createjs.Ticker.addEventListener("tick", stage);
+    }
+    $(function(){init();});
+    </script>
+{% endaddtoblock %}
+{% endblock %}

@@ -7,6 +7,19 @@ $menu-border: $border-hight solid $border-color;
 $transparent-border: $border-hight solid none;
 $hover-color: #f0f9ff;
 
+select {
+    text-overflow: ellipsis;
+    overflow:hidden;
+    width:100px;
+    white-space:nowrap;
+}
+
+select option {
+    width:100px;
+    text-overflow:ellipsis;
+    overflow:hidden;
+}
+
 #svg_1,#svg_4,#svg_3,#svg_2 {
     min-height: 300px;
 }
@@ -20,12 +33,12 @@ $hover-color: #f0f9ff;
 }
 
 .options_menu {
-    background-color: yellow;
+    background-color: white;
     @include box-shadow(rgba(black, 0.4) 0 0 25px);
 }
 
 .hidden_menu {
-    width: 0%;
+    width: 0px;
     opacity: 0;
     height: 0px;
 }

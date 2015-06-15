@@ -14,7 +14,7 @@ var Tree = function(_parent_id, _data, _event_handler) {
         right: 0
     };
     self.i = 0;
-    self.min_r = 5;
+    self.min_r = 3;
     self.t_offset = 13;
     self.duration = 400;
 
@@ -28,10 +28,13 @@ var Tree = function(_parent_id, _data, _event_handler) {
     this.height = Math.max(window.innerHeight, this.height);
     this.height = this.height - this.margin.top - this.margin.bottom;
 
-    self.scale = d3.scale.linear().range([self.min_r, 40]);
-    self.radius = function(node, key) {
-        key = key || 'effecif';
-        return self.scale(node[key]);
+    self.scale = d3.scale.log().range([self.min_r, self.rect_height / 2 * 0.7]).domain([1, 200]);
+    self.radius = function(node) {
+        var res = 0;
+        if (node) {
+            res = self.scale(node.verbatim_count);
+        }
+        return res;
     };
 
     self.fill = d3.scale.category20();
@@ -79,10 +82,7 @@ Tree.prototype.init = function() {
 
 Tree.prototype.process_data = function() {
     var self = this;
-
-    $.map(self.data.nodes, function(v) {
-        v.id = null;
-    });
+    return this.display_data = this.data;
 
     var job_name = 'Job Name';
     var root = {
@@ -92,75 +92,14 @@ Tree.prototype.process_data = function() {
         effecif: self.min_r,
         overcode: true
     };
-
-
-    // TODO: do it for each book
-    var book_name = 'book 1';
-    var clusters = $.map(self.data.clusters, function(v, i) {
-        v['name'] = i;
-        v.cluster = book_name;
-        v.overcode = true;
-        v.id = null;
-        return [v];
-    });
-    var book = {
-        name: book_name,
-        parent: root,
-        cluster: job_name,
-        effecif: self.min_r,
-        children: clusters,
-        overcode: true
-    }
-
-    self.data.nodes.map(function(node) {
-        node['name'] = node.title;
-        node.overcode = false;
-    })
-    var nodes = _.union(root, book, clusters, self.data.nodes);
-    self.scale.domain([self.min_r, d3.max(nodes, function(d) {
-        return d['effecif'];
-    })]);
-
-
-    var dataMap = nodes.reduce(function(map, node) {
-        var n = node.name;
-        map[node.name] = node;
-        return map;
-    }, {});
-
-    var treeData = [];
-    nodes.forEach(function(node) {
-        // add to parent
-        var cluster = dataMap[node.cluster];
-        if (cluster) {
-            // create child array if it doesn't exist
-            (cluster.children || (cluster.children = []))
-            // add node to child array
-            .push(node);
-        } else {
-            // cluster is null or missing
-            treeData.push(node);
-        }
-    });
-
-    root['children'] = [{
-        name: book_name,
-        effecif: self.min_r,
-        cluster: root.name,
-        parent: root,
-        children: treeData,
-        overcode: true
-    }];
-
-    self.display_data = root;
 };
 
 Tree.prototype.update = function(source) {
     var self = this;
-    var nodes = self.tree.nodes(self.display_data).reverse();
+    var nodes = self.tree.nodes(self.display_data.question).reverse();
     var links = self.tree.links(nodes);
 
-    var max_depth = 3;
+    var max_depth = 2;
     self.depth_scale.domain([0, (max_depth + 1) * 180]);
 
     nodes.forEach(function(d) {
@@ -169,6 +108,9 @@ Tree.prototype.update = function(source) {
 
     var node = self.svg.selectAll('g.node')
         .data(nodes, function(d) {
+            if (d.depth < 2) {
+                d.overcode = true;
+            }
             return d.id || (d.id = ++(self.i));
         });
 
@@ -217,16 +159,26 @@ Tree.prototype.update = function(source) {
     .attr("rx", self.rect_rx)
         .attr("ry", self.rect_ry);
 
+    nodeEnter.append('circle')
+            .attr('class', function(d) {
+                var c = d.overcode ? 'overcode' : 'code';
+                return 'node ' + c;
+            })
+            .attr('r', function(d) {
+                return self.radius(d);
+            })
+            .attr('cx', self.rect_height/2);
+
+
     nodeEnter.append('text')
         .attr('x', function(d) {
-            return d.children || d._children ? 30 + self.radius(d) + self.t_offset : self.radius(d) + self.t_offset;
+            return self.rect_height;
+            return d.children.length || d._children ? 30 + self.radius(d) + self.t_offset : self.radius(d) + self.t_offset;
         })
         .attr('dy', '.35em')
-        .attr('text-anchor', function(d) {
-            return d.children || d._children ? 'end' : 'start';
-        })
+        .attr('text-anchor', 'start')
         .text(function(d) {
-            return d.name;
+            return d.text;
         })
         .style('fill-opacity', 1e-6);
 
@@ -304,6 +256,6 @@ Tree.prototype.update = function(source) {
     });
 };
 
-// Tree.prototype.tooltip_html = tooltip_html;
+Tree.prototype.tooltip_html = tooltip_html;
 Tree.prototype.show_verbatims = show_verbatims;
 Tree.prototype.helpers_init = helpers_init;

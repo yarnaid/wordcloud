@@ -3,55 +3,71 @@
   src: url("../fonts/glyphicons-halflings-regular.eot");
   src: url("../fonts/glyphicons-halflings-regular.eot?#iefix") format("embedded-opentype"), url("../fonts/glyphicons-halflings-regular.woff2") format("woff2"), url("../fonts/glyphicons-halflings-regular.woff") format("woff"), url("../fonts/glyphicons-halflings-regular.ttf") format("truetype"), url("../fonts/glyphicons-halflings-regular.svg#glyphicons_halflingsregular") format("svg"), url("../fonts/klavikaregular-osf-opentype.otf") format("opentype");
 }
-/* line 7, scss/tree.scss */
+/* line 6, scss/tree.scss */
+.tree * circle {
+  stroke: none;
+}
+/* line 9, scss/tree.scss */
+.tree * text {
+  stroke: none;
+}
+/* line 13, scss/tree.scss */
 .tree * .node text {
   font: 12px Arial, "Helvetica Neue", Helvetica, sans-serif;
 }
-/* line 10, scss/tree.scss */
+/* line 16, scss/tree.scss */
 .tree * .node rect {
   stroke-width: 3px;
   cursor: pointer;
   fill: white;
 }
-/* line 16, scss/tree.scss */
+/* line 22, scss/tree.scss */
+.tree * .node.overcode circle {
+  fill: #d69ae6;
+}
+/* line 25, scss/tree.scss */
 .tree * .node.overcode rect {
   stroke: #d69ae6;
 }
-/* line 18, scss/tree.scss */
+/* line 27, scss/tree.scss */
 .tree * .node.overcode rect:hover {
   fill: #f8f2fa;
 }
-/* line 22, scss/tree.scss */
+/* line 31, scss/tree.scss */
 .tree * .node.overcode text {
   fill: #9b36bb;
 }
-/* line 27, scss/tree.scss */
+/* line 36, scss/tree.scss */
+.tree * .node.code circle {
+  fill: #c2daec;
+}
+/* line 39, scss/tree.scss */
 .tree * .node.code text {
   fill: #4596d3;
 }
-/* line 30, scss/tree.scss */
+/* line 42, scss/tree.scss */
 .tree * .node.code rect {
   stroke: #c2daec;
 }
-/* line 32, scss/tree.scss */
+/* line 44, scss/tree.scss */
 .tree * .node.code rect:hover {
   fill: #eef5fa;
 }
-/* line 39, scss/tree.scss */
+/* line 51, scss/tree.scss */
 .tree * .link {
   fill: none;
   stroke: #ccc;
   stroke-width: 2px;
 }
-/* line 43, scss/tree.scss */
+/* line 55, scss/tree.scss */
 .tree * .link.code {
   stroke: #c2daec;
 }
-/* line 46, scss/tree.scss */
+/* line 58, scss/tree.scss */
 .tree * .link.overcode {
   stroke: #d69ae6;
 }
-/* line 51, scss/tree.scss */
+/* line 63, scss/tree.scss */
 .tree * .collapsed {
   fill: lightsteelblue;
 }

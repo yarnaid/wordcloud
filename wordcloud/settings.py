@@ -28,6 +28,7 @@ SECRET_KEY = 't@dpxuj8i5&uh+&v#(z7+&x@$g#-^7%tk-$@ker9rc8_t#z#ph'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 DEBUG_PANEL = False
+COMPRESS_ENABLED = not DEBUG
 
 TEMPLATE_DEBUG = DEBUG
 
@@ -75,6 +76,7 @@ INSTALLED_APPS = (
     'data_filter',
     'compare_vis',
     'vis_widget',
+    'compressor',
     # 'mod_wsgi.server',
 )
 
@@ -168,7 +170,7 @@ STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
     # 'djangobower.finders.BowerFinder',
-    # 'compressor.finders.CompressorFinder',
+    'compressor.finders.CompressorFinder',
 )
 
 # Parse database configuration from $DATABASE_URL
@@ -205,4 +207,4 @@ REST_FRAMEWORK = {
 CRISPY_TEMPLATE_PACK = 'bootstrap3'
 DISQUS_API_KEY = 'UMEIxG4BoKA5i2k29rjEjcAWepfR4YZItxSuNZtjI4ZOendtjOsCUcqeMz3nUL1c'
 DISQUS_WEBSITE_SHORTNAME = 'dixit'
-SILKY_PYTHON_PROFILER = True
+# SILKY_PYTHON_PROFILER = True
