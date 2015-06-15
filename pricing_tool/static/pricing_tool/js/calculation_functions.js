@@ -1,4 +1,19 @@
 var calculator = {
+	month_names: [
+		"January",
+		"February", 
+		"March", 
+		"April", 
+		"May", 
+		"June",
+	  	"July",
+	  	"August", 
+	  	"September", 
+	  	"October", 
+	  	"November", 
+	  	"December"
+	],
+
 	pricing_levels : {
 		1: 0.2,
 		2: 0.16,
@@ -122,8 +137,24 @@ var calculator = {
 		};  
 	},
 
-	getDataDeliveryDate: function(date, duration) {
-	//	date
+	getDataDeliveryDate: function(data, cell_amount, duration) {
+
+		var latest = 0;
+
+		for(var i=1; i<=cell_amount; i++) {
+			date = data[i].date_availability;
+			if(date != undefined) {
+				if (date.getTime()>latest)
+					latest = date.getTime();
+			}
+		}
+		if(latest!=0) {
+			var lastDate = new Date(latest+duration*1000);
+			var am_pm = (lastDate.getUTCHours()>13)? "PM" : "AM";
+
+			return am_pm +" "+lastDate.getDate()+" "+this.month_names[lastDate.getMonth()]+" "+lastDate.getFullYear();
+		} else 
+			return ""
 	},
 
 	formatCurrency : function(str) {

@@ -6,6 +6,26 @@ $(document).ready(function() {
 
     var previousSelectedButton = null;
 
+    var tabBlinker = function() {
+	   	if (times > 0 || times < 0) {
+	        if ($(elem).hasClass("blink")) 
+	            $(elem).removeClass("blink");
+	        else
+	            $(elem).addClass("blink");
+	    }
+
+	    clearTimeout(function () {
+	        blink(elem, times, speed);
+	    });
+
+	    if (times > 0 || times < 0) {
+	        setTimeout(function () {
+	            blink(elem, times, speed);
+	        }, speed);
+	        times -= .5;
+	    }
+    }
+
 	var getSourceLang = function() {
 		var checked_radio = 
 					$("input[name='pt-language-choose']:checked")[0].id;
@@ -386,10 +406,12 @@ $(document).ready(function() {
 	        }
 
     		var cell_amount = $("#cells-number")[0].valueAsNumber;
+    		var timestamp = calculator.timeCalculation(formData, cell_amount).total;
 
     		$(".pt-result-cost p").text("€"+calculator.formatCurrency(calculator.countCodingCost(formData, cell_amount).total));
-    		$(".pt-result-timing p").text(calculator.formatTime(calculator.timeCalculation(formData, cell_amount).total));
-    		
+    		$(".pt-result-timing p").text(calculator.formatTime(timestamp));
+    		//if()
+    		$(".pt-result-data-delivery p").text(calculator.getDataDeliveryDate(formData, cell_amount,timestamp))
     		$(lastOpened).fadeOut();
     		$(".buttons-wrapper").fadeOut();
     		$(".pt-results-wrapper").fadeIn();
