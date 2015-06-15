@@ -262,6 +262,7 @@ input[disabled] {
     background-color: #0083E8;
 }
 
+.pt-options-identical-tabs,
 .pt-options-tab-active {
     background-color: #6E0CAD;
     top: -10px;

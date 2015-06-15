@@ -72,7 +72,7 @@ var calculator = {
 			var D6 = this.questions_categories.D6 * data[i].questions.long_questions;
 			var J = this.pricing_levels[1];
 
-			var cell_cost = (A*B*C)*(D1*1+D2*1.5+D3*3+D5*8+D6*12)*J;
+			var cell_cost = (A*B*C)*(D1+D2+D3+D5+D6)*J;
 			var cell_name = "Cell "+i;
 
 			sum_for_separate_cell[cell_name] = cell_cost;
@@ -108,7 +108,7 @@ var calculator = {
 			var D5 = this.questions_categories.D5 * data[i].questions.brand_questions;
 			var D6 = this.questions_categories.D6 * data[i].questions.brand_questions;
 
-			var cell_cost = (A*B*C)*(D1*1+D2*1.5+D3*3+D4*4+D5*8+D6*12)*Ht*9.5;
+			var cell_cost = (A*B*C)*(D1+D2+D3+D4+D5+D6)*Ht*9.5;
 			var cell_name = "Cell "+i;
 
 			sum_for_separate_cell[cell_name] = cell_cost;
@@ -122,10 +122,24 @@ var calculator = {
 		};  
 	},
 
-	formatCurrency : 
-		function(str) {
-			return str.toFixed(2).replace(/./g, function(c, i, a) {
-			    return i && c !== "." && ((a.length - i) % 3 === 0) ? '\'' + c : c;
-			});
+	getDataDeliveryDate: function(date, duration) {
+	//	date
+	},
+
+	formatCurrency : function(str) {
+		return str.toFixed(2).replace(/./g, function(c, i, a) {
+		    return i && c !== "." && ((a.length - i) % 3 === 0) ? '\'' + c : c;
+		});
+	},
+
+	formatTime : function(seconds) {
+			var secondsInDay = 60*60*24;
+			var fullDays = Math.floor(seconds/secondsInDay);
+			var left = seconds - fullDays*secondsInDay;
+			if(left - secondsInDay/2>0) {
+				fullDays++;
+				return fullDays+" days";
+			} else 
+				return fullDays+" ½ days";
 		}
 }

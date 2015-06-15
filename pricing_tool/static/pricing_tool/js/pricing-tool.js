@@ -111,6 +111,37 @@ $(document).ready(function() {
 		return formArray;
     };
 
+    var renderIdenticalCellTabs = function(){
+		var diff = {
+			4: "55px",
+			3: "25px",
+			2: "8px",
+			1: "-5px",
+			0: "-10px",
+		}
+
+		$('.pt-options-list li').remove();
+		var number_of_cells = $('#cells-number')[0].valueAsNumber;
+		var width = number_of_cells * 47;
+		var percents_per_cell = 100.0/number_of_cells;
+
+		var mid = Math.floor(number_of_cells/2)+1;
+		
+		if(number_of_cells == 1)
+			$("#identical-cells-field").hide();
+		else 
+			$("#identical-cells-field").show();
+
+		if(number_of_cells%2==0)
+			mid = mid-1;
+
+		$('.pt-options-wrapper').css("width", width+"px");
+		$('.pt-options-list').css("width", width+"px");
+		for(var i=1; i<=number_of_cells; i++)
+			$('.pt-options-list').append(
+				"<li id='cell_"+i
+				+"' class='pt-options-tab pt-options-identical-tabs' style='left:"+percents_per_cell*(i-1)+"%;top:"+diff[Math.abs(mid-i)]+";'><a href='#'>"+i+"</a></li>");
+	} 
     var renderCellTabs = function(){
     	if(!isIdentical) {
 			var diff = {
@@ -330,8 +361,14 @@ $(document).ready(function() {
     	function() {
     		var checkedId = this.id;
     		isIdentical = (checkedId == "identical-cells-yes") ? true: false;
-    		if(isIdentical)
-    		 	$('.pt-options-list li').remove();
+    		if(isIdentical) {
+    			var data = saveDataFromCurrentForm();
+    		
+    			renderIdenticalCellTabs();
+
+    			for(var i = 1; i<=$("#cells-number")[0].valueAsNumber; i++)
+    				saveToBuffer(i, data);
+    		}
     		else renderCellTabs();
     	}
     );
@@ -339,20 +376,19 @@ $(document).ready(function() {
     $("#perform-calculations").click(
     	function() {
     		var data = saveDataFromCurrentForm();
+    		var arr = $('.pt-options-tab-active');
     		
-    		if(isIdentical) {
-    			for(var i = 1; i<=$("#cells-number")[0].valueAsNumber; i++)
-    				saveToBuffer(i, data);
-    		} else {
-    			var activeCellString = $('.pt-options-tab-active')[0].id;
+    		if(arr.length!=0) {
+    			var activeCellString = arr[0].id;
     			var cell_number = parseInt(activeCellString.substring(activeCellString.indexOf("_")+1));
 
 	        	saveToBuffer(cell_number, data);
-    		}
+	        }
+
     		var cell_amount = $("#cells-number")[0].valueAsNumber;
 
     		$(".pt-result-cost p").text("€"+calculator.formatCurrency(calculator.countCodingCost(formData, cell_amount).total));
-    		$(".pt-result-timing p").text(calculator.timeCalculation(formData, cell_amount).total);
+    		$(".pt-result-timing p").text(calculator.formatTime(calculator.timeCalculation(formData, cell_amount).total));
     		
     		$(lastOpened).fadeOut();
     		$(".buttons-wrapper").fadeOut();
