@@ -257,7 +257,12 @@ $(document).ready(function() {
 		}
     };
 
-    $('#cells-number').change(renderCellTabs);
+    $('#cells-number').change(function() {
+    	if(!isIdentical)
+    		renderCellTabs();
+    	else 
+    		renderIdenticalCellTabs();
+    });
 
     $('.pt-options-wrapper').on("mouseover",'.pt-options-tab',
     	function() {
