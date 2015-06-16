@@ -103,11 +103,13 @@ var calculator = {
 		}
 		
 		var verbatimTranslationCost = this.computeVerbatimTranslationCosts(data, cell_amount);
+		var codebookTranslationCost = this.computeCodebookTranslationCosts(data, cell_amount);
 		
 		return {
-			total : total_sum+verbatimTranslationCost.total,
+			total : total_sum+verbatimTranslationCost.total+codebookTranslationCost.total,
 			separate : sum_for_separate_cell,
-			separate_for_translation: verbatimTranslationCost.separate
+			separate_for_translation: verbatimTranslationCost.separate,
+			separate_for_codebook: codebookTranslationCost.separate,
 		};  
 	},
 
@@ -126,7 +128,7 @@ var calculator = {
 			var A = this.language_rates[data[i].source_language];
 			var B = data[i].sample_size;
 			var C = this.previous_codebook_rate[data[i].previous_codebook.uses];
-			var Ht = this.timing_costs[data[i].cells_number];
+			var Ht = this.timing_costs[cell_amount];
 			var D1 = this.questions_categories.D1 * data[i].questions.brand_questions;
 			var D2 = this.questions_categories.D2 * data[i].questions.short_questions;
 			var D3 = this.questions_categories.D3 * data[i].questions.like_questions;
@@ -143,36 +145,43 @@ var calculator = {
 		}
 
 		var translationTime = this.computeVerbatimTranslationTime(data, cell_amount);
+		var codebookTranslationCost = this.computeCodebookTranslationTime(data, cell_amount);
 
 		return {
-			total : total_sum+translationTime.total,
+			total : total_sum+translationTime.total+codebookTranslationCost.total,
 			separate : sum_for_separate_cell,
-			separate_for_translation : translationTime.separate
+			separate_for_translation : translationTime.separate,
+			separate_for_codebook : codebookTranslationCost.separate,
 		};  
 	},
 
 	/*
-	 * (A*E)*(D1*1+D2*1.5+D3*3+D4*4+D5*8+D6*12)*(C/10)*J
+	 * (A*E*H)*(D1*1+D2*1.5+D3*3+D4*4+D5*8+D6*12)*(C/10)*J
 	 */
-	/*computeCodebookTranslationCost(data, cell_amount) : function() {
+	computeCodebookTranslationCosts : function(data, cell_amount) {
 		var total_sum = 0;
 		var sum_for_separate_cell = {};
 
 		for(var i=1; i<=cell_amount; i++) {
 
 			var A = this.language_rates[data[i].source_language];
-			var B = data[i].sample_size;
+			var E = 0;
+			for(var j=0; j<data[i].codebook_translation_languages.length; j++) {
+				E += this.language_rates[data[i].codebook_translation_languages[j]];
+			}
+			
+			var J = this.pricing_levels[1];
 			var C = this.previous_codebook_rate[data[i].previous_codebook.uses];
-
+			
+			var H = this.timing_costs[cell_amount];
 			var D1 = this.questions_categories.D1 * data[i].questions.brand_questions;
 			var D2 = this.questions_categories.D2 * data[i].questions.short_questions;
 			var D3 = this.questions_categories.D3 * data[i].questions.like_questions;
 			var D4 = 0;//this.questions_categories.D3 * data[i].questions._questions;
-			var D5 = this.questions_categories.D5 * data[i].questions.brand_questions;
-			var D6 = this.questions_categories.D6 * data[i].questions.brand_questions;
+			var D5 = this.questions_categories.D5 * data[i].questions.story_questions;
+			var D6 = this.questions_categories.D6 * data[i].questions.long_questions;
 
-			var cell_cost = 0;
-			for(data.verbatim_rt)(A*B*C)*(D1+D2+D3+D4+D5+D6)*(C/10);
+			var cell_cost = (A*E*H)*(D1+D2+D3+D4+D5+D6)*(C/10)*J;
 			var cell_name = "Cell "+i;
 
 			sum_for_separate_cell[cell_name] = cell_cost;
@@ -184,7 +193,46 @@ var calculator = {
 			total : total_sum,
 			separate : sum_for_separate_cell
 		};  
-	},*/
+	},
+
+	/*
+	 * (A*E)*(D1*1+D2*1.5+D3*3+D4*4+D5*8+D6*12)*(C/10)*Ht*9.5
+	 */	
+	computeCodebookTranslationTime : function(data, cell_amount) {
+		var total_sum = 0;
+		var sum_for_separate_cell = {};
+
+		for(var i=1; i<=cell_amount; i++) {
+
+			var A = this.language_rates[data[i].source_language];
+			var E = 0;
+			for(var j=0; j<data[i].codebook_translation_languages.length; j++) {
+				E += this.language_rates[data[i].codebook_translation_languages[j]];
+			}
+			var C = this.previous_codebook_rate[data[i].previous_codebook.uses];
+			var Ht = this.timing_costs[data[i].cells_number];
+			
+			var D1 = this.questions_categories.D1 * data[i].questions.brand_questions;
+			var D2 = this.questions_categories.D2 * data[i].questions.short_questions;
+			var D3 = this.questions_categories.D3 * data[i].questions.like_questions;
+			var D4 = 0;//this.questions_categories.D3 * data[i].questions._questions;
+			var D5 = this.questions_categories.D5 * data[i].questions.story_questions;
+			var D6 = this.questions_categories.D6 * data[i].questions.long_questions;
+
+			var cell_cost = 0;
+			cell_cost = (A*E)*(D1+D2+D3+D4+D5+D6)*(C/10)*Ht*9.5;
+			var cell_name = "Cell "+i;
+
+			sum_for_separate_cell[cell_name] = cell_cost;
+
+			total_sum += cell_cost;
+		}
+
+		return {
+			total : total_sum,
+			separate : sum_for_separate_cell
+		};  
+	},
 
 	/*
 	 * (A*F)*(G2*1.5+G3*3+G4*4+G5*8)*2*J

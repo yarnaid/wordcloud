@@ -3,28 +3,15 @@ $(document).ready(function() {
     var lastOpened = '';
     var isIdentical = false;
     var lastOpenedSelector = '';
+	var diff = {
+		4: "65px",
+		3: "35px",
+		2: "18px",
+		1: "5px",
+		0: "0px",
+	};
 
     var previousSelectedButton = null;
-
-    var tabBlinker = function() {
-	   	if (times > 0 || times < 0) {
-	        if ($(elem).hasClass("blink")) 
-	            $(elem).removeClass("blink");
-	        else
-	            $(elem).addClass("blink");
-	    }
-
-	    clearTimeout(function () {
-	        blink(elem, times, speed);
-	    });
-
-	    if (times > 0 || times < 0) {
-	        setTimeout(function () {
-	            blink(elem, times, speed);
-	        }, speed);
-	        times -= .5;
-	    }
-    }
 
 	var getSourceLang = function() {
 		var checked_radio = 
@@ -168,14 +155,6 @@ $(document).ready(function() {
 
     var renderCellTabs = function(){
     	if(!isIdentical) {
-			var diff = {
-				4: "65px",
-				3: "35px",
-				2: "18px",
-				1: "5px",
-				0: "0px",
-			}
-
 			$('.pt-options-list li').remove();
 			var number_of_cells = $('#cells-number')[0].valueAsNumber;
 			var width = number_of_cells * 47;
@@ -204,13 +183,16 @@ $(document).ready(function() {
     var retainFormData = function(index) {
 		$(".pt-verbatim-translation-languages input").prop("checked", false);
 		$(".pt-verbatim-translation-languages input").attr("disabled", false);    	
+		
+		$(".pt-codebook-translation-content input").prop("checked", false);
+		$(".pt-codebook-translation-content input").attr("disabled", false);    	
 
     	var data = formData[index];
     	var prev_source_lang = "#pt-language-"+getSourceLang().toLowerCase();
     	$(prev_source_lang).prop("checked", false);
     	var source_lang = "#pt-language-"+data.source_language.toLowerCase();
 		var disabled_lang_1 = "#pt-verbatim-translation-language-"+data.source_language.toLowerCase();
-		var disabled_lang_2 = "#pt-codebook-translation-content-"+data.source_language.toLowerCase();
+		var disabled_lang_2 = "#pt-codebook-translation-language-"+data.source_language.toLowerCase();
 		
 		$(source_lang).prop("checked", true);
 		
@@ -239,6 +221,12 @@ $(document).ready(function() {
 			$("#pt-verbatim-translation-language-"
 				+data.verbatim_translation_languages[i].toLowerCase()).prop("checked", true);
 		}
+
+		for(var i = 0; i<data.codebook_translation_languages.length; i++) {
+			$("#pt-codebook-translation-language-"
+				+data.codebook_translation_languages[i].toLowerCase()).prop("checked", true);
+		}
+
 
 		if(data.previous_codebook.uses) {
 			$("#codebook-create-new").prop("checked", false);
@@ -276,6 +264,7 @@ $(document).ready(function() {
     		var prev_top = $(this).css("top");
 			
 			if(this.className.indexOf('pt-options-tab-active')==-1) {
+	    		//$(this).animate({top: parseInt(prev_top)-10+"px"});
 	    		$(this).css("top", parseInt(prev_top)-10+"px");
 	    		$('.pt-outher-circle').toggleClass('pt-outher-circle-hover');
     		}
@@ -286,6 +275,7 @@ $(document).ready(function() {
     	function() {
     		var prev_top = $(this).css("top");
     		if(this.className.indexOf('pt-options-tab-active')==-1) {
+	    		//$(this).animate({top: parseInt(prev_top)+10+"px"});
 	    		$(this).css("top", parseInt(prev_top)+10+"px");
 	    		$('.pt-outher-circle').toggleClass('pt-outher-circle-hover');
 	    	}
@@ -421,7 +411,9 @@ $(document).ready(function() {
     		var timestamp = calculator.timeCalculation(formData, cell_amount).total;
 
     		$(".pt-result-cost p").text("€"+calculator.formatCurrency(calculator.countCodingCost(formData, cell_amount).total));
-    		$(".pt-result-timing p").text(calculator.formatTime(timestamp));
+    		//$(".pt-result-timing p").text(calculator.formatTime(timestamp));
+    		$(".pt-result-timing p").text(timestamp);
+    		
     		//if()
     		$(".pt-result-data-delivery p").text(calculator.getDataDeliveryDate(formData, cell_amount,timestamp))
     		$(lastOpened).fadeOut();
@@ -433,11 +425,13 @@ $(document).ready(function() {
    $("input[name='pt-language-choose']").change(
     	function() {
     		$(".pt-verbatim-translation-languages input[type='checkbox']").removeAttr("disabled");
+    		$(".pt-codebook-translation-content input[type='checkbox']").removeAttr("disabled");
     		var source_lang = getSourceLang();
 
     		var checkboxId = source_lang.toLowerCase();
 
-    		$('#pt-verbatim-translation-language-'+checkboxId).attr("disabled", true)
+    		$('#pt-codebook-translation-language-'+checkboxId).attr("disabled", true)
+			$('#pt-verbatim-translation-language-'+checkboxId).attr("disabled", true)
     	}
     )
 
@@ -465,6 +459,9 @@ $(document).ready(function() {
 
     // this sections sets defaults values (renders initial amount of cells, checks checkboxes etc)
     $('#pt-language-english').prop('checked', true);
+	$('#pt-codebook-translation-language-english').prop('disabled', true);
+	$('#pt-verbatim-translation-language-english').prop('disabled', true);
+
     renderCellTabs();
 
     $('#codebook-create-new').prop('checked', true);
