@@ -42,56 +42,6 @@
 
 <body>
 
-{% comment %}
-    <nav class="up_menu" id='left-nav'>
-        <div>
-            <div class="panel panel-default">
-                {# {% block left_menu %} #}
-                <div class="panel-heading">
-                    {% block menu_heading %} Panel {% endblock %}
-                </div>
-                <div class="panel-body">
-                    <div id="sidebar">
-                        {% block menu_body %}
-                        <ul class="nav list-group">
-                            <li>
-                                <a class="list-group-item active" href="{% url 'cloud' %}">CLICK ME TO SEE CLOUD!</a>
-                            </li>
-                            <li>
-                                <a class="list-group-item active" href="{% url 'wordle' %}">WORDLE</a>
-                            </li>
-                            <li>
-                                <a class="list-group-item active" href="{% url 'tree' %}">TREE <span class="badge">under construction</span>
-                                    </a>
-                            </li>
-                            <li>
-                                <a class="list-group-item active" href="{% url 'pricing_tool' %}">Pricing Tool</a>
-                            </li>
-                        </ul>
-                        {% endblock %}
-                    </div>
-                </div>
-                {# {% endblock %} #}
-            </div>
-        </div>
-    </nav>
-       <script type="text/javascript">
-    $(function() {
-   $("#left-nav").mmenu({
-          // configuration
-          offCanvas: {
-             pageNodetype: "section",
-             zposition : "front"
-          }
-       });
-    });
-   </script>
-
-{% endcomment %}
-
-
-
-
 <div class="page-wrap">
     {% include 'wordcloud/nav_bar_auth.html' %}
 
@@ -116,7 +66,7 @@
     {% endblock footer %}
 
 {% block help_chat %}
-{% if not debug and debug %}
+{% if not debug %}
 <!-- begin olark code -->
 <script id="olark-wrapper" data-cfasync="false" type='text/javascript'>/*<![CDATA[*/window.olark||(function(c){var f=window,d=document,l=f.location.protocol=="https:"?"https:":"http:",z=c.name,r="load";var nt=function(){
 f[z]=function(){
