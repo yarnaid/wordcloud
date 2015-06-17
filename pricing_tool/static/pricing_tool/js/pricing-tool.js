@@ -26,6 +26,77 @@ $(document).ready(function() {
     	formData[cellIndex] = data;
     }; 
    	
+    var fillTablesWithData = function(data, cell_amount) {
+    	$(".pt-summary-table-usual-row").remove();
+    	$(".pt-summary-table-summary-row").remove();
+    	var sumForEachCategory = {
+    		"brand": 0,
+    		"short": 0,
+    		"story": 0,
+    		"likes": 0,
+    		"long" : 0
+    	};
+    	var toAdd = "";
+    	for(var i=1; i<=cell_amount; i++){
+    		var cellName = "Cell "+i;
+    		var str = "<tr class='pt-summary-table-usual-row'>"+
+    					  "<td><p>"+cellName+"</p></td>"+
+	    				  "<td><p>"+data.for_each_cat[i]["brand"]+" €</p></td>"+
+	    				  "<td><p>"+data.for_each_cat[i]["short"]+" €</p></td>"+
+	    				  "<td><p>"+data.for_each_cat[i]["likes"]+" €</p></td>"+
+	    				  "<td><p>"+data.for_each_cat[i]["story"]+" €</p></td>"+
+	    				  "<td><p>"+data.for_each_cat[i]["long"]+" €</p></td>"+
+    					  "<td><p>"+data.separate[cellName]+" €</p></td>"+
+    				  "</tr>"
+    		toAdd += str;
+
+    		sumForEachCategory["brand"] += data.for_each_cat[i]["brand"];
+    		sumForEachCategory["short"] += data.for_each_cat[i]["short"];
+    		sumForEachCategory["likes"] += data.for_each_cat[i]["likes"];
+    		sumForEachCategory["story"] += data.for_each_cat[i]["story"];
+    		sumForEachCategory["long"] += data.for_each_cat[i]["long"];
+
+    	}
+    	toAdd += "<tr class='pt-summary-table-summary-row'>"+
+    				"<td><p>total</p></td>"+
+    				"<td><p>"+sumForEachCategory["brand"]+" €</p></td>"+
+    				"<td><p>"+sumForEachCategory["short"]+" €</p></td>"+
+    				"<td><p>"+sumForEachCategory["likes"]+" €</p></td>"+
+    				"<td><p>"+sumForEachCategory["story"]+" €</p></td>"+
+    				"<td><p>"+sumForEachCategory["long"]+" €</p></td>"+
+    				"<td><p>"+data.total+" €</p></td>"+
+    			"</tr>"
+
+    	$("#summary-costs-table .pt-summary-table-header-row").after(toAdd);
+
+    	if(data.translation_cost == 0) {
+    		$(".pt-result-cost-translation-info").hide();
+    	} else {
+    		$("#summary-translation-costs-table pt-summary-table-usual-row").remove();
+			$("#summary-translation-costs-table pt-summary-table-summary-row").remove();
+
+			var toAdd = "";
+			
+			for(var i=1; i<=cell_amount; i++) {
+				var cellName = "Cell "+i;
+    			var str = 
+	    				  "<tr class='pt-summary-table-usual-row'>"+
+	    					  "<td><p>"+cellName+"</p></td>"+
+		    				  "<td><p>"+(data.codebook_translation.for_each_cat[i]["brand"]).toFixed(2)+" €</p></td>"+
+		    				  "<td><p>"+data.codebook_translation.for_each_cat[i]["short"].toFixed(2)+" €</p></td>"+
+		    				  "<td><p>"+(data.codebook_translation.for_each_cat[i]["likes"]+data.verbatim_translation.for_each_cat[i]["likes"]).toFixed(2)+" €</p></td>"+
+		    				  "<td><p>"+(data.codebook_translation.for_each_cat[i]["story"]+data.verbatim_translation.for_each_cat[i]["story"]).toFixed(2)+" €</p></td>"+
+		    				  "<td><p>"+(data.codebook_translation.for_each_cat[i]["long"]+data.verbatim_translation.for_each_cat[i]["long"]).toFixed(2)+" €</p></td>"+
+	    					  "<td><p>€</p></td>"+
+	    				  "</tr>"
+    			toAdd += str;
+			}
+			$("#summary-translation-costs-table .pt-summary-table-header-row").after(toAdd);			
+
+    		$(".pt-result-cost-translation-info").show();
+    	}
+    };
+
     var saveDataFromCurrentForm = function() {
 
 		var codebookFormHandler = function() {
@@ -409,20 +480,22 @@ $(document).ready(function() {
 
     		var cell_amount = $("#cells-number")[0].valueAsNumber;
     		var timestamp = calculator.timeCalculation(formData, cell_amount).total;
-
-    		$(".pt-result-cost p").text("€"+calculator.formatCurrency(calculator.countCodingCost(formData, cell_amount).total));
+    		var outputData = calculator.countCodingCost(formData, cell_amount)
+    		$(".pt-result-cost p").text("€"+calculator.formatCurrency(outputData.total+outputData.translation_cost));
     		//$(".pt-result-timing p").text(calculator.formatTime(timestamp));
     		$(".pt-result-timing p").text(timestamp);
     		
     		//if()
     		$(".pt-result-data-delivery p").text(calculator.getDataDeliveryDate(formData, cell_amount,timestamp))
+    		fillTablesWithData(outputData, cell_amount);
+
     		$(lastOpened).fadeOut();
     		$(".buttons-wrapper").fadeOut();
     		$(".pt-results-wrapper").fadeIn();
     	}
     )
 
-   $("input[name='pt-language-choose']").change(
+    $("input[name='pt-language-choose']").change(
     	function() {
     		$(".pt-verbatim-translation-languages input[type='checkbox']").removeAttr("disabled");
     		$(".pt-codebook-translation-content input[type='checkbox']").removeAttr("disabled");
@@ -456,6 +529,16 @@ $(document).ready(function() {
         selectOtherMonths: true,
     });
 
+    $(".pt-result-cost, .pt-result-timing, .pt-result-data-delivery").hover(
+    	function() {
+    		$('.'+this.className+'-popup').fadeIn(200);
+    		var height = $('.pt-result-cost-popup-content').css("height");
+    		$('.pt-result-cost-popup-content').css("top", -(parseInt(height)/2-35))
+    	},
+    	function() {
+    		$('.'+this.className+'-popup').fadeOut(200);
+    	}
+    );
 
     // this sections sets defaults values (renders initial amount of cells, checks checkboxes etc)
     $('#pt-language-english').prop('checked', true);
