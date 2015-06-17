@@ -14,6 +14,14 @@ var calculator = {
 	  	"December"
 	],
 
+	verbatim_extractions : {
+		G2: 1.5,
+		G3: 3,
+		G4: 4,
+		G5: 8,
+		G6: 12,
+	},
+
 	pricing_levels : {
 		1: 0.2,
 		2: 0.16,
@@ -75,28 +83,45 @@ var calculator = {
 	countCodingCost : function(data,cell_amount) {
 		var total_sum = 0;
 		var sum_for_separate_cell = {};
+		var foreach = {}
 
 		for(var i=1; i<=cell_amount; i++) {
 			var A = this.language_rates[data[i].source_language];
 			var B = data[i].sample_size;
 			var C = this.previous_codebook_rate[data[i].previous_codebook.uses];
-			var D1 = this.questions_categories.D1 * data[i].questions.brand_questions;
-			var D2 = this.questions_categories.D2 * data[i].questions.short_questions;
-			var D3 = this.questions_categories.D3 * data[i].questions.like_questions;
-			var D5 = this.questions_categories.D5 * data[i].questions.story_questions;
-			var D6 = this.questions_categories.D6 * data[i].questions.long_questions;
 			var J = this.pricing_levels[1];
 
-			var cell_cost = (A*B*C)*(D1+D2+D3+D5+D6)*J;
+			var D1 = (A*B*C*J)*this.questions_categories.D1 * data[i].questions.brand_questions;
+			var D2 = (A*B*C*J)*this.questions_categories.D2 * data[i].questions.short_questions;
+			var D3 = (A*B*C*J)*this.questions_categories.D3 * data[i].questions.like_questions;
+			var D5 = (A*B*C*J)*this.questions_categories.D5 * data[i].questions.story_questions;
+			var D6 = (A*B*C*J)*this.questions_categories.D6 * data[i].questions.long_questions;
+			var cell_cost = (D1+D2+D3+D5+D6);
 			var cell_name = "Cell "+i;
+
+			foreach[i] = {
+				"brand": D1,
+				"story": D5,
+				"short": D2,
+				"long" : D6,
+				"likes": D3 
+			};
 
 			sum_for_separate_cell[cell_name] = cell_cost;
 
 			total_sum += cell_cost;
 		}
+		
+		var verbatimTranslationCost = this.computeVerbatimTranslationCosts(data, cell_amount);
+		var codebookTranslationCost = this.computeCodebookTranslationCosts(data, cell_amount);
+		
 		return {
 			total : total_sum,
-			separate : sum_for_separate_cell
+			translation_cost: verbatimTranslationCost.total+codebookTranslationCost.total,
+			separate : sum_for_separate_cell,
+			for_each_cat : foreach,
+			verbatim_translation: verbatimTranslationCost,
+			codebook_translation: codebookTranslationCost,
 		};  
 	},
 
@@ -115,15 +140,109 @@ var calculator = {
 			var A = this.language_rates[data[i].source_language];
 			var B = data[i].sample_size;
 			var C = this.previous_codebook_rate[data[i].previous_codebook.uses];
-			var Ht = this.timing_costs[data[i].cells_number];
+			var Ht = this.timing_costs[cell_amount];
+
 			var D1 = this.questions_categories.D1 * data[i].questions.brand_questions;
 			var D2 = this.questions_categories.D2 * data[i].questions.short_questions;
 			var D3 = this.questions_categories.D3 * data[i].questions.like_questions;
 			var D4 = 0;//this.questions_categories.D3 * data[i].questions._questions;
-			var D5 = this.questions_categories.D5 * data[i].questions.brand_questions;
-			var D6 = this.questions_categories.D6 * data[i].questions.brand_questions;
+			var D5 = this.questions_categories.D5 * data[i].questions.story_questions;
+			var D6 = this.questions_categories.D6 * data[i].questions.long_questions;
 
 			var cell_cost = (A*B*C)*(D1+D2+D3+D4+D5+D6)*Ht*9.5;
+			var cell_name = "Cell "+i;
+
+			sum_for_separate_cell[cell_name] = cell_cost;
+
+			total_sum += cell_cost;
+		}
+
+		var translationTime = this.computeVerbatimTranslationTime(data, cell_amount);
+		var codebookTranslationCost = this.computeCodebookTranslationTime(data, cell_amount);
+
+		return {
+			total : total_sum+translationTime.total+codebookTranslationCost.total,
+			separate : sum_for_separate_cell,
+			separate_for_translation : translationTime.separate,
+			separate_for_codebook : codebookTranslationCost.separate,
+		};  
+	},
+
+	/*
+	 * (A*E*H)*(D1*1+D2*1.5+D3*3+D4*4+D5*8+D6*12)*(C/10)*J
+	 */
+	computeCodebookTranslationCosts : function(data, cell_amount) {
+		var total_sum = 0;
+		var sum_for_separate_cell = {};
+		var foreach = {};
+
+		for(var i=1; i<=cell_amount; i++) {
+
+			var A = this.language_rates[data[i].source_language];
+			var E = 0;
+			for(var j=0; j<data[i].codebook_translation_languages.length; j++) {
+				E += this.language_rates[data[i].codebook_translation_languages[j]];
+			}
+			
+			var J = this.pricing_levels[1];
+			var C = this.previous_codebook_rate[data[i].previous_codebook.uses];
+			
+			var H = this.timing_costs[cell_amount];
+			var D1 = (A*E*H)*(C/10)*J*this.questions_categories.D1 * data[i].questions.brand_questions;
+			var D2 = (A*E*H)*(C/10)*J*this.questions_categories.D2 * data[i].questions.short_questions;
+			var D3 = (A*E*H)*(C/10)*J*this.questions_categories.D3 * data[i].questions.like_questions;
+			var D4 = 0;//this.questions_categories.D3 * data[i].questions._questions;
+			var D5 = (A*E*H)*(C/10)*J*this.questions_categories.D5 * data[i].questions.story_questions;
+			var D6 = (A*E*H)*(C/10)*J*this.questions_categories.D6 * data[i].questions.long_questions;
+
+			var cell_cost = (D1+D2+D3+D4+D5+D6);
+			var cell_name = "Cell "+i;
+
+			foreach[i] = {
+				"brand" : D1,
+				"short" : D2,
+				"likes" : D3,
+				"story" : D5,
+				"long": D6,
+			}
+			sum_for_separate_cell[cell_name] = cell_cost;
+
+			total_sum += cell_cost;
+		}
+
+		return {
+			total : total_sum,
+			for_each_cat : foreach,
+			separate : sum_for_separate_cell,
+		};  
+	},
+
+	/*
+	 * (A*E)*(D1*1+D2*1.5+D3*3+D4*4+D5*8+D6*12)*(C/10)*Ht*9.5
+	 */	
+	computeCodebookTranslationTime : function(data, cell_amount) {
+		var total_sum = 0;
+		var sum_for_separate_cell = {};
+
+		for(var i=1; i<=cell_amount; i++) {
+
+			var A = this.language_rates[data[i].source_language];
+			var E = 0;
+			for(var j=0; j<data[i].codebook_translation_languages.length; j++) {
+				E += this.language_rates[data[i].codebook_translation_languages[j]];
+			}
+			var C = this.previous_codebook_rate[data[i].previous_codebook.uses];
+			var Ht = this.timing_costs[data[i].cells_number];
+			
+			var D1 = this.questions_categories.D1 * data[i].questions.brand_questions;
+			var D2 = this.questions_categories.D2 * data[i].questions.short_questions;
+			var D3 = this.questions_categories.D3 * data[i].questions.like_questions;
+			var D4 = 0;//this.questions_categories.D3 * data[i].questions._questions;
+			var D5 = this.questions_categories.D5 * data[i].questions.story_questions;
+			var D6 = this.questions_categories.D6 * data[i].questions.long_questions;
+		
+			var cell_cost = 0;
+			cell_cost = (A*E)*(D1+D2+D3+D4+D5+D6)*(C/10)*Ht*9.5;
 			var cell_name = "Cell "+i;
 
 			sum_for_separate_cell[cell_name] = cell_cost;
@@ -135,6 +254,85 @@ var calculator = {
 			total : total_sum,
 			separate : sum_for_separate_cell
 		};  
+	},
+
+	/*
+	 * (A*F)*(G6*12+G3*3+G4*4+G5*8)*2*J
+	 * F - rate for language
+	 * G6 - for story questions
+	 * G3 - for likes
+	 * G4 - for twitter
+	 * G5 - long 
+	 */
+	computeVerbatimTranslationCosts: function(data, cell_amount) {
+		var totalCount = 0;
+		var perCell = {};
+		var foreach = {};
+		
+		for(var i=1; i<=cell_amount; i++) {
+			var A = this.language_rates[data[i].source_language];
+			var F = 0;
+			for(var j=0; j<data[i].verbatim_translation_languages.length; j++) {
+				F += this.language_rates[data[i].verbatim_translation_languages[j]];
+			}
+
+			var J = this.pricing_levels[1];
+			var G6 = (A*F)*2*J*this.verbatim_extractions.G6 * data[i].verbatims_translation.long_question_translation;
+			var G3 = (A*F)*2*J*this.verbatim_extractions.G3 * data[i].verbatims_translation.likes_question_translation;
+			var G5 = (A*F)*2*J*this.verbatim_extractions.G5 * data[i].verbatims_translation.story_question_translation;
+
+			var cell_count = (G6+G3+G5);
+			totalCount += cell_count;
+
+			foreach[i] = {
+				"long": G5,
+				"likes": G3,
+				"story": G6
+			}
+			perCell["Cell "+i] = cell_count;
+		}
+
+		return {
+			total: totalCount,
+			for_each_cat: foreach,
+			separate: perCell
+		}
+	},
+
+	/*
+	 * (A*F)*(G6*1.5+G3*3+G4*4+G5*8)*2*Ht*9.5
+	 * F - rate for language
+	 * G6 - for long questions
+	 * G3 - for likes
+	 * G4 - for twitter
+	 * G5 - long 
+	 * Ht - for numbers of cell
+	 */
+	computeVerbatimTranslationTime : function(data, cell_amount) {
+		var totalCount = 0;
+		var perCell = {};
+		for(var i=1; i<=cell_amount; i++) {
+			var A = this.language_rates[data[i].source_language];
+			var F = 0;
+			for(var j=0; j<data[i].verbatim_translation_languages.length; j++) {
+				F += this.language_rates[data[i].verbatim_translation_languages[j]];
+			}
+
+			var G6 = this.verbatim_extractions.G6 * data[i].verbatims_translation.story_question_translation;
+			var G3 = this.verbatim_extractions.G3 * data[i].verbatims_translation.likes_question_translation;
+			var G5 = this.verbatim_extractions.G3 * data[i].verbatims_translation.story_question_translation;
+			var Ht = this.timing_costs[data[i].cells_number];
+
+			var cell_count = (A*F)*(G6+G3+G5)*2*Ht*9.5;
+			totalCount += cell_count;
+
+			perCell["Cell "+i] = cell_count;
+		}
+
+		return {
+			total: totalCount,
+			separate: perCell
+		}
 	},
 
 	getDataDeliveryDate: function(data, cell_amount, duration) {
@@ -164,13 +362,13 @@ var calculator = {
 	},
 
 	formatTime : function(seconds) {
-			var secondsInDay = 60*60*24;
-			var fullDays = Math.floor(seconds/secondsInDay);
-			var left = seconds - fullDays*secondsInDay;
-			if(left - secondsInDay/2>0) {
-				fullDays++;
-				return fullDays+" days";
-			} else 
-				return fullDays+" ½ days";
-		}
+		var secondsInDay = 60*60*24;
+		var fullDays = Math.floor(seconds/secondsInDay);
+		var left = seconds - fullDays*secondsInDay;
+		if(left - secondsInDay/2>0) {
+			fullDays++;
+			return fullDays+" days";
+		} else 
+			return fullDays+" ½ days";
+	}
 }

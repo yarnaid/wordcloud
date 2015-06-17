@@ -254,7 +254,36 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="pt-row-top pt-codebook-translation-content"></div>
+                            <div class="pt-row-top pt-codebook-translation-content">
+                                <div class="checkbox form-group">
+                                    <input type="checkbox" name="pt-codebook-translation-language-choose" id="pt-language-german">
+                                    <label class="control-label" for="pt-codebook-translation-language-german">German</label>
+                                </div>
+                                <div class="checkbox form-group">
+                                    <input type="checkbox" name="pt-codebook-translation-language-choose" id="pt-codebook-translation-language-spanish">
+                                    <label class="control-label" for="pt-codebook-translation-language-spanish">Spanish</label>
+                                </div>
+                                <div class="checkbox form-group">
+                                    <input type="checkbox" name="pt-codebook-translation-language-choose" id="pt-codebook-translation-language-english" checked='true'>
+                                    <label class="control-label" for="pt-codebook-translation-language-english">English</label>
+                                </div>
+                                <div class="checkbox form-group">
+                                    <input type="checkbox" name="pt-codebook-translation-language-choose" id="pt-codebook-translation-language-french">
+                                    <label class="control-label" for="pt-codebook-translation-language-french">French</label>
+                                </div>
+                                <div class="checkbox form-group">
+                                    <input type="checkbox" name="pt-codebook-translation-language-choose" id="pt-codebook-translation-language-mandarin">
+                                    <label class="control-label" for="pt-codebook-translation-language-mandarin">Mandarin</label>
+                                </div>
+                                <div class="checkbox form-group">
+                                    <input type="checkbox" name="pt-codebook-translation-language-choose" id="pt-codebook-translation-language-italian">
+                                    <label class="control-label" for="pt-codebook-translation-language-italian">Italian</label>
+                                </div>
+                                <div class="checkbox form-group">
+                                    <input type="checkbox" name="pt-codebook-translation-language-choose" id="pt-language-portuguese">
+                                    <label class="control-label" for="pt-codebook-translation-language-portuguese">Portuguese</label>
+                                </div>
+                            </div>
                             <div class="pt-row-top pt-verbatim-translation-content">
                                 <div class="pt-top-buttons-wrapper">
                                     <input id="languages" type="button" class="btn button-verbatim-translation" value="Language">
@@ -366,17 +395,103 @@
                     </div>
                 </div>
                 <div class="pt-results-wrapper">
-                    <div class="pt-result-cost">
-                        <h2>Cost</h2>
-                        <p class="pt-result-middle">[Fill all segments]</p>
+                    <div>
+                        <div class="pt-result-cost-popup">
+                            <div>
+                                <div id="cost-pin" class="pt-popup-pin">
+                                    <div>
+                                    </div>
+                                </div>
+                                 <div class="pt-result-cost-popup-content">
+                                     <div>
+                                        <p>Cost for coding:</p>
+                                        <table id="summary-costs-table" class="pt-summary-table">
+                                            <tr class="pt-summary-table-header-row">
+                                                <td><p>cell</p></td>
+                                                <td><p>brand</p></td>
+                                                <td><p>short</p></td>
+                                                <td><p>like</p></td>
+                                                <td><p>story</p></td>
+                                                <td><p>long</p></td>
+                                                <td><p>total</p></td>
+                                            </tr>
+                                            <tr class="pt-summary-table-usual-row">
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                            </tr>
+                                            <tr class="pt-summary-table-summary-row">
+                                                <td><p>total</p></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                            </tr>
+                                            
+                                        </table>
+                                        <div class="pt-result-cost-translation-info">
+                                            <p>Cost for translation:</p>
+                                            <table id="summary-translation-costs-table" class="pt-summary-table">
+                                                <tr class="pt-summary-table-header-row">
+                                                    <td><p>cell</p></td>
+                                                    <td><p>brand</p></td>
+                                                    <td><p>short</p></td>
+                                                    <td><p>like</p></td>
+                                                    <td><p>story</p></td>
+                                                    <td><p>long</p></td>
+                                                    <td><p>total</p></td>
+                                                </tr>                           
+                                            </table>
+                                        </div>
+                                     </div>
+                                 </div>
+                            </div>
+                        </div>
+                        <div class="pt-result-cost">
+                            <h2>Cost</h2>
+                            <p class="pt-result-middle">[Fill all segments]</p>
+                        </div>
                     </div>
-                    <div class="pt-result-timing">
-                        <h2>Timing</h2>
-                        <p class="pt-result-middle">[Fill all segments]</p>
+                    <div>
+                        <div class="pt-result-timing-popup">
+                            <div>
+                                <div id="timing-pin" class="pt-popup-pin">
+                                    <div></div>
+                                </div>
+                                <div class="pt-result-timing-popup-content">
+                                    <div></div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="pt-result-timing">
+                            <h2>Timing</h2>
+                            <p class="pt-result-middle">[Fill all segments]</p>
+                        </div>
                     </div>
-                    <div class="pt-result-data-delivery">
-                        <h2>Data delivery</h2>
-                        <p class="pt-result-middle">[Fill all segments]</p>
+                    <div>
+                        
+                        <div class="pt-result-data-delivery-popup">
+                            <div>
+                                <div id="data-delivery-pin" class="pt-popup-pin">
+                                    <div>
+                                    </div>
+                                </div>
+                                <div class="pt-result-data-delivery-popup-content">
+                                    <div></div>
+                                </div>
+                            </div>
+                        </div>    
+                        <div class="pt-result-data-delivery">
+                            <h2>Data delivery</h2>
+                            <p class="pt-result-middle">[Fill all segments]</p>
+                        </div>
                     </div>
                 </div>
             </div>
