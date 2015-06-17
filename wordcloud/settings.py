@@ -208,3 +208,9 @@ CRISPY_TEMPLATE_PACK = 'bootstrap3'
 DISQUS_API_KEY = 'UMEIxG4BoKA5i2k29rjEjcAWepfR4YZItxSuNZtjI4ZOendtjOsCUcqeMz3nUL1c'
 DISQUS_WEBSITE_SHORTNAME = 'dixit'
 # SILKY_PYTHON_PROFILER = True
+
+
+try:
+    from local_settings import *
+except:
+    pass

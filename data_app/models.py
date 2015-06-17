@@ -138,7 +138,6 @@ class UploadFile(helpers.TimeMixin):
             in current file
     """
 
-    # TODO: Comment and split to smaller function
     # TODO: improve performace, bulk DB write
 
     sheet = models.FileField(storage=OverwriteStorage(),
@@ -340,8 +339,12 @@ class UploadFile(helpers.TimeMixin):
             related_titles = list()
 
             codes_parent_nets = list()
+            import ipdb; ipdb.set_trace()
             for ccode in cb.iterrows():
-                code = ccode[1]
+                if len(ccode) > 3:
+                    code = ccode[2] if ccode[2] is not None else ccode[1]
+                else:
+                    code = ccode[1]
                 parent_nets.append(code.NET)
                 codes_parent_nets.append(code.NET)
                 parent = {
