@@ -74,7 +74,13 @@ $(document).ready(function() {
     	} else {
     		$("#summary-translation-costs-table pt-summary-table-usual-row").remove();
 			$("#summary-translation-costs-table pt-summary-table-summary-row").remove();
-
+	    	var sumForEachCategory = {
+	    		"brand": 0,
+	    		"short": 0,
+	    		"story": 0,
+	    		"likes": 0,
+	    		"long" : 0
+	    	};
 			var toAdd = "";
 			
 			for(var i=1; i<=cell_amount; i++) {
@@ -87,10 +93,32 @@ $(document).ready(function() {
 		    				  "<td><p>"+(data.codebook_translation.for_each_cat[i]["likes"]+data.verbatim_translation.for_each_cat[i]["likes"]).toFixed(2)+" €</p></td>"+
 		    				  "<td><p>"+(data.codebook_translation.for_each_cat[i]["story"]+data.verbatim_translation.for_each_cat[i]["story"]).toFixed(2)+" €</p></td>"+
 		    				  "<td><p>"+(data.codebook_translation.for_each_cat[i]["long"]+data.verbatim_translation.for_each_cat[i]["long"]).toFixed(2)+" €</p></td>"+
-	    					  "<td><p>€</p></td>"+
+	    					  "<td><p>"+(data.codebook_translation.separate["Cell "+i]+data.verbatim_translation.separate["Cell "+i]).toFixed(2)+"€</p></td>"+
 	    				  "</tr>"
     			toAdd += str;
+
+				sumForEachCategory["brand"] += data.codebook_translation.for_each_cat[i]["brand"];
+	    		sumForEachCategory["short"] += data.codebook_translation.for_each_cat[i]["short"];
+	    		sumForEachCategory["likes"] += (data.codebook_translation.for_each_cat[i]["likes"]+data.verbatim_translation.for_each_cat[i]["likes"]);
+	    		sumForEachCategory["story"] += (data.codebook_translation.for_each_cat[i]["story"]+data.verbatim_translation.for_each_cat[i]["story"]);
+	    		sumForEachCategory["long"] += (data.codebook_translation.for_each_cat[i]["long"]+data.verbatim_translation.for_each_cat[i]["long"]);
 			}
+
+			var total =sumForEachCategory["brand"]+
+						sumForEachCategory["short"]+
+						sumForEachCategory["likes"]+
+						sumForEachCategory["story"]+
+						sumForEachCategory["long"];
+			toAdd += 
+				"<tr class='pt-summary-table-summary-row'>"+
+    				"<td><p>total</p></td>"+
+    				"<td><p>"+sumForEachCategory["brand"].toFixed(2)+" €</p></td>"+
+    				"<td><p>"+sumForEachCategory["short"].toFixed(2)+" €</p></td>"+
+    				"<td><p>"+sumForEachCategory["likes"].toFixed(2)+" €</p></td>"+
+    				"<td><p>"+sumForEachCategory["story"].toFixed(2)+" €</p></td>"+
+    				"<td><p>"+sumForEachCategory["long"].toFixed(2)+" €</p></td>"+
+    				"<td><p>"+(data.verbatim_translation.total+data.codebook_translation.total).toFixed(2)+" €</p></td>"+
+    			"</tr>"
 			$("#summary-translation-costs-table .pt-summary-table-header-row").after(toAdd);			
 
     		$(".pt-result-cost-translation-info").show();
@@ -249,7 +277,6 @@ $(document).ready(function() {
 					+"' class='pt-options-tab' style='left:"+percents_per_cell*(i-1)+"%;top:"+diff[Math.abs(mid-i)]+";'><a href='#'>"+i+"</a></li>");
 		}
 	}
-
 
     var retainFormData = function(index) {
 		$(".pt-verbatim-translation-languages input").prop("checked", false);
