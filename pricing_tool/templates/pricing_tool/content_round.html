@@ -22,14 +22,14 @@
                     <label for="cells-number" class="col-sm-7">Number of cels:</label>
                     <input type="number" name="cells-number" id="cells-number" class="col-sm-5 form-control" min="1" max="9" step="1" value="1">
                 </div>
-                <div class="row form-group">
+                <div id="identical-cells-field" class="row form-group">
                     <label for="identical-cells-yes" class="col-sm-7">Identical cells:</label>
                     <div>
                         <label for="identical-cells-yes">
-                            <input type="radio" name="identical-cells" id="identical-cells-yes" value="Yes" checked> Yes
+                            <input type="radio" name="identical-cells" id="identical-cells-yes" value="Yes" > Yes
                         </label>
                         <label for="identical-cells-no">
-                            <input type="radio" name="identical-cells" id="identical-cells-no" value="No"> No
+                            <input type="radio" name="identical-cells" id="identical-cells-no" value="No" checked> No
                         </label>
                     </div>
                 </div>
@@ -58,7 +58,7 @@
                 </div>
             </div>
         </aside>
-        <section class="col-md-9 cols-sm-12 pt-body">s
+        <section class="col-md-9 cols-sm-12 pt-body">
             <h6>Choose cell to fill the data:</h6>
             <div class="pt-wheel">
                 <div class="pt-outher-circle"></div>
@@ -226,35 +226,64 @@
                                 <div class="form-group row">
                                     <label for="brand-question" class="col-md-7">Brand question:</label>
                                     <div class="col-md-5">
-                                        <input type="number" max='20' min='0' id="brand-question" class="form-control col-md-6" name="brand-question" value="10">
+                                        <input type="number" max='20' min='0' id="brand-question" class="form-control col-md-6" name="brand-question" value="0">
                                     </div>
                                 </div>
                                 <div class="form-group row">
                                     <label for="one-word-question" class="col-md-7">One word question:</label>
                                     <div class="col-md-5">
-                                        <input type="number" max='20' min='0' id="one-word-question" class="form-control" name="one-word-question" min="0" value="8">
+                                        <input type="number" max='20' min='0' id="one-word-question" class="form-control" name="one-word-question" min="0" value="0">
                                     </div>
                                 </div>
                                 <div class="form-group row">
                                     <label for="feeling-likes-question" class="col-md-7">Feeling / likes question:</label>
                                     <div class="col-md-5">
-                                        <input type="number" max='20' min='0' id="feeling-likes-question" class="form-control" name="feeling-likes-question" value="10">
+                                        <input type="number" max='20' min='0' id="feeling-likes-question" class="form-control" name="feeling-likes-question" value="0">
                                     </div>
                                 </div>
                                 <div class="form-group row">
                                     <label for="story-question" class="col-md-7">Story question:</label>
                                     <div class="col-md-5">
-                                        <input type="number" max='20' min='0' id="story-question" class="form-control" name="story-question" value="10">
+                                        <input type="number" max='20' min='0' id="story-question" class="form-control" name="story-question" value="0">
                                     </div>
                                 </div>
                                 <div class="form-group row">
                                     <label for="long-questions" class="col-md-7">Long questions:</label>
                                     <div class="col-md-5">
-                                        <input type="number" max='20' min='0' id="long-questions" class="form-control" name="long-questions" value="1">
+                                        <input type="number" max='20' min='0' id="long-questions" class="form-control" name="long-questions" value="0">
                                     </div>
                                 </div>
                             </div>
-                            <div class="pt-row-top pt-codebook-translation-content"></div>
+                            <div class="pt-row-top pt-codebook-translation-content">
+                                <div class="checkbox form-group">
+                                    <input type="checkbox" name="pt-codebook-translation-language-choose" id="pt-language-german">
+                                    <label class="control-label" for="pt-codebook-translation-language-german">German</label>
+                                </div>
+                                <div class="checkbox form-group">
+                                    <input type="checkbox" name="pt-codebook-translation-language-choose" id="pt-codebook-translation-language-spanish">
+                                    <label class="control-label" for="pt-codebook-translation-language-spanish">Spanish</label>
+                                </div>
+                                <div class="checkbox form-group">
+                                    <input type="checkbox" name="pt-codebook-translation-language-choose" id="pt-codebook-translation-language-english" checked='true'>
+                                    <label class="control-label" for="pt-codebook-translation-language-english">English</label>
+                                </div>
+                                <div class="checkbox form-group">
+                                    <input type="checkbox" name="pt-codebook-translation-language-choose" id="pt-codebook-translation-language-french">
+                                    <label class="control-label" for="pt-codebook-translation-language-french">French</label>
+                                </div>
+                                <div class="checkbox form-group">
+                                    <input type="checkbox" name="pt-codebook-translation-language-choose" id="pt-codebook-translation-language-mandarin">
+                                    <label class="control-label" for="pt-codebook-translation-language-mandarin">Mandarin</label>
+                                </div>
+                                <div class="checkbox form-group">
+                                    <input type="checkbox" name="pt-codebook-translation-language-choose" id="pt-codebook-translation-language-italian">
+                                    <label class="control-label" for="pt-codebook-translation-language-italian">Italian</label>
+                                </div>
+                                <div class="checkbox form-group">
+                                    <input type="checkbox" name="pt-codebook-translation-language-choose" id="pt-language-portuguese">
+                                    <label class="control-label" for="pt-codebook-translation-language-portuguese">Portuguese</label>
+                                </div>
+                            </div>
                             <div class="pt-row-top pt-verbatim-translation-content">
                                 <div class="pt-top-buttons-wrapper">
                                     <input id="languages" type="button" class="btn button-verbatim-translation" value="Language">
@@ -366,17 +395,103 @@
                     </div>
                 </div>
                 <div class="pt-results-wrapper">
-                    <div class="pt-result-cost">
-                        <h2>Cost</h2>
-                        <p class="pt-result-middle">[Fill all segments]</p>
+                    <div>
+                        <div class="pt-result-cost-popup">
+                            <div>
+                                <div id="cost-pin" class="pt-popup-pin">
+                                    <div>
+                                    </div>
+                                </div>
+                                 <div class="pt-result-cost-popup-content">
+                                     <div>
+                                        <p>Cost for coding:</p>
+                                        <table id="summary-costs-table" class="pt-summary-table">
+                                            <tr class="pt-summary-table-header-row">
+                                                <td><p>cell</p></td>
+                                                <td><p>brand</p></td>
+                                                <td><p>short</p></td>
+                                                <td><p>like</p></td>
+                                                <td><p>story</p></td>
+                                                <td><p>long</p></td>
+                                                <td><p>total</p></td>
+                                            </tr>
+                                            <tr class="pt-summary-table-usual-row">
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                            </tr>
+                                            <tr class="pt-summary-table-summary-row">
+                                                <td><p>total</p></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                            </tr>
+                                            
+                                        </table>
+                                        <div class="pt-result-cost-translation-info">
+                                            <p>Cost for translation:</p>
+                                            <table id="summary-translation-costs-table" class="pt-summary-table">
+                                                <tr class="pt-summary-table-header-row">
+                                                    <td><p>cell</p></td>
+                                                    <td><p>brand</p></td>
+                                                    <td><p>short</p></td>
+                                                    <td><p>like</p></td>
+                                                    <td><p>story</p></td>
+                                                    <td><p>long</p></td>
+                                                    <td><p>total</p></td>
+                                                </tr>                           
+                                            </table>
+                                        </div>
+                                     </div>
+                                 </div>
+                            </div>
+                        </div>
+                        <div class="pt-result-cost">
+                            <h2>Cost</h2>
+                            <p class="pt-result-middle">[Fill all segments]</p>
+                        </div>
                     </div>
-                    <div class="pt-result-timing">
-                        <h2>Timing</h2>
-                        <p class="pt-result-middle">[Fill all segments]</p>
+                    <div>
+                        <div class="pt-result-timing-popup">
+                            <div>
+                                <div id="timing-pin" class="pt-popup-pin">
+                                    <div></div>
+                                </div>
+                                <div class="pt-result-timing-popup-content">
+                                    <div></div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="pt-result-timing">
+                            <h2>Timing</h2>
+                            <p class="pt-result-middle">[Fill all segments]</p>
+                        </div>
                     </div>
-                    <div class="pt-result-data-delivery">
-                        <h2>Data delivery</h2>
-                        <p class="pt-result-middle">[Fill all segments]</p>
+                    <div>
+                        
+                        <div class="pt-result-data-delivery-popup">
+                            <div>
+                                <div id="data-delivery-pin" class="pt-popup-pin">
+                                    <div>
+                                    </div>
+                                </div>
+                                <div class="pt-result-data-delivery-popup-content">
+                                    <div></div>
+                                </div>
+                            </div>
+                        </div>    
+                        <div class="pt-result-data-delivery">
+                            <h2>Data delivery</h2>
+                            <p class="pt-result-middle">[Fill all segments]</p>
+                        </div>
                     </div>
                 </div>
             </div>

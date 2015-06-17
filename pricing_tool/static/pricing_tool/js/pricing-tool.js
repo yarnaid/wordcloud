@@ -1,8 +1,15 @@
 $(document).ready(function() {
 	var formData = {}
     var lastOpened = '';
-
+    var isIdentical = false;
     var lastOpenedSelector = '';
+	var diff = {
+		4: "65px",
+		3: "35px",
+		2: "18px",
+		1: "5px",
+		0: "0px",
+	};
 
     var previousSelectedButton = null;
 
@@ -19,6 +26,77 @@ $(document).ready(function() {
     	formData[cellIndex] = data;
     }; 
    	
+    var fillTablesWithData = function(data, cell_amount) {
+    	$(".pt-summary-table-usual-row").remove();
+    	$(".pt-summary-table-summary-row").remove();
+    	var sumForEachCategory = {
+    		"brand": 0,
+    		"short": 0,
+    		"story": 0,
+    		"likes": 0,
+    		"long" : 0
+    	};
+    	var toAdd = "";
+    	for(var i=1; i<=cell_amount; i++){
+    		var cellName = "Cell "+i;
+    		var str = "<tr class='pt-summary-table-usual-row'>"+
+    					  "<td><p>"+cellName+"</p></td>"+
+	    				  "<td><p>"+data.for_each_cat[i]["brand"]+" €</p></td>"+
+	    				  "<td><p>"+data.for_each_cat[i]["short"]+" €</p></td>"+
+	    				  "<td><p>"+data.for_each_cat[i]["likes"]+" €</p></td>"+
+	    				  "<td><p>"+data.for_each_cat[i]["story"]+" €</p></td>"+
+	    				  "<td><p>"+data.for_each_cat[i]["long"]+" €</p></td>"+
+    					  "<td><p>"+data.separate[cellName]+" €</p></td>"+
+    				  "</tr>"
+    		toAdd += str;
+
+    		sumForEachCategory["brand"] += data.for_each_cat[i]["brand"];
+    		sumForEachCategory["short"] += data.for_each_cat[i]["short"];
+    		sumForEachCategory["likes"] += data.for_each_cat[i]["likes"];
+    		sumForEachCategory["story"] += data.for_each_cat[i]["story"];
+    		sumForEachCategory["long"] += data.for_each_cat[i]["long"];
+
+    	}
+    	toAdd += "<tr class='pt-summary-table-summary-row'>"+
+    				"<td><p>total</p></td>"+
+    				"<td><p>"+sumForEachCategory["brand"]+" €</p></td>"+
+    				"<td><p>"+sumForEachCategory["short"]+" €</p></td>"+
+    				"<td><p>"+sumForEachCategory["likes"]+" €</p></td>"+
+    				"<td><p>"+sumForEachCategory["story"]+" €</p></td>"+
+    				"<td><p>"+sumForEachCategory["long"]+" €</p></td>"+
+    				"<td><p>"+data.total+" €</p></td>"+
+    			"</tr>"
+
+    	$("#summary-costs-table .pt-summary-table-header-row").after(toAdd);
+
+    	if(data.translation_cost == 0) {
+    		$(".pt-result-cost-translation-info").hide();
+    	} else {
+    		$("#summary-translation-costs-table pt-summary-table-usual-row").remove();
+			$("#summary-translation-costs-table pt-summary-table-summary-row").remove();
+
+			var toAdd = "";
+			
+			for(var i=1; i<=cell_amount; i++) {
+				var cellName = "Cell "+i;
+    			var str = 
+	    				  "<tr class='pt-summary-table-usual-row'>"+
+	    					  "<td><p>"+cellName+"</p></td>"+
+		    				  "<td><p>"+(data.codebook_translation.for_each_cat[i]["brand"]).toFixed(2)+" €</p></td>"+
+		    				  "<td><p>"+data.codebook_translation.for_each_cat[i]["short"].toFixed(2)+" €</p></td>"+
+		    				  "<td><p>"+(data.codebook_translation.for_each_cat[i]["likes"]+data.verbatim_translation.for_each_cat[i]["likes"]).toFixed(2)+" €</p></td>"+
+		    				  "<td><p>"+(data.codebook_translation.for_each_cat[i]["story"]+data.verbatim_translation.for_each_cat[i]["story"]).toFixed(2)+" €</p></td>"+
+		    				  "<td><p>"+(data.codebook_translation.for_each_cat[i]["long"]+data.verbatim_translation.for_each_cat[i]["long"]).toFixed(2)+" €</p></td>"+
+	    					  "<td><p>€</p></td>"+
+	    				  "</tr>"
+    			toAdd += str;
+			}
+			$("#summary-translation-costs-table .pt-summary-table-header-row").after(toAdd);			
+
+    		$(".pt-result-cost-translation-info").show();
+    	}
+    };
+
     var saveDataFromCurrentForm = function() {
 
 		var codebookFormHandler = function() {
@@ -50,8 +128,8 @@ $(document).ready(function() {
 			}
 		};
 
-		var verbatim_translation_arr = function(source_lang) {
-			var arr = $(".pt-verbatim-translation-languages input");
+		var translation_arr = function(prefix, source_lang) {
+			var arr = $(prefix+" input");
 			var result = [];
 			for (var i = 0; i < arr.length; i++) {
 				var lang = $('label[for="'+ arr[i].id+'"]').text();
@@ -61,6 +139,12 @@ $(document).ready(function() {
 
 			return result;
 		} 
+
+		var am_pm = $("input[name='date-availability-choose']:checked")[0].id;
+		if(am_pm == 'date-availability-am')
+			am_pm = "AM";
+		else 
+			am_pm = "PM";
 
 		var cell_num = $('#cells-number')[0].valueAsNumber;
 		var sample_sz = $("#sample-size")[0].valueAsNumber;
@@ -73,8 +157,8 @@ $(document).ready(function() {
 		var prev_codebook = codebookFormHandler();
 		var source_lang = getSourceLang();
 		var date_avl = undefined;
-		var verb_trans_langs = verbatim_translation_arr(source_lang);
-
+		var verb_trans_langs = translation_arr(".pt-verbatim-translation-languages", source_lang);
+		var cb_trans_langs = translation_arr(".pt-codebook-translation-content", source_lang);
 		var long_q_trans = $("#verbatim-translation-long-questions")[0].valueAsNumber;
 		var story_q_trans = $("#verbatim-translation-story-questions")[0].valueAsNumber;
 		var likes_q_trans = $("#verbatim-translation-feeling-likes-questions")[0].valueAsNumber;
@@ -89,10 +173,14 @@ $(document).ready(function() {
 			previous_codebook: prev_codebook,
 			date_availability: date_avl,
 			verbatim_translation_languages: verb_trans_langs, 
-			likes_question_translation: likes_q_trans,
-			story_question_translation: story_q_trans,
-			long_question_translation: long_q_trans,
+			codebook_translation_languages: cb_trans_langs,
+			verbatims_translation: {
+				likes_question_translation: likes_q_trans,
+				story_question_translation: story_q_trans,
+				long_question_translation: long_q_trans,
+			},
 			verbatim_translation_languages: verb_trans_langs,
+			am_or_pm: am_pm,
 			questions: {
 				brand_questions: brand_q,
 				short_questions: short_q,
@@ -104,45 +192,83 @@ $(document).ready(function() {
 		return formArray;
     };
 
+    var renderIdenticalCellTabs = function(){
+		var diff = {
+			4: "55px",
+			3: "25px",
+			2: "8px",
+			1: "-5px",
+			0: "-10px",
+		}
+
+		$('.pt-options-list li').remove();
+		var number_of_cells = $('#cells-number')[0].valueAsNumber;
+		var width = number_of_cells * 47;
+		var percents_per_cell = 100.0/number_of_cells;
+
+		var mid = Math.floor(number_of_cells/2)+1;
+		
+		if(number_of_cells == 1)
+			$("#identical-cells-field").hide();
+		else 
+			$("#identical-cells-field").show();
+
+		if(number_of_cells%2==0)
+			mid = mid-1;
+
+		$('.pt-options-wrapper').css("width", width+"px");
+		$('.pt-options-list').css("width", width+"px");
+		for(var i=1; i<=number_of_cells; i++)
+			$('.pt-options-list').append(
+				"<li id='cell_"+i
+				+"' class='pt-options-tab pt-options-identical-tabs' style='left:"+percents_per_cell*(i-1)+"%;top:"+diff[Math.abs(mid-i)]+";'><a href='#'>"+i+"</a></li>");
+	};
+
     var renderCellTabs = function(){
-    		var diff = {
-    			4: "65px",
-    			3: "35px",
-    			2: "18px",
-    			1: "5px",
-    			0: "0px",
-    		}
+    	if(!isIdentical) {
+			$('.pt-options-list li').remove();
+			var number_of_cells = $('#cells-number')[0].valueAsNumber;
+			var width = number_of_cells * 47;
+			var percents_per_cell = 100.0/number_of_cells;
 
-    		$('.pt-options-list li').remove();
-    		var number_of_cells = $('#cells-number')[0].valueAsNumber;
-    		var width = number_of_cells * 47;
-    		var percents_per_cell = 100.0/number_of_cells;
+			var mid = Math.floor(number_of_cells/2)+1;
+			
+			if(number_of_cells == 1)
+				$("#identical-cells-field").hide();
+			else 
+				$("#identical-cells-field").show();
 
- 			var mid = Math.floor(number_of_cells/2)+1;
- 			if(number_of_cells%2==0)
- 				mid = mid-1;
+			if(number_of_cells%2==0)
+				mid = mid-1;
 
-    		$('.pt-options-wrapper').css("width", width+"px");
-    		$('.pt-options-list').css("width", width+"px");
-    		for(var i=1; i<=number_of_cells; i++)
-    			$('.pt-options-list').append(
-    				"<li id='cell_"+i
-    				+"' class='pt-options-tab' style='left:"+percents_per_cell*(i-1)+"%;top:"+diff[Math.abs(mid-i)]+";'><a href='#'>"+i+"</a></li>");
-    	}
+			$('.pt-options-wrapper').css("width", width+"px");
+			$('.pt-options-list').css("width", width+"px");
+			for(var i=1; i<=number_of_cells; i++)
+				$('.pt-options-list').append(
+					"<li id='cell_"+i
+					+"' class='pt-options-tab' style='left:"+percents_per_cell*(i-1)+"%;top:"+diff[Math.abs(mid-i)]+";'><a href='#'>"+i+"</a></li>");
+		}
+	}
 
 
     var retainFormData = function(index) {
 		$(".pt-verbatim-translation-languages input").prop("checked", false);
 		$(".pt-verbatim-translation-languages input").attr("disabled", false);    	
+		
+		$(".pt-codebook-translation-content input").prop("checked", false);
+		$(".pt-codebook-translation-content input").attr("disabled", false);    	
 
     	var data = formData[index];
     	var prev_source_lang = "#pt-language-"+getSourceLang().toLowerCase();
     	$(prev_source_lang).prop("checked", false);
     	var source_lang = "#pt-language-"+data.source_language.toLowerCase();
-		var disabled_lang = "#pt-verbatim-translation-language-"+data.source_language.toLowerCase();
-		//alert(source_lang);
+		var disabled_lang_1 = "#pt-verbatim-translation-language-"+data.source_language.toLowerCase();
+		var disabled_lang_2 = "#pt-codebook-translation-language-"+data.source_language.toLowerCase();
+		
 		$(source_lang).prop("checked", true);
-		$(disabled_lang).attr("disabled", true);
+		
+		$(disabled_lang_1).attr("disabled", true);
+		$(disabled_lang_2).attr("disabled", true);
 		
     	$("#sample-size").val(data.sample_size);
 		$("#brand-question").val(data.questions.brand_questions);
@@ -152,16 +278,26 @@ $(document).ready(function() {
 		$("#long-questions").val(data.questions.long_questions);
 		if(data.date_availability != undefined) {
 			$('#datepicker').datepicker("setDate", data.date_availability);
+
+			var checkboxId = "#date-availability-"+data.am_or_pm.toLowerCase();
+			$(checkboxId).prop("checked", true);
 		}
 
-		$("#verbatim-translation-long-questions").val(data.long_question_translation);
-		$("#verbatim-translation-story-questions").val(data.story_question_translation);
-		$("#verbatim-translation-feeling-likes-questions").val(data.likes_question_translation);
+
+		$("#verbatim-translation-long-questions").val(data.verbatims_translation.long_question_translation);
+		$("#verbatim-translation-story-questions").val(data.verbatims_translation.story_question_translation);
+		$("#verbatim-translation-feeling-likes-questions").val(data.verbatims_translation.likes_question_translation);
 
 		for(var i = 0; i<data.verbatim_translation_languages.length; i++) {
 			$("#pt-verbatim-translation-language-"
 				+data.verbatim_translation_languages[i].toLowerCase()).prop("checked", true);
 		}
+
+		for(var i = 0; i<data.codebook_translation_languages.length; i++) {
+			$("#pt-codebook-translation-language-"
+				+data.codebook_translation_languages[i].toLowerCase()).prop("checked", true);
+		}
+
 
 		if(data.previous_codebook.uses) {
 			$("#codebook-create-new").prop("checked", false);
@@ -187,13 +323,19 @@ $(document).ready(function() {
 		}
     };
 
-    $('#cells-number').change(renderCellTabs);
+    $('#cells-number').change(function() {
+    	if(!isIdentical)
+    		renderCellTabs();
+    	else 
+    		renderIdenticalCellTabs();
+    });
 
     $('.pt-options-wrapper').on("mouseover",'.pt-options-tab',
     	function() {
     		var prev_top = $(this).css("top");
 			
 			if(this.className.indexOf('pt-options-tab-active')==-1) {
+	    		//$(this).animate({top: parseInt(prev_top)-10+"px"});
 	    		$(this).css("top", parseInt(prev_top)-10+"px");
 	    		$('.pt-outher-circle').toggleClass('pt-outher-circle-hover');
     		}
@@ -204,6 +346,7 @@ $(document).ready(function() {
     	function() {
     		var prev_top = $(this).css("top");
     		if(this.className.indexOf('pt-options-tab-active')==-1) {
+	    		//$(this).animate({top: parseInt(prev_top)+10+"px"});
 	    		$(this).css("top", parseInt(prev_top)+10+"px");
 	    		$('.pt-outher-circle').toggleClass('pt-outher-circle-hover');
 	    	}
@@ -213,34 +356,35 @@ $(document).ready(function() {
     $('.pt-options-wrapper').on("click",'.pt-options-tab',
         function() {
 
-        	var data = saveDataFromCurrentForm();
-        	var new_number = parseInt(this.id.substring(this.id.indexOf('_')+1));
+			if($('.pt-options-tab-active')[0] != undefined ) {
+	 	       	var cell_number = parseInt($('.pt-options-tab-active')[0].id.substring(this.id.indexOf('_')+1));
 
-			if($('.pt-options-tab-active')[0] != undefined) {
-	            var cell_number = parseInt($('.pt-options-tab-active')[0].id.substring(this.id.indexOf('_')+1));
+	 	       	if(cell_number==NaN) return;
+        		var data = saveDataFromCurrentForm();
 	        	saveToBuffer(cell_number, data);
-	        } else {
-            	saveToBuffer(new_number, data);
-	        }
 
-            var prev_top = $('.pt-options-tab-active').css("top");
-            
-            if(cell_number != new_number) {
-	        	$('.pt-options-tab-active').css("top", parseInt(prev_top)+20+"px");;
-	            $('.pt-options-tab-active').removeClass('pt-options-tab-active');
+	        	var new_number = parseInt(this.id.substring(this.id.indexOf('_')+1));
+	            var prev_top = $('.pt-options-tab-active').css("top");
 	            
-	            prev_top = $(this).css("top");
-	    		$(this).css("top", parseInt(prev_top)-10+"px");
-	            $(this).addClass('pt-options-tab-active');
-	            $('.pt-inner-circle').addClass('pt-inner-circle-show');
-	           	$('.pt-outher-circle').toggleClass('pt-outher-circle-hover');
-	            $('.pt-outher-circle').addClass('pt-outher-circle-active');
-				$('#datepicker tr td').removeClass('ui-datepicker-current-day');
+	            if(cell_number == new_number) {
+	            	return;
+	            } else {
+		        	$('.pt-options-tab-active').css("top", parseInt(prev_top)+20+"px");;
+		            $('.pt-options-tab-active').removeClass('pt-options-tab-active');
+		        }
+		    } 
+            prev_top = $(this).css("top");
+    		$(this).css("top", parseInt(prev_top)-10+"px");
+            $(this).addClass('pt-options-tab-active');
+            $('.pt-inner-circle').addClass('pt-inner-circle-show');
+           	$('.pt-outher-circle').toggleClass('pt-outher-circle-hover');
+            $('.pt-outher-circle').addClass('pt-outher-circle-active');
+			$('#datepicker tr td').removeClass('ui-datepicker-current-day');
 
-	            $('.pt-verbatim-translation-languages input').prop("checked", false);
-	            if(formData[new_number] != undefined)
-	            	retainFormData(new_number, data);
-	        }
+            $('.pt-verbatim-translation-languages input').prop("checked", false);
+            if(formData[new_number] != undefined) {
+            	retainFormData(new_number, data);
+            }
         }
     );
 
@@ -251,7 +395,7 @@ $(document).ready(function() {
             // hide all other containers
             $(lastOpened).hide();
             // remove all other active classes
-            // alert(this);
+
             $(lastOpenedSelector).removeClass(lastOpenedSelector.substring(1) + '-active');
             // set the active class
             $(this).toggleClass(this.className + '-active');
@@ -306,31 +450,61 @@ $(document).ready(function() {
 		}    
     )
 
+    $("input[name='identical-cells']").change(
+    	function() {
+    		var checkedId = this.id;
+    		isIdentical = (checkedId == "identical-cells-yes") ? true: false;
+    		if(isIdentical) {
+    			var data = saveDataFromCurrentForm();
+    		
+    			renderIdenticalCellTabs();
+
+    			for(var i = 1; i<=$("#cells-number")[0].valueAsNumber; i++)
+    				saveToBuffer(i, data);
+    		}
+    		else renderCellTabs();
+    	}
+    );
+
     $("#perform-calculations").click(
     	function() {
-    		//var formArray = saveDataFromCurrentForm();
     		var data = saveDataFromCurrentForm();
-    		var cell_number = parseInt($('.pt-options-tab-active')[0].id.substring(this.id.indexOf('_')+1));
-	        saveToBuffer(cell_number, data);
-    		var cell_amount = $("#cells-number")[0].valueAsNumber;
-
-    		$(".pt-result-cost p").text("€"+calculator.formatCurrency(calculator.countCodingCost(formData, cell_amount).total));
-    		$(".pt-result-timing p").text(calculator.timeCalculation(formData, cell_amount).total);
+    		var arr = $('.pt-options-tab-active');
     		
+    		if(arr.length!=0) {
+    			var activeCellString = arr[0].id;
+    			var cell_number = parseInt(activeCellString.substring(activeCellString.indexOf("_")+1));
+
+	        	saveToBuffer(cell_number, data);
+	        }
+
+    		var cell_amount = $("#cells-number")[0].valueAsNumber;
+    		var timestamp = calculator.timeCalculation(formData, cell_amount).total;
+    		var outputData = calculator.countCodingCost(formData, cell_amount)
+    		$(".pt-result-cost p").text("€"+calculator.formatCurrency(outputData.total+outputData.translation_cost));
+    		//$(".pt-result-timing p").text(calculator.formatTime(timestamp));
+    		$(".pt-result-timing p").text(timestamp);
+    		
+    		//if()
+    		$(".pt-result-data-delivery p").text(calculator.getDataDeliveryDate(formData, cell_amount,timestamp))
+    		fillTablesWithData(outputData, cell_amount);
+
     		$(lastOpened).fadeOut();
     		$(".buttons-wrapper").fadeOut();
     		$(".pt-results-wrapper").fadeIn();
     	}
     )
 
-   $("input[name='pt-language-choose']").change(
+    $("input[name='pt-language-choose']").change(
     	function() {
     		$(".pt-verbatim-translation-languages input[type='checkbox']").removeAttr("disabled");
+    		$(".pt-codebook-translation-content input[type='checkbox']").removeAttr("disabled");
     		var source_lang = getSourceLang();
 
     		var checkboxId = source_lang.toLowerCase();
 
-    		$('#pt-verbatim-translation-language-'+checkboxId).attr("disabled", true)
+    		$('#pt-codebook-translation-language-'+checkboxId).attr("disabled", true)
+			$('#pt-verbatim-translation-language-'+checkboxId).attr("disabled", true)
     	}
     )
 
@@ -355,9 +529,22 @@ $(document).ready(function() {
         selectOtherMonths: true,
     });
 
+    $(".pt-result-cost, .pt-result-timing, .pt-result-data-delivery").hover(
+    	function() {
+    		$('.'+this.className+'-popup').fadeIn(200);
+    		var height = $('.pt-result-cost-popup-content').css("height");
+    		$('.pt-result-cost-popup-content').css("top", -(parseInt(height)/2-35))
+    	},
+    	function() {
+    		$('.'+this.className+'-popup').fadeOut(200);
+    	}
+    );
 
     // this sections sets defaults values (renders initial amount of cells, checks checkboxes etc)
     $('#pt-language-english').prop('checked', true);
+	$('#pt-codebook-translation-language-english').prop('disabled', true);
+	$('#pt-verbatim-translation-language-english').prop('disabled', true);
+
     renderCellTabs();
 
     $('#codebook-create-new').prop('checked', true);

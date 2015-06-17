@@ -3,9 +3,9 @@
     <div class="container">
         <div class="row">
             <div class="col-md-12">
-                {# <div class="mainpage-image"><img src="{% static "img/main.png" %}"></div> #}
                 {% include "wordcloud/image.html" %}
             </div>
+            {% comment %}
             <div class="col-md-5 col-sm-12">
                 <h2>Lorem ipsum dolor sit amet</h2>
                 <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ut dolorem temporibus ducimus nulla doloremque, necessitatibus nesciunt eligendi at laboriosam ratione cupiditate itaque quisquam, veniam atque unde? Vero repudiandae veritatis porro. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ut dolorem temporibus ducimus nulla doloremque, necessitatibus nesciunt eligendi at laboriosam ratione cupiditate itaque quisquam, veniam atque unde? Vero repudiandae veritatis porro.Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ut dolorem temporibus ducimus nulla doloremque, necessitatibus nesciunt eligendi at laboriosam ratione cupiditate itaque quisquam, veniam atque unde?</p>
@@ -14,9 +14,16 @@
                 <h2>Fugiat, quam nobis</h2>
                 <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ut dolorem temporibus ducimus nulla doloremque, necessitatibus nesciunt eligendi at laboriosam ratione cupiditate itaque quisquam, veniam atque unde? Vero repudiandae veritatis porro. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ut dolorem temporibus ducimus nulla doloremque, necessitatibus nesciunt eligendi at laboriosam ratione cupiditate itaque quisquam, veniam atque unde? Vero repudiandae veritatis porro.Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ut dolorem temporibus ducimus nulla doloremque, necessitatibus nesciunt eligendi at laboriosam ratione cupiditate itaque quisquam, veniam atque unde? Vero repudiandae veritatis porro. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ut dolorem temporibus ducimus nulla doloremque, necessitatibus nesciunt eligendi at laboriosam ratione cupiditate itaque quisquam, veniam atque unde? Vero repudiandae veritatis porro..</p>
             </div>
+            {% endcomment %}
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+            <img src="{% static 'img/under-construction.jpg' %}" />
+            </div>
         </div>
     </div>
 </section>
+{% comment %}
 <section class="benefits-block section-center section-hilite">
     <div class="container">
         <div class="row">
@@ -71,3 +78,4 @@
         </div>
     </div>
 </section>
+{% endcomment %}
