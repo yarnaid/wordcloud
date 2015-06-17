@@ -636,7 +636,8 @@ input[disabled] {
 
 .pt-result-data-delivery-popup,
 .pt-result-timing-popup,
-.pt-result-cost-popup {
+.pt-result-cost-popup,
+.pt-pricing-level-popup {
     position: absolute;
     left: 200px;
     z-index: 100;
@@ -644,11 +645,13 @@ input[disabled] {
 }
 
 .pt-result-data-delivery-popup > div,
+.pt-result-data-delivery-popup > div,
 .pt-result-timing-popup > div,
 .pt-result-cost-popup > div{
     position: relative;
 }
 
+.pt-pricing-level-popup-content>div,
 .pt-result-data-delivery-popup-content > div ,
 .pt-result-timing-popup-content> div ,
 .pt-result-cost-popup-content > div{
@@ -657,7 +660,7 @@ input[disabled] {
     padding: 20px;    
 }
 
-
+.pt-pricing-level-popup-content,
 .pt-result-data-delivery-popup-content,
 .pt-result-timing-popup-content,
 .pt-result-cost-popup-content {
@@ -672,7 +675,8 @@ input[disabled] {
 
 #cost-pin,
 #timing-pin,
-#data-delivery-pin {
+#data-delivery-pin,
+#level-pricings-pin {
 
     position: absolute;
     background-color: white;
@@ -682,6 +686,42 @@ input[disabled] {
     -ms-transform: rotate(45deg); /* IE 9 */
     -webkit-transform: rotate(45deg); /* Safari */
     transform: rotate(45deg);
+}
+
+.pt-pricing-level-popup {
+    left: 0;
+    display: none;
+    top: 70px;
+}
+
+.pt-pricing-level-popup-content {
+    width: 300px;
+}
+
+.pricing-level-row {
+    height: 20px;
+}
+
+.pricing-level-row>div {
+    padding: 0;
+    font-size: 12px;
+}
+
+.pt-pricings-info-pin {
+    width: 10px;
+    height: 10px;
+    background-color:black; 
+}
+
+#level-pricings-pin {
+    border-bottom: none;
+    border-top: 5px solid white; 
+    top: -5px;
+}
+
+#level-pricings-pin >div {
+    border-top: 2px solid #a9cbe6;
+    border-bottom: none;
 }
 
 .pt-popup-pin > div {

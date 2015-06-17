@@ -439,10 +439,14 @@ $(document).ready(function() {
         function() {
             $(this)
                 .css('border', '2px solid #00F');
+            $(".pt-pricing-level-popup").fadeIn(200);
+            var width = $(".pt-pricing-level-popup-content").css("width");
+            $("#level-pricings-pin").css("left", parseInt(width)/2+"px");
         },
         function() {
             $(this)
                 .css('border', '2px solid #AAA');
+            $(".pt-pricing-level-popup").fadeOut(200);
         }
     );
 
