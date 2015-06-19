@@ -5,7 +5,21 @@
         <p><a href="{% url 'pricing_tool' %}">Old version</a></p>
     </div>
 </div>
+<!--<div id="dialog" title="super dialog">dialog</div>-->
 <section class="container pt-wrapper">
+    <div id="save-order-dialog" title="Basic dialog">
+        <div>
+          <label for="order-clients-name">Your name:</label>
+          <input id="order-clients-name" type="text" rows="1" ></input>
+          <label for="order-project-name">Project description</label>
+          <input id="order-project-name" type="text" rows="1" ></input>
+          <label for="order-project-number">Project number</label>
+          <input id="order-project-number" type="text" rows="1" ></input>
+          <label for="order-comments">Your comments</label>
+          <input id="order-comments" type="textarea" rows="5" ></input>
+        </div>
+    </div>
+
     <div class="row">
         <aside class="col-md-3 col-sm-12 pt-left-menu">
             <form action="#" method="post" class="pt-aside-form form-inline">
@@ -560,6 +574,11 @@
                         </div>
                     </div>
                 </div>
+            </div>
+            <div class="pt-save-confirm-contact col-md-offset-10">
+                <div id="save-button" class="btn button-controls">Save</div>
+                <div class="btn button-controls">Confirm</div>
+                <div class="btn button-controls">Contact</div>
             </div>
         </section>
     </div>

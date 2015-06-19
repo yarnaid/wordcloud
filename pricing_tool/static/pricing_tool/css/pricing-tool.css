@@ -17,6 +17,20 @@ bootstrap overrides
 /*
 END bootstrap overrides
  */
+
+.ui-widget-overlay { 
+    position: absolute; 
+    top: 0; 
+    left: 0; 
+    width: 100%; 
+    height: 100%; 
+}
+.ui-widget-overlay { 
+    background-color: black;
+     opacity: .50;
+     filter:Alpha(Opacity=50); 
+     position: fixed;
+}
 /* datepicker override */
 
 #ui-datepicker-div {
@@ -141,6 +155,11 @@ input[disabled] {
 
 .pt-level-4 .progress-value {
     left: 185px;
+}
+
+.pt-body {
+    position: relative;
+    height: 500px;
 }
 
 .line {
@@ -773,7 +792,7 @@ input[disabled] {
     font-size: 12px;
 }
 
-.pt-summary-table tr td:last-child p{
+.pt-summary-table tr td:last-child p {
     font-weight: bold;
 }
 
@@ -789,6 +808,15 @@ input[disabled] {
     background-color: #d6d6d6;
 }
 
+.pt-save-confirm-contact {
+    width:140px;
+    margin-top: 400px;
+}
+
+.pt-save-confirm-contact > div {
+    margin-top: 10px; 
+}
+
 #timing-table td:last-child p {
     width: 100px;
 }
@@ -800,10 +828,23 @@ input[disabled] {
 #data-delivery-table td:first-child p {
     width: 50px;
 }
+
+.order-dialog {
+    background-color: white;
+    box-shadow: 0px 0px 10px black;
+    padding: 20px;
+    z-index: 2000;
+    border-radius: 10px;
+    position: fixed;
+}
+
+.order-dialog .ui-dialog-titlebar {display: none;}
+
+
 /*
 buttons
  */
-
+.button-controls,
 .button-accept,
 .button-cancel,
 .button-verbatim-translation {
@@ -822,6 +863,7 @@ buttons
     text-transform: none;
 }
 
+.button-controls:hover,
 .button-accept:hover,
 .button-accept:focus,
 .button-verbatim-translation:hover,

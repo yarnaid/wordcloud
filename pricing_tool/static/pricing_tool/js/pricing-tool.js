@@ -590,7 +590,11 @@ $(document).ready(function() {
 			}
 		}    
     )
-
+    $('#save-button').click(
+    	function() {
+	    	$( "#save-order-dialog" ).dialog('open');
+    	}
+    )
 
     $("#datepicker").datepicker({
         firstDay: 1,
@@ -620,5 +624,24 @@ $(document).ready(function() {
     $('#codebook-create-new').prop('checked', true);
     $('#codebook-from-previous-job').prop('checked', true);
     $('.ui-datepicker-today').removeClass('ui-datepicker-current-day');
+
+    $( "#save-order-dialog" ).dialog({
+    	modal: true,
+    	draggable: false,
+    	dialogClass: "order-dialog",
+    	autoOpen: false,
+    	buttons : [
+    		{
+    			text: "Ok",
+    			id: "confirm-order-button",
+			      icons: {
+			        primary: "ui-icon-heart"
+			      },
+			      click: function() {
+			        $( this ).dialog( "close" );
+			      }
+    		}
+    	]
+    });
 });
 
