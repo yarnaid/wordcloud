@@ -118,7 +118,7 @@ LANGUAGES = (
     ('en', _('English')),
     ('fr', _('French')),
     ('de', _('German')),
-    ('es', _('Spanish')),
+    ('sp', _('Spanish')),
 #    ('it', _('Italian')),
 #    ('pt', _('Portuguese')),
 #    ('zh-cn', ('Simplified Chinese')),
