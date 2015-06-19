@@ -3,30 +3,14 @@ from __future__ import unicode_literals
 import sys
 reload(sys)
 sys.setdefaultencoding('utf-8')
-"""
-Django settings for wordcloud project.
-
-For more information on this file, see
-https://docs.djangoproject.com/en/1.8/topics/settings/
-
-For the full list of settings and their values, see
-https://docs.djangoproject.com/en/1.8/ref/settings/
-"""
-
-# Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 from django.utils.translation import ugettext_lazy as _
 import os
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/1.8/howto/deployment/checklist/
-
-# SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 't@dpxuj8i5&uh+&v#(z7+&x@$g#-^7%tk-$@ker9rc8_t#z#ph'
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 DEBUG_PANEL = False
 COMPRESS_ENABLED = not DEBUG
 
@@ -121,9 +105,6 @@ ROOT_URLCONF = 'wordcloud.urls'
 WSGI_APPLICATION = 'wordcloud.wsgi.application'
 
 
-# Database
-# https://docs.djangoproject.com/en/1.8/ref/settings/#databases
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -131,16 +112,17 @@ DATABASES = {
     }
 }
 
-# Internationalization
-# https://docs.djangoproject.com/en/1.8/topics/i18n/
-
 LANGUAGE_CODE = 'en-us'
 
 LANGUAGES = (
     ('en', _('English')),
     ('fr', _('French')),
-    # ('de', _('German')),
-    ('sp', _('Spanish')),
+    ('de', _('German')),
+    ('es', _('Spanish')),
+    ('it', _('Italian')),
+    ('pt', _('Portuguese')),
+    ('zh-cn', ('Simplified Chinese')),
+    ('zh-tw', ('Traditional Chinese')),
     # ('ru', _('Russian')),
 )
 
