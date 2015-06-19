@@ -120,7 +120,7 @@ input[disabled] {
 .progress-value {
     height: 27px;
     line-height: 27px;
-    font-ize: 14px;
+    font-size: 14px;
     color: #ffffff;
     position: absolute;
     right: 0;
@@ -144,7 +144,7 @@ input[disabled] {
 }
 
 .line {
-    border: 2px solid black;
+    border: 1px solid #b3b3b3;
     margin: 20px 0;
 }
 
@@ -688,9 +688,20 @@ input[disabled] {
     transform: rotate(45deg);
 }
 
+.violet {
+    background-color: #6e0cad;
+}
+
+.next-level {
+    background-color: #b3b3b3;
+    color: white;
+    font-size: 10px;
+    text-align: center;
+}
+
 .pt-pricing-level-popup {
     left: 0;
-    display: none;
+    /*display: none;*/
     top: 70px;
 }
 
@@ -704,13 +715,19 @@ input[disabled] {
 
 .pricing-level-row>div {
     padding: 0;
+    margin-left: 5px;
     font-size: 12px;
 }
 
 .pt-pricings-info-pin {
-    width: 10px;
-    height: 10px;
-    background-color:black; 
+    width: 12px;
+    height: 12px;
+    padding: 0;
+}
+
+.pt-pricing-level-costs-spent {
+    text-align: right;
+    font-weight: bold;
 }
 
 #level-pricings-pin {
@@ -729,7 +746,6 @@ input[disabled] {
     border-bottom: 2px solid #a9cbe6;
     width:10px;
     height: 10px;
-
 }
 
 .pt-popup-pin {
@@ -771,6 +787,18 @@ input[disabled] {
 
 .pt-summary-table tr:last-child {
     background-color: #d6d6d6;
+}
+
+#timing-table td:last-child p {
+    width: 100px;
+}
+
+#data-delivery-table p {
+    width: 150px;
+}
+
+#data-delivery-table td:first-child p {
+    width: 50px;
 }
 /*
 buttons

@@ -350,6 +350,43 @@ $(document).ready(function() {
 		}
     };
 
+    var fillTimingsTable = function(data, cell_amount) {
+    	$("#timing-table .pt-summary-table-usual-row").remove();
+    	$("#timing-table .pt-summary-table-summary-row").remove();
+
+    	var toAdd = "";
+    	for(var i=1; i<=cell_amount; i++) {
+    		var cellName = "Cell "+i;
+    		toAdd +=
+    			"<tr class='pt-summary-table-usual-row'>"+
+    				"<td><p>"+cellName+"</p></td>"+
+    				"<td><p>"+calculator.formatTime(data.separate[cellName])+"</p></td>"+
+    			"</tr>"
+    	}
+
+    	$("#timing-table .pt-summary-table-header-row").after(toAdd);
+    }
+
+    var fillDataDeliveryTable = function(data, cell_amount) {
+    	$("#data-delivery-table .pt-summary-table-usual-row").remove();
+    	$("#data-delivery-table .pt-summary-table-summary-row").remove();
+
+    	var toAdd = "";
+
+		for(var i=1; i<=cell_amount; i++) {
+    		var cellName = "Cell "+i;
+    		if(data.separate[cellName] != undefined)
+	    		toAdd +=
+	    			"<tr class='pt-summary-table-usual-row'>"+
+	    				"<td><p>"+cellName+"</p></td>"+
+	    				"<td><p>"+(data.separate[cellName][0])+"</p></td>"+
+		  				"<td><p>"+(data.separate[cellName][1])+"</p></td>"
+	    			"</tr>"
+    	}
+    	$('#data-delivery-table .pt-summary-table-header-row').after(toAdd)
+
+    }
+
     $('#cells-number').change(function() {
     	if(!isIdentical)
     		renderCellTabs();
@@ -510,15 +547,17 @@ $(document).ready(function() {
 	        }
 
     		var cell_amount = $("#cells-number")[0].valueAsNumber;
-    		var timestamp = calculator.timeCalculation(formData, cell_amount).total;
-    		var outputData = calculator.countCodingCost(formData, cell_amount)
-    		$(".pt-result-cost p").text("€"+calculator.formatCurrency(outputData.total+outputData.translation_cost));
-    		//$(".pt-result-timing p").text(calculator.formatTime(timestamp));
-    		$(".pt-result-timing p").text(timestamp);
+    		var timestamp = calculator.timeCalculation(formData, cell_amount);
+    		var outputData = calculator.countCodingCost(formData, cell_amount);
+    		var dataDeliveryData = calculator.getDataDeliveryDate(formData, timestamp, cell_amount);
     		
-    		//if()
-    		$(".pt-result-data-delivery p").text(calculator.getDataDeliveryDate(formData, cell_amount,timestamp))
+    		$(".pt-result-cost p").text("€"+calculator.formatCurrency(outputData.total+outputData.translation_cost));
+    		$(".pt-result-timing p").text(calculator.formatTime(timestamp.total));
+    		$(".pt-result-data-delivery p").text(dataDeliveryData.total);
+
     		fillTablesWithData(outputData, cell_amount);
+    		fillTimingsTable(timestamp, cell_amount);
+    		fillDataDeliveryTable(dataDeliveryData, cell_amount);
 
     		$(lastOpened).fadeOut();
     		$(".buttons-wrapper").fadeOut();
@@ -563,8 +602,8 @@ $(document).ready(function() {
     $(".pt-result-cost, .pt-result-timing, .pt-result-data-delivery").hover(
     	function() {
     		$('.'+this.className+'-popup').fadeIn(200);
-    		var height = $('.pt-result-cost-popup-content').css("height");
-    		$('.pt-result-cost-popup-content').css("top", -(parseInt(height)/2-35))
+    		var height = $('.'+this.className+'-popup-content').css("height");
+    		$('.'+this.className+'-popup-content').css("top", -(parseInt(height)/2-35))
     	},
     	function() {
     		$('.'+this.className+'-popup').fadeOut(200);
