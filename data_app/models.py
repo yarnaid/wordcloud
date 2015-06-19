@@ -278,13 +278,10 @@ class UploadFile(helpers.TimeMixin):
 
         start = time.clock()
         for key, cb in self.code_books_entities.iteritems():
-            codes_dict = dict()
-            parents_dict = dict()
-            related_codes = dict()
+            referenced_overcodes = list()
+            overcodes_dict = dict()
+            subnets_dict = dict()
 
-            codes_text = list()
-            codes_titles = list()
-            codes_nets = list()
             codes_codebooks = list()
 
             try:
@@ -292,25 +289,33 @@ class UploadFile(helpers.TimeMixin):
             except Exception as e:
                 print key, self.job
                 raise e
-            cb = code_books[key]
-            cb = cb.where(pd.notnull(cb), None)
-            ocb = cb[pd.isnull(cb.Codes)]  # overcodes
-            cb = cb[pd.notnull(cb.Codes)]
+            _cb = code_books[key]
+            _cb = _cb.where(pd.notnull(_cb), None)
+            ocb = _cb[pd.isnull(_cb.Codes)]  # overcodes
+            cb = _cb[pd.notnull(_cb.Codes)]
 
+            # parsing overcodes and subnets here
             for oocode in ocb.iterrows():
                 code = oocode[1]
-                codes_text.append(code.text)
-                codes_titles.append(code.title)
-                codes_nets.append(code.NET)
+                if code['Sub net'] is not None:
+                    num_code = int(code['Sub net'])
+                    parent_code = code.NET
+                    overcode_flag = False
+                    referenced_overcodes.append(parent_code)
+                else:
+                    num_code = code.NET
+                    parent_code = None
+                    overcode_flag = True
+
                 codes_codebooks.append(code_book)
                 ccode = {
                     'text': code.text,
                     'title': code.title,
-                    'code': code.NET,
-                    'parent': None,
+                    'code': num_code,
+                    'parent': parent_code,
                     'code_book': code_book,
                     'job': self.job,
-                    'overcode': True,
+                    'overcode': overcode_flag,
                     'text_en': code.text,
                     'title_en': code.title
                 }
@@ -318,57 +323,72 @@ class UploadFile(helpers.TimeMixin):
                     if ckey.count('text_') > 0 or ckey.count('title_') > 0:
                         ccode[ckey] = code[ckey]
                 # oc.save()
-                codes_dict[(ccode['code'], ccode['text'], ccode['title'])] = ccode
-            # TODO: OPTIMIZE QUERY
-            existing_codes = {(code.text, code.title,):
-                                  code for code in Code.objects.filter(text__in=codes_text, title__in=codes_titles,
-                                                                       code__in=codes_nets, code_book=code_book,
-                                                                       job=self.job, parent=None)}
-            for k, value in codes_dict.iteritems():
-                if key in existing_codes.keys():
-                    code = existing_codes[k]
+                if overcode_flag:
+                    overcodes_dict[ccode['code']] = ccode
                 else:
+                    subnets_dict[ccode['code']] = ccode
+                    # TODO: OPTIMIZE QUERY
+
+            existing_overcodes = {code.code:
+                                code for code in Code.objects.filter(code__in=overcodes_dict.keys()+referenced_overcodes,
+                                                                     code_book=code_book,
+                                                                     job=self.job)}
+            existing_subnets = {code.code:
+                                code for code in Code.objects.filter(code__in=subnets_dict.keys(), code_book=code_book,
+                                                                     job=self.job)}
+
+            for k, value in overcodes_dict.iteritems():
+
+                try:
+                    code = existing_overcodes[k]
+                except:
                     code = Code()
                 for arg, val in value.iteritems():
                     setattr(code, arg, val)
                 code.save()
+                existing_overcodes[k] = code
 
-            parent_nets = list()
-            related_nets = list()
-            related_text = list()
-            related_titles = list()
+            for k, value in subnets_dict.iteritems():
 
-            codes_parent_nets = list()
-            import ipdb; ipdb.set_trace()
+                try:
+                    code = existing_overcodes[k]
+                except:
+                    code = Code()
+                for arg, val in value.iteritems():
+                    if arg == 'parent' and val is not None:
+                        code.parent = existing_overcodes[val]
+                    else:
+                        setattr(code, arg, val)
+                code.save()
+                existing_subnets[k] = code
+
+            related_codes = dict()
+            related_num_codes = list()
+            parent_codes = list()
+
             for ccode in cb.iterrows():
+                print(ccode)
                 if len(ccode) > 3:
                     code = ccode[2] if ccode[2] is not None else ccode[1]
                 else:
                     code = ccode[1]
-                parent_nets.append(code.NET)
-                codes_parent_nets.append(code.NET)
-                parent = {
-                    'code': code.NET,
-                    'job': self.job,
-                    'overcode': True,
-                    'code_book': code_book,
-                    'parent': None
-                }
+                #print("lol", code['Sub net'])
+                if code['Sub net'] is not None:
+                    parent_code = int(code['Sub net'])
+                else:
+                    parent_code = code.NET
+                #print(parent_code)
+                if parent_code not in existing_overcodes.keys()+existing_subnets.keys():
+                    parent_codes.append(parent_code)
 
-                parent_key = parent['code']
-                if parent not in parents_dict.values():
-                    parents_dict[parent_key] = parent
-
-                related_text.append(code.text)
-                related_titles.append(code.title)
-                related_nets.append(code.Codes)
+                related_num_codes.append(code.Codes)
                 c = {
                     'text': code.text,
                     'title': code.title,
                     'code': code.Codes,
                     'job': self.job,
                     'overcode': False,
-                    'parent': parent_key,
+                    'parent': parent_code,
                     'code_book': code_book,
                     'text_en': code.text,
                     'title_en': code.title
@@ -378,36 +398,32 @@ class UploadFile(helpers.TimeMixin):
                     if ckey.count('text_') > 0 or ckey.count('title_') > 0:
                         c[ckey] = code[ckey]
 
-                related_codes[(c['text'], c['title'], c['code'], parent_key)] = c
+                related_codes[c['code']] = c
 
-            existing_parents = {code.code: code for code in Code.objects.filter(code__in=codes_parent_nets,
+            existing_parents = {code.code: code for code in Code.objects.filter(code__in=parent_codes,
                                                                                 job=self.job,
-                                                                                overcode=True,
                                                                                 code_book=code_book,
-                                                                                parent=None)}
-            existing_related = {(code.text, code.title, code.NET, code.parent): code
-                                for code in Code.objects.filter(code__in=related_nets,
+                                                                                )}
+            for key, value in existing_overcodes.iteritems():
+                existing_parents[key] = value
+            for key, value in existing_subnets.iteritems():
+                existing_parents[key] = value
+
+            existing_related_codes = {code.code: code
+                                for code in Code.objects.filter(code__in=related_num_codes,
                                                                 job=self.job,
-                                                                overcode=False,
-                                                                parent__in=existing_parents,
-                                                                text__in=related_text,
-                                                                title__in=related_titles)}
+                                                                code_book=code_book,
+                                                                parent__in=existing_parents,)}
+
+            #import ipdb; ipdb.set_trace()
 
             for key, value in related_codes.iteritems():
-                if key[3] in existing_parents.keys():
-                    key = (key[0], key[1], key[2], existing_parents[key[3]])
-                else:
-                    parent = Code()
-                    for arg, val in parents_dict[value['parent']].iteritems():
-                        setattr(parent, arg, val)
-                    parent.save()
-                    key = (key[0], key[1], key[2], parent)
-                    existing_parents[parent.code] = parent
+                print(key, value['parent'], value)
+                if value['parent'] is not None:
+                    value['parent'] = existing_parents[value['parent']]
 
-                value['parent'] = key[3]
-
-                if key in existing_related.keys():
-                    code = existing_related[key]
+                if key in existing_related_codes.keys():
+                    code = existing_related_codes[key]
                 else:
                     code = Code()
 
@@ -415,6 +431,8 @@ class UploadFile(helpers.TimeMixin):
                     setattr(code, arg, val)
 
                 code.save()
+
+
 
     def parse_code_books(self, excel_file):
         code_books_names = filter(lambda x: re.match(cb_regex, x, re.IGNORECASE) is not None, excel_file.sheet_names)

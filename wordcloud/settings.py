@@ -26,7 +26,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 SECRET_KEY = 't@dpxuj8i5&uh+&v#(z7+&x@$g#-^7%tk-$@ker9rc8_t#z#ph'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 DEBUG_PANEL = False
 COMPRESS_ENABLED = not DEBUG
 
@@ -209,8 +209,7 @@ DISQUS_API_KEY = 'UMEIxG4BoKA5i2k29rjEjcAWepfR4YZItxSuNZtjI4ZOendtjOsCUcqeMz3nUL
 DISQUS_WEBSITE_SHORTNAME = 'dixit'
 # SILKY_PYTHON_PROFILER = True
 
-
 try:
-    from local_settings import *
+    from local_setting import *
 except:
-    pass
+     pass
