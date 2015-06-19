@@ -119,10 +119,10 @@ LANGUAGES = (
     ('fr', _('French')),
     ('de', _('German')),
     ('es', _('Spanish')),
-    ('it', _('Italian')),
-    ('pt', _('Portuguese')),
-    ('zh-cn', ('Simplified Chinese')),
-    ('zh-tw', ('Traditional Chinese')),
+#    ('it', _('Italian')),
+#    ('pt', _('Portuguese')),
+#    ('zh-cn', ('Simplified Chinese')),
+#    ('zh-tw', ('Traditional Chinese')),
     # ('ru', _('Russian')),
 )
 
