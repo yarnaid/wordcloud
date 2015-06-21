@@ -295,7 +295,7 @@ $(document).ready(function() {
 				} else {
 					$('.pt-options-list').append(
 						"<li id='cell_"+i
-						+"' class='pt-options-tab' style='left:"+percents_per_cell*(i-1)+"%;top:"+diff[Math.abs(mid-i)]+";'><a href='#'>"+i+"</a></li>");
+						+"' class='pt-options-tab pt-unvisited-tab' style='left:"+percents_per_cell*(i-1)+"%;top:"+diff[Math.abs(mid-i)]+";'><a href='#'>"+i+"</a></li>");
 				}
 			$( '#cell_1' ).addClass('pt-options-tab-active')
 		}
@@ -407,14 +407,24 @@ $(document).ready(function() {
 	    			"</tr>"
     	}
     	$('#data-delivery-table .pt-summary-table-header-row').after(toAdd)
-
     }
 
     $('#cells-number').change(function() {
-    	if(!isIdentical)
+    	var cell_number = parseInt($('.pt-options-tab-active')[0].id.substring($('.pt-options-tab-active')[0].id.indexOf('_')+1));
+
+	    if(cell_number==NaN) return;
+		
+		var data = saveDataFromCurrentForm();
+		alert
+    	saveToBuffer(cell_number, data);
+
+    	if(!isIdentical) {
     		renderCellTabs();
-    	else 
+    	}
+    	else {
     		renderIdenticalCellTabs();
+    	}
+    	retainFormData(1);
     });
 
     $('.pt-options-wrapper').on("mouseover",'.pt-options-tab',
@@ -463,6 +473,7 @@ $(document).ready(function() {
             prev_top = $(this).css("top");
     		$(this).css("top", parseInt(prev_top)-10+"px");
             $(this).addClass('pt-options-tab-active');
+            $(this).removeClass('pt-unvisited-tab');
             $('.pt-inner-circle').addClass('pt-inner-circle-show');
            	$('.pt-outher-circle').toggleClass('pt-outher-circle-hover');
             $('.pt-outher-circle').addClass('pt-outher-circle-active');
@@ -672,18 +683,6 @@ $(document).ready(function() {
 		}
     })
 
-    // this sections sets defaults values (renders initial amount of cells, checks checkboxes etc)
-    $('#pt-language-english').prop('checked', true);
-	$('#pt-codebook-translation-language-english').prop('disabled', true);
-	$('#pt-verbatim-translation-language-english').prop('disabled', true);
-
-    renderCellTabs();
-    loadStudyTypes();
-
-    $('#codebook-create-new').prop('checked', true);
-    $('#codebook-from-previous-job').prop('checked', true);
-    $('.ui-datepicker-today').removeClass('ui-datepicker-current-day');
-
     $( "#confirm-order-dialog" ).dialog({
     	modal: true,
     	draggable: false,
@@ -707,6 +706,26 @@ $(document).ready(function() {
     		}
     	]
     });
+
+	var unvisitedBlinker = setInterval(function() { 
+		$('.pt-unvisited-tab').animate({opacity:0.6},750);
+		$('.pt-unvisited-tab').animate({opacity:1},750);
+	}, 1500);
+
+    // this sections sets defaults values (renders initial amount of cells, checks checkboxes etc)
+	$('#pt-codebook-translation-language-english').prop('disabled', true);
+	$('#pt-verbatim-translation-language-english').prop('disabled', true);
+
+	$('pt-r')
+    renderCellTabs();
+    loadStudyTypes();
+
+    $('#codebook-create-new').prop('checked', true);
+    $('#codebook-from-previous-job').prop('checked', true);
+    $('.ui-datepicker-today').removeClass('ui-datepicker-current-day');
     $( '#cell_1' ).addClass('pt-options-tab-active')
+    $('.pt-results-wrapper').hide();
+
+    $('#pt-language-english').prop('checked', true);
 });
 
