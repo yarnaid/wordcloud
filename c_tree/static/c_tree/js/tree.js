@@ -9,16 +9,20 @@ var Tree = function(_parent_id, _data, _event_handler) {
     self.event_handler = _event_handler;
     self.margin = {
         top: 10,
-        bottom: 200,
+        bottom: 210,
         left: 0,
         right: 0
     };
     self.i = 0;
+    self.max_lengh = 0;
+    self.max_depth = 0;
+    self.max_verbatim_count = 0;
+
     self.min_r = 3;
     self.t_offset = 13;
-    self.duration = 400;
+    self.duration = 200;
 
-    self.rect_height = 32;
+    self.rect_height = 28;
     self.rect_width = 120;
     self.rect_rx = self.rect_height / 2;
     self.rect_ry = self.rect_rx;
@@ -28,7 +32,8 @@ var Tree = function(_parent_id, _data, _event_handler) {
     this.height = Math.max(window.innerHeight, this.height);
     this.height = this.height - this.margin.top - this.margin.bottom;
 
-    self.scale = d3.scale.log().range([self.min_r, self.rect_height / 2 * 0.7]).domain([1, 200]);
+    self.max_r = self.rect_height / 2 * 0.7;
+    self.scale = d3.scale.log().range([self.min_r, self.max_r]);
     self.radius = function(node) {
         var res = 0;
         if (node) {
@@ -38,7 +43,7 @@ var Tree = function(_parent_id, _data, _event_handler) {
     };
 
     self.fill = d3.scale.category20();
-    self.depth_scale = d3.scale.linear().range([10, self.width]);
+    self.depth_scale = d3.scale.linear();
 
     self.zoom = d3.behavior.zoom();
 
@@ -82,16 +87,26 @@ Tree.prototype.init = function() {
 
 Tree.prototype.process_data = function() {
     var self = this;
-    return this.display_data = this.data;
 
-    var job_name = 'Job Name';
-    var root = {
-        parent: null,
-        name: job_name,
-        cluster: null,
-        effecif: self.min_r,
-        overcode: true
-    };
+    var nodes = [];
+    nodes.push(self.data.question);
+    while (nodes.length > 0) {
+        var root = nodes.pop();
+        self.max_lengh = Math.max(self.max_lengh, root.title.length);
+        self.max_depth = Math.max(self.max_depth || 0, root.code_depth);
+        self.max_verbatim_count =  Math.max(self.max_verbatim_count || 0, root.verbatim_count);
+        for (var i = 0; i < root.children.length; ++i) {
+            nodes.push(root.children[i]);
+        }
+    }
+
+    self.max_depth += 1;
+    self.depth_scale.domain([0, self.max_depth])
+        .range([10, self.width - self.rect_width]);
+    self.rect_width = Math.min(self.max_lengh * 10, self.width / 6);
+    self.scale.domain([1, self.max_verbatim_count]);
+
+    return this.display_data = this.data;
 };
 
 Tree.prototype.update = function(source) {
@@ -99,11 +114,9 @@ Tree.prototype.update = function(source) {
     var nodes = self.tree.nodes(self.display_data.question).reverse();
     var links = self.tree.links(nodes);
 
-    var max_depth = 2;
-    self.depth_scale.domain([0, (max_depth + 1) * 180]);
 
     nodes.forEach(function(d) {
-        d.y = self.depth_scale(d.depth * 180);
+        d.y = self.depth_scale(d.depth);
     });
 
     var node = self.svg.selectAll('g.node')
@@ -115,18 +128,18 @@ Tree.prototype.update = function(source) {
         });
 
     function click(d) {
-        if (!d.overcode) {
+        if (!d.children || !d._children) {
             self.show_verbatims(d);
-        } else {
-            if (d.children) {
-                d._children = d.children;
-                d.children = null;
-            } else {
-                d.children = d._children;
-                d._children = null;
-            }
-            self.update(d);
         }
+
+        if (d.children) {
+            d._children = d.children;
+            d.children = null;
+        } else {
+            d.children = d._children;
+            d._children = null;
+        }
+        self.update(d);
     }
 
     var nodeEnter = node.enter().append('g')
@@ -170,17 +183,32 @@ Tree.prototype.update = function(source) {
             .attr('cx', self.rect_height/2);
 
 
-    nodeEnter.append('text')
+    function wrap() {
+            var d3_self = d3.select(this),
+                textLength = d3_self.node().getComputedTextLength(),
+                text = d3_self.text();
+            console.log(textLength, text);
+            while (textLength > (self.rect_width - self.max_r * 4) && text.length > 0) {
+                console.log(textLength, text);
+                text = text.slice(0, -1);
+                d3_self.text(text + '...');
+                textLength = d3_self.node().getComputedTextLength();
+            }
+        };
+
+    var nodeText = nodeEnter.append('text')
         .attr('x', function(d) {
             return self.rect_height;
-            return d.children.length || d._children ? 30 + self.radius(d) + self.t_offset : self.radius(d) + self.t_offset;
         })
         .attr('dy', '.35em')
         .attr('text-anchor', 'start')
-        .text(function(d) {
-            return d.text;
-        })
+        // .text(function(d) {
+            // return d.title;
+        // })
         .style('fill-opacity', 1e-6);
+    nodeText.append('tspan').text(function(d) {
+            return d.title;
+        }).each(wrap);
 
     var nodeUpdate = node.transition()
         .duration(self.duration)

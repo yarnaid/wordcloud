@@ -131,6 +131,9 @@ var show_verbatims = function(d) {
         return;
     var rest = new Rest();
     var verbatims = rest.get_verbatims(d.id, d.question_id);
+    if (verbatims.length < 1) {
+        return;
+    }
     verbatims = verbatims.filter(function(v) {return parseInt(v.variable.uid) >= 0;});
     verbatims.forEach(function(v) {
         v.uid = v.variable.uid;

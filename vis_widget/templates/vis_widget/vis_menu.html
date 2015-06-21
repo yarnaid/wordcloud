@@ -1,7 +1,7 @@
 {% load sekizai_tags staticfiles i18n data_filter_tags %}
 
 {% block vis_menu %}
-    <div class="hidden_menu options_menu" id="vis_menu_{{ col }}">
+    <div class="hidden_menu options_menu hidden" id="vis_menu_{{ col }}">
         {% data_filter col %}
     </div>
 {% endblock vis_menu %}

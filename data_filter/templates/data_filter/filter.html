@@ -11,7 +11,17 @@
         </div>
     </div>
 
-    {% include "data_filter/selector.html" with label="Job" options=job_numbers id_=id %}
+<div class="row">
+    <div class="col-md-6 col-xs-6 col-sm-6 text-right"><label for="sel-Job-{{id}}">Job:</label></div>
+    <div class="col-md-6 col-xs-6 col-sm-6 text-left">
+        <select id="sel-Job-{{id}}">
+            {% for job in jobs %}
+                <option value="{{job.0}}">{{job.2}} - {{job.1}}</option>
+            {% endfor %}
+        </select>
+    </div>
+</div>
+
     {% include "data_filter/selector.html" with label="Question" options=question_names id_=id %}
     <script type="text/javascript">
     var params_ids_{{ id }} = [];

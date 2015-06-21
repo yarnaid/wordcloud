@@ -16,11 +16,18 @@ var show_menu = function(id_, div_id) {
         width = '40%';
         opacity = 1;
     }
+    if (opacity == 1) {
+        $(id_).toggleClass('hidden');
+    }
     $(id_)
-    .animate({
-        width: width,
-        opacity: opacity
-        }, 150);
+        .animate({
+            width: width,
+            opacity: opacity
+            }, 150,
+            function() {
+                if (opacity == 0)
+                    $(id_).toggleClass('hidden');
+            });
 
     return false;
 };
