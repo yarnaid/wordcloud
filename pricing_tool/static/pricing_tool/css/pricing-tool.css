@@ -230,20 +230,12 @@ input[disabled] {
     width: 644px;
     height: 644px;
     background-color: #FFF;
-    border: 9px solid #50677e;
+    border: 9px solid #99aabb;
     border-radius: 50%;
     -webkit-transition: 0.3s all;
     -ms-transition: 0.3s all;
     transition: 0.3s all;
     z-index: 100;
-}
-
-.pt-outher-circle-active {
-    border-color: #6e0cad;
-}
-
-.pt-outher-circle-hover {
-    border-color: #0083e8;
 }
 
 .pt-options-wrapper {
@@ -271,7 +263,7 @@ input[disabled] {
     top:10px;
     width: 40px;
     height: 80px;
-    background: #50677e;
+    background: #99aabb;
     font-size: 18px;
     font-weight: 100;
     border-radius: 19px 19px 0 0;
@@ -334,12 +326,21 @@ input[disabled] {
     margin: 0;
     width: 423px;
     height: 422px;
-    border: 9px solid #50677e;
+    border: 9px solid #99aabb;
     border-radius: 50%;
     -webkit-transition: 0.3s all;
     -ms-transition: 0.3s all;
     transition: 0.3s all;
-    z-index: 100;
+    z-index: 105;
+}
+
+.pt-inner-circle-active,
+.pt-outher-circle-active {
+    border-color: #6e0cad;
+}
+.pt-inner-circle-hover,
+.pt-outher-circle-hover {
+    border-color: #0083e8;
 }
 
 .pt-inner-circle-show {

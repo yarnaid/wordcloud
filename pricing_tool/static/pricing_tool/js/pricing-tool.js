@@ -435,6 +435,7 @@ $(document).ready(function() {
 	    		//$(this).animate({top: parseInt(prev_top)-10+"px"});
 	    		$(this).css("top", parseInt(prev_top)-10+"px");
 	    		$('.pt-outher-circle').toggleClass('pt-outher-circle-hover');
+	    		$('.pt-inner-circle').toggleClass('pt-inner-circle-hover');
     		}
     	}
     );
@@ -446,6 +447,7 @@ $(document).ready(function() {
 	    		//$(this).animate({top: parseInt(prev_top)+10+"px"});
 	    		$(this).css("top", parseInt(prev_top)+10+"px");
 	    		$('.pt-outher-circle').toggleClass('pt-outher-circle-hover');
+	    		$('.pt-inner-circle').toggleClass('pt-inner-circle-hover');
 	    	}
     	}
     );
@@ -474,7 +476,8 @@ $(document).ready(function() {
     		$(this).css("top", parseInt(prev_top)-10+"px");
             $(this).addClass('pt-options-tab-active');
             $(this).removeClass('pt-unvisited-tab');
-            $('.pt-inner-circle').addClass('pt-inner-circle-show');
+            $('.pt-inner-circle').toggleClass('pt-inner-circle-hover');
+            $('.pt-inner-circle').addClass('pt-inner-circle-active');
            	$('.pt-outher-circle').toggleClass('pt-outher-circle-hover');
             $('.pt-outher-circle').addClass('pt-outher-circle-active');
 			$('#datepicker tr td').removeClass('ui-datepicker-current-day');
@@ -637,7 +640,19 @@ $(document).ready(function() {
     	function() {
 	    	$( "#confirm-order-dialog" ).dialog('open');
     	}
-    )
+    );
+
+    $('#save-button').click(
+    	function() {
+    		$("#save-order-dialog").dialog("open");
+    	}
+    );
+
+    $('#contact-button').click(
+    	function() {
+    		$('#contact-dialog').dialog("open");
+    	}
+    );
 
     $("#datepicker").datepicker({
         firstDay: 1,
@@ -692,14 +707,62 @@ $(document).ready(function() {
     	buttons : [
     		{
     			text: "Ok",
-    			id: "button-confirm-save-project",
+    			id: "button-confirm-confirm-project",
 			    click: function() {
 		        	$( this ).dialog( "close" );
 		      	}
     		},
     		{
     			text: "Cancel",
+    			id: "button-cancel-confirm-project",
+    			click: function() {
+		        	$( this ).dialog( "close" );
+		      	}
+    		}
+    	]
+    });
+
+    $( '#save-order-dialog' ).dialog({
+    	modal: true,
+    	draggable: false,
+    	dialogClass: "order-dialog",
+    	autoOpen: false,
+    	width: 500,
+    	buttons : [
+    		{
+    			text: "Ok",
+    			id: "button-ok-save-project",
+    			click: function() {
+		        	$( this ).dialog( "close" );
+		      	}
+    		},
+    		{
+    			text: "Cancel",
     			id: "button-cancel-save-project",
+    			click: function() {
+		        	$( this ).dialog( "close" );
+		      	}
+    		}
+    	]
+    });
+
+    $( '#contact-dialog' ).dialog({
+    	modal: true,
+    	draggable: false,
+    	dialogClass: "order-dialog",
+    	autoOpen: false,
+    	width: 500,
+    	buttons : [
+    		{
+    			text: "Ok",
+    			id: "button-ok-contact",
+    			click: function() {
+		        	$( this ).dialog( "close" );
+		      	}
+    		},
+    		{
+    			text: "Cancel",
+    			id: "button-ok-contact",
     			click: function() {
 		        	$( this ).dialog( "close" );
 		      	}
@@ -716,7 +779,7 @@ $(document).ready(function() {
 	$('#pt-codebook-translation-language-english').prop('disabled', true);
 	$('#pt-verbatim-translation-language-english').prop('disabled', true);
 
-	$('pt-r')
+	//$('pt-r')
     renderCellTabs();
     loadStudyTypes();
 
@@ -727,5 +790,7 @@ $(document).ready(function() {
     $('.pt-results-wrapper').hide();
 
     $('#pt-language-english').prop('checked', true);
+    $('.pt-inner-circle').addClass('pt-inner-circle-active');
+    $('.pt-outher-circle').addClass('pt-outher-circle-active');
 });
 
