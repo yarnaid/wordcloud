@@ -9,7 +9,7 @@ register = template.Library()
 def data_filter(context, id_):
     jobs = models.Job.objects.all()
     context['job_ids'] = [j.id for j in jobs]
-    context['job_numbers'] = [j.id for j in jobs]
+    context['job_numbers'] = [j.number for j in jobs]
     context['job_names'] = [j.name for j in jobs]
     context['jobs'] = zip(context['job_ids'],
                           context['job_numbers'],
