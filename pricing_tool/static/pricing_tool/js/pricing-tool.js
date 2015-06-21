@@ -256,9 +256,16 @@ $(document).ready(function() {
 		$('.pt-options-wrapper').css("width", width+"px");
 		$('.pt-options-list').css("width", width+"px");
 		for(var i=1; i<=number_of_cells; i++)
-			$('.pt-options-list').append(
-				"<li id='cell_"+i
-				+"' class='pt-options-tab pt-options-identical-tabs' style='left:"+percents_per_cell*(i-1)+"%;top:"+diff[Math.abs(mid-i)]+";'><a href='#'>"+i+"</a></li>");
+			if(i==1) {
+				$('.pt-options-list').append(
+					"<li id='cell_"+i
+					+"' class='pt-options-tab pt-options-identical-tabs' style='left:"+percents_per_cell*(i-1)+"%;top:"+(parseInt(diff[Math.abs(mid-i)])-10)+"px;'><a href='#'>"+i+"</a></li>");
+			} else {
+				$('.pt-options-list').append(
+					"<li id='cell_"+i
+					+"' class='pt-options-tab pt-options-identical-tabs' style='left:"+percents_per_cell*(i-1)+"%;top:"+diff[Math.abs(mid-i)]+";'><a href='#'>"+i+"</a></li>");
+			}
+		$( '#cell_1' ).addClass('pt-options-tab-active')
 	};
 
     var renderCellTabs = function(){
@@ -281,9 +288,16 @@ $(document).ready(function() {
 			$('.pt-options-wrapper').css("width", width+"px");
 			$('.pt-options-list').css("width", width+"px");
 			for(var i=1; i<=number_of_cells; i++)
-				$('.pt-options-list').append(
-					"<li id='cell_"+i
-					+"' class='pt-options-tab' style='left:"+percents_per_cell*(i-1)+"%;top:"+diff[Math.abs(mid-i)]+";'><a href='#'>"+i+"</a></li>");
+				if(i==1) {
+					$('.pt-options-list').append(
+						"<li id='cell_"+i
+						+"' class='pt-options-tab' style='left:"+percents_per_cell*(i-1)+"%;top:"+(parseInt(diff[Math.abs(mid-i)])-20)+"px;'><a href='#'>"+i+"</a></li>");
+				} else {
+					$('.pt-options-list').append(
+						"<li id='cell_"+i
+						+"' class='pt-options-tab' style='left:"+percents_per_cell*(i-1)+"%;top:"+diff[Math.abs(mid-i)]+";'><a href='#'>"+i+"</a></li>");
+				}
+			$( '#cell_1' ).addClass('pt-options-tab-active')
 		}
 	}
 
@@ -607,6 +621,7 @@ $(document).ready(function() {
 			}
 		}    
     )
+
     $('#confirm-button').click(
     	function() {
 	    	$( "#confirm-order-dialog" ).dialog('open');
@@ -630,6 +645,32 @@ $(document).ready(function() {
     		$('.'+this.className+'-popup').fadeOut(200);
     	}
     );
+
+    $("#study-type").on('change', function() {
+    	var selectedIndex = $('#study-type')[0].selectedIndex;
+    	var studyType = stubs.study_types[selectedIndex];
+
+    	var propMap = {
+    		likes: ["#feeling-likes-question",'like_questions'],
+    		one_word: ["#one-word-question",'short_questions'],
+    		story: ["#story-question","story_questions"]
+    	}
+    	$(".pt-questions-content input").val(0);
+
+    	var questions = studyType.properties.questions
+    	for(var key in questions){
+    		if(questions.hasOwnProperty(key)) {
+    			$(propMap[key][0]).val(questions[key]);
+    		}
+    	}
+
+    	data = saveDataFromCurrentForm();
+
+		for(var i = 1; i<=$("#cells-number")[0].valueAsNumber; i++) {
+			formData[i].questions = data.questions;
+			formData[i].sample_size = data.sample_size;
+		}
+    })
 
     // this sections sets defaults values (renders initial amount of cells, checks checkboxes etc)
     $('#pt-language-english').prop('checked', true);
@@ -666,5 +707,6 @@ $(document).ready(function() {
     		}
     	]
     });
+    $( '#cell_1' ).addClass('pt-options-tab-active')
 });
 

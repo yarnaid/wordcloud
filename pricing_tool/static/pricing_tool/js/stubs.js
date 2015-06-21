@@ -21,7 +21,7 @@ var stubs = {
 			properties: {
 				sample_size: 150,
 				questions: {
-					short: 1,
+					one_word: 1,
 					likes: 5,
 					story: 1,
 				}
@@ -32,7 +32,7 @@ var stubs = {
 			properties: {
 				sample_size: 150,
 				questions: {
-					short: 1,
+					one_word: 1,
 					likes: 7,
 					story: 1,
 				}
@@ -43,7 +43,7 @@ var stubs = {
 			properties: {
 				sample_size: 150,
 				questions: {
-					short: 1,
+					one_word: 1,
 					likes: 10,
 					story: 1,
 				}
