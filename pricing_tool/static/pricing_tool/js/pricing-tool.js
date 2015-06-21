@@ -13,6 +13,15 @@ $(document).ready(function() {
 
     var previousSelectedButton = null;
 
+    var loadStudyTypes = function() {
+    	var toRender = '';
+    	for(var i=0; i<stubs.study_types.length; i++) {
+    		toRender += "<option>"+stubs.study_types[i].name+"</options>"
+    	}
+
+    	$('#study-type').append(toRender);
+    }
+
 	var getSourceLang = function() {
 		var checked_radio = 
 					$("input[name='pt-language-choose']:checked")[0].id;
@@ -545,6 +554,13 @@ $(document).ready(function() {
 
 	        	saveToBuffer(cell_number, data);
 	        }
+    		/*
+    		 *	Getting level stub
+    		 */
+
+    		var level = $("#level-stub").val();
+    		level = parseInt(level.substring(level.lastIndexOf(' ')));
+    		formData['level'] = level;
 
     		var cell_amount = $("#cells-number")[0].valueAsNumber;
     		var timestamp = calculator.timeCalculation(formData, cell_amount);
@@ -554,6 +570,7 @@ $(document).ready(function() {
     		$(".pt-result-cost p").text("€"+calculator.formatCurrency(outputData.total+outputData.translation_cost));
     		$(".pt-result-timing p").text(calculator.formatTime(timestamp.total));
     		$(".pt-result-data-delivery p").text(dataDeliveryData.total);
+
 
     		fillTablesWithData(outputData, cell_amount);
     		fillTimingsTable(timestamp, cell_amount);
@@ -590,9 +607,9 @@ $(document).ready(function() {
 			}
 		}    
     )
-    $('#save-button').click(
+    $('#confirm-button').click(
     	function() {
-	    	$( "#save-order-dialog" ).dialog('open');
+	    	$( "#confirm-order-dialog" ).dialog('open');
     	}
     )
 
@@ -620,26 +637,32 @@ $(document).ready(function() {
 	$('#pt-verbatim-translation-language-english').prop('disabled', true);
 
     renderCellTabs();
+    loadStudyTypes();
 
     $('#codebook-create-new').prop('checked', true);
     $('#codebook-from-previous-job').prop('checked', true);
     $('.ui-datepicker-today').removeClass('ui-datepicker-current-day');
 
-    $( "#save-order-dialog" ).dialog({
+    $( "#confirm-order-dialog" ).dialog({
     	modal: true,
     	draggable: false,
     	dialogClass: "order-dialog",
     	autoOpen: false,
+    	width: 500,
     	buttons : [
     		{
     			text: "Ok",
-    			id: "confirm-order-button",
-			      icons: {
-			        primary: "ui-icon-heart"
-			      },
-			      click: function() {
-			        $( this ).dialog( "close" );
-			      }
+    			id: "button-confirm-save-project",
+			    click: function() {
+		        	$( this ).dialog( "close" );
+		      	}
+    		},
+    		{
+    			text: "Cancel",
+    			id: "button-cancel-save-project",
+    			click: function() {
+		        	$( this ).dialog( "close" );
+		      	}
     		}
     	]
     });

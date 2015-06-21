@@ -1,3 +1,7 @@
+textarea {
+    resize:none;
+}
+
 /*
 bootstrap overrides
  */
@@ -660,7 +664,7 @@ input[disabled] {
     position: absolute;
     left: 200px;
     z-index: 100;
- /*   display: none;*/
+    display: none;
 }
 
 .pt-result-data-delivery-popup > div,
@@ -720,7 +724,7 @@ input[disabled] {
 
 .pt-pricing-level-popup {
     left: 0;
-    /*display: none;*/
+    display: none;
     top: 70px;
 }
 
@@ -838,9 +842,48 @@ input[disabled] {
     position: fixed;
 }
 
+.order-dialog label {
+    text-align: right;
+}
+
+.order-dialog input {
+    margin-bottom: 10px;
+}
+
+.order-dialog textarea {
+    width: 100%;
+}
+
 .order-dialog .ui-dialog-titlebar {display: none;}
 
+.order-dialog .ui-dialog-buttonset {
+    width: 200px;
+    margin: auto;
+}
 
+.order-dialog .ui-dialog-buttonset button {
+    width:90px;
+    height: 50px;
+    background: linear-gradient(to top, #121212, #565656);
+    border-radius: 5px;
+    border: 1px solid black;
+    color: white;
+    font-weight: normal;
+}
+
+.order-dialog .ui-dialog-buttonset button:hover {
+    background: #121212;
+}
+
+.order-dialog .ui-dialog-buttonset button:first-child {
+    margin-right: 20px;
+}
+
+.dialog-header {
+    width: 100%;
+    text-align: center;
+    font-weight: bold;
+}
 /*
 buttons
  */

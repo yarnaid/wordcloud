@@ -7,16 +7,19 @@
 </div>
 <!--<div id="dialog" title="super dialog">dialog</div>-->
 <section class="container pt-wrapper">
-    <div id="save-order-dialog" title="Basic dialog">
+    <div id="confirm-order-dialog" title="Basic dialog">
         <div>
-          <label for="order-clients-name">Your name:</label>
-          <input id="order-clients-name" type="text" rows="1" ></input>
-          <label for="order-project-name">Project description</label>
-          <input id="order-project-name" type="text" rows="1" ></input>
-          <label for="order-project-number">Project number</label>
-          <input id="order-project-number" type="text" rows="1" ></input>
-          <label for="order-comments">Your comments</label>
-          <input id="order-comments" type="textarea" rows="5" ></input>
+            <p class='dialog-header'>Confirm project</p>
+            <div class="line"></div>
+            <label for="order-clients-name" class="col-md-4">Your name:</label>
+            <input id="order-clients-name" type="text" class="col-md-8"></input>
+            <label for="order-project-name" class="col-md-4">Project name:</label>
+            <input id="order-project-name" type="text" class="col-md-8"></input>
+            <label for="order-project-number" class="col-md-4">Project number</label>
+            <input id="order-project-number" type="text" class="col-md-8"></input>
+            <label>Your comments</label>
+            <textarea rows="5">Input your comments:</textarea>
+            <a >Attach file...</a> 
         </div>
     </div>
 
@@ -27,9 +30,7 @@
                 <div class="row form-group">
                     <label for="study-type" class="col-sm-7">Study type:</label>
                     <select name="study-type" id="study-type" class="col-sm-5 form-control">
-                        <option value="Choice 1">Choice 1</option>
-                        <option value="Choice 2">Choice 2</option>
-                        <option value="Choice 3">Choice 3</option>
+
                     </select>
                 </div>
                 <div class="row form-group">
@@ -47,6 +48,13 @@
                         </label>
                     </div>
                 </div>
+                <label for="level-stub">Level stub:</label>
+                <select name="current-level" id="level-stub">
+                    <option>Level 1</option>
+                    <option>Level 2</option>
+                    <option>Level 3</option>
+                    <option>Level 4</option>
+                </select>
             </form>
         </aside>
         <aside class="pt-progress-bar-container col-md-3 col-md-offset-6">
@@ -577,7 +585,7 @@
             </div>
             <div class="pt-save-confirm-contact col-md-offset-10">
                 <div id="save-button" class="btn button-controls">Save</div>
-                <div class="btn button-controls">Confirm</div>
+                <div id="confirm-button" class="btn button-controls">Confirm</div>
                 <div class="btn button-controls">Contact</div>
             </div>
         </section>
@@ -588,4 +596,5 @@
 <script src="http://code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
 <script type="text/javascript" src="{% static 'pricing_tool/js/pricing-tool.js' %}"></script>
 <script type="text/javascript" src="{% static 'pricing_tool/js/calculation_functions.js' %}"></script>
+<script type="text/javascript" src="{% static 'pricing_tool/js/stubs.js' %}"></script>
 {% endaddtoblock %} {% endblock %}

@@ -26,7 +26,7 @@ var calculator = {
 		1: 0.2,
 		2: 0.16,
 		3: 0.12,
-		4: 1
+		4: 0.1
 	},
 
 	timing_costs : {
@@ -89,7 +89,7 @@ var calculator = {
 			var A = this.language_rates[data[i].source_language];
 			var B = data[i].sample_size;
 			var C = this.previous_codebook_rate[data[i].previous_codebook.uses];
-			var J = this.pricing_levels[1];
+			var J = this.pricing_levels[data.level];
 
 			var D1 = (A*B*C*J)*this.questions_categories.D1 * data[i].questions.brand_questions;
 			var D2 = (A*B*C*J)*this.questions_categories.D2 * data[i].questions.short_questions;
@@ -190,7 +190,7 @@ var calculator = {
 				E += this.language_rates[data[i].codebook_translation_languages[j]];
 			}
 			
-			var J = this.pricing_levels[1];
+			var J = this.pricing_levels[data.level];
 			var C = this.previous_codebook_rate[data[i].previous_codebook.uses];
 			
 			var H = this.timing_costs[cell_amount];
@@ -282,7 +282,7 @@ var calculator = {
 				F += this.language_rates[data[i].verbatim_translation_languages[j]];
 			}
 
-			var J = this.pricing_levels[1];
+			var J = this.pricing_levels[data.level];
 			var G6 = (A*F)*2*J*this.verbatim_extractions.G6 * data[i].verbatims_translation.long_question_translation;
 			var G3 = (A*F)*2*J*this.verbatim_extractions.G3 * data[i].verbatims_translation.likes_question_translation;
 			var G5 = (A*F)*2*J*this.verbatim_extractions.G5 * data[i].verbatims_translation.story_question_translation;
