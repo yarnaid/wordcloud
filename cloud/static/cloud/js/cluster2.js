@@ -13,7 +13,7 @@ var Cluster = function(_parent_id, _data, _eventHandler, _fps) {
 
     this.padding = -5; // separation between same-color nodes
     this.clusterPadding = 2; // separation between different-color nodes
-    this.maxRadius = 500;
+    this.maxRadius = 300;
     this.codes_overlap = 5;
     this.margin = {
         top: 10,
@@ -21,10 +21,16 @@ var Cluster = function(_parent_id, _data, _eventHandler, _fps) {
         bottom: 200,
         left: 0
     };
-    this.raduis_scale = d3.scale.linear().range([10, 40]).domain([1, 300]);
+
+    self.max_lengh = 0;
+    self.max_depth = 0;
+    self.max_verbatim_count = 0;
 
 
     this.min_radius = 4.5;
+
+    this.raduis_scale = d3.scale.log();
+
 
     this.width = $(this.parent_id).width() - this.margin.left - this.margin.right;
     this.height = $(this.parent_id).height();
@@ -119,14 +125,21 @@ Cluster.prototype.init = function() {
 
     this.link = this.svg.selectAll('.link').data(this.links);
 
+    var set_class = function(d) {
+            var res = 'node';
+            var c = d.overcode ? ' overcode' : ' code';
+            res = res + c;
+            if (d.children.length > 0 && !d.overcode) {
+                res = res + ' subnet';
+            }
+            return res;
+        };
+
     this.node = this.svg.selectAll('.node')
         .data(this.nodes)
         .enter()
         .append('g')
-        .attr('class', function(d) {
-            var c = d.overcode ? 'overcode' : 'code';
-            return 'node ' + c;
-        })
+        .attr('class', set_class)
         .call(this.force.drag)
         .on("mouseover", function(d) {
             self.tooltip_elem.transition()
@@ -190,13 +203,13 @@ Cluster.prototype.init = function() {
         self.node
             .each(collide(0.5))
             .attr('cx', function(d) {
-                if (d.x > self.width - d.r) d.x -= 1;
-                else if (d.x < d.r) d.x += 1;
+                if (d.x > self.width - d.radius) d.x -= 1;
+                else if (d.x < d.return) d.x += 1;
                 return d.x;
             })
             .attr('cy', function(d) {
-                if (d.y > self.height - d.r) d.y -= 1;
-                else if (d.y < d.r) d.y += 1;
+                if (d.y > self.height - d.return) d.y -= 1;
+                else if (d.y < d.return) d.y += 1;
                 return d.y;
             });
 
@@ -228,10 +241,7 @@ Cluster.prototype.init = function() {
 
     this.node.append('circle')
         .attr('id', 'one')
-        .attr('class', function(d) {
-            var c = d.overcode ? 'overcode' : 'code';
-            return 'node ' + c;
-        })
+        .attr('class', set_class)
         .attr('r', function(d) {
             return d.radius || self.min_radius;
         });
@@ -311,6 +321,27 @@ Cluster.prototype.update = function() {};
 
 Cluster.prototype.wrangle = function() {
     var self = this;
+
+    var nodes = [];
+    nodes.push(self.data.question);
+    self.full_count = 0;
+    var children_len = 0;
+    while (nodes.length > 0) {
+        var root = nodes.pop();
+        self.max_lengh = Math.max(self.max_lengh, root.title.length);
+        self.max_depth = Math.max(self.max_depth || 0, root.code_depth);
+        self.max_verbatim_count =  Math.max(self.max_verbatim_count || 0, root.verbatim_count);
+        self.full_count += root.verbatim_count || 0;
+        for (var i = 0; i < root.children.length; ++i) {
+            nodes.push(root.children[i]);
+        }
+        children_len = Math.max(children_len, nodes.length);
+    }
+
+    self.max_depth += 1;
+    self.raduis_scale.range([self.min_radius, self.width/children_len/2])
+        .domain([1, self.full_count]);
+
     self.display_data = self.data;
 };
 

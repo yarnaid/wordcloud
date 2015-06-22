@@ -34,24 +34,30 @@
 }
 
 /* line 32, scss/cloud.scss */
+.subnet {
+  stroke: #398dcf;
+  fill: rgba(57, 141, 207, 0.2);
+}
+
+/* line 37, scss/cloud.scss */
 .code:hover {
   stroke: #398dcf;
   fill: rgba(57, 141, 207, 0.5);
 }
 
-/* line 37, scss/cloud.scss */
+/* line 42, scss/cloud.scss */
 .code > g > .circle-text {
   fill: #398dcf;
 }
 
-/* line 41, scss/cloud.scss */
+/* line 46, scss/cloud.scss */
 .circle-text {
   fill: #AF61CB;
   stroke: none;
   position: absolute;
 }
 
-/* line 47, scss/cloud.scss */
+/* line 52, scss/cloud.scss */
 .cloud * .link {
   stroke: none;
 }
