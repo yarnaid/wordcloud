@@ -1,3 +1,7 @@
+textarea {
+    resize:none;
+}
+
 /*
 bootstrap overrides
  */
@@ -17,6 +21,20 @@ bootstrap overrides
 /*
 END bootstrap overrides
  */
+
+.ui-widget-overlay { 
+    position: absolute; 
+    top: 0; 
+    left: 0; 
+    width: 100%; 
+    height: 100%; 
+}
+.ui-widget-overlay { 
+    background-color: black;
+     opacity: .50;
+     filter:Alpha(Opacity=50); 
+     position: fixed;
+}
 /* datepicker override */
 
 #ui-datepicker-div {
@@ -120,7 +138,7 @@ input[disabled] {
 .progress-value {
     height: 27px;
     line-height: 27px;
-    font-ize: 14px;
+    font-size: 14px;
     color: #ffffff;
     position: absolute;
     right: 0;
@@ -143,8 +161,13 @@ input[disabled] {
     left: 185px;
 }
 
+.pt-body {
+    position: relative;
+    height: 500px;
+}
+
 .line {
-    border: 2px solid black;
+    border: 1px solid #b3b3b3;
     margin: 20px 0;
 }
 
@@ -207,20 +230,12 @@ input[disabled] {
     width: 644px;
     height: 644px;
     background-color: #FFF;
-    border: 9px solid #50677e;
+    border: 9px solid #99aabb;
     border-radius: 50%;
     -webkit-transition: 0.3s all;
     -ms-transition: 0.3s all;
     transition: 0.3s all;
     z-index: 100;
-}
-
-.pt-outher-circle-active {
-    border-color: #6e0cad;
-}
-
-.pt-outher-circle-hover {
-    border-color: #0083e8;
 }
 
 .pt-options-wrapper {
@@ -248,7 +263,7 @@ input[disabled] {
     top:10px;
     width: 40px;
     height: 80px;
-    background: #50677e;
+    background: #99aabb;
     font-size: 18px;
     font-weight: 100;
     border-radius: 19px 19px 0 0;
@@ -311,12 +326,21 @@ input[disabled] {
     margin: 0;
     width: 423px;
     height: 422px;
-    border: 9px solid #50677e;
+    border: 9px solid #99aabb;
     border-radius: 50%;
     -webkit-transition: 0.3s all;
     -ms-transition: 0.3s all;
     transition: 0.3s all;
     z-index: 100;
+}
+
+.pt-inner-circle-active,
+.pt-outher-circle-active {
+    border-color: #6e0cad;
+}
+.pt-inner-circle-hover,
+.pt-outher-circle-hover {
+    border-color: #0083e8;
 }
 
 .pt-inner-circle-show {
@@ -636,19 +660,22 @@ input[disabled] {
 
 .pt-result-data-delivery-popup,
 .pt-result-timing-popup,
-.pt-result-cost-popup {
+.pt-result-cost-popup,
+.pt-pricing-level-popup {
     position: absolute;
     left: 200px;
     z-index: 100;
- /*   display: none;*/
+    display: none;
 }
 
+.pt-result-data-delivery-popup > div,
 .pt-result-data-delivery-popup > div,
 .pt-result-timing-popup > div,
 .pt-result-cost-popup > div{
     position: relative;
 }
 
+.pt-pricing-level-popup-content>div,
 .pt-result-data-delivery-popup-content > div ,
 .pt-result-timing-popup-content> div ,
 .pt-result-cost-popup-content > div{
@@ -657,7 +684,7 @@ input[disabled] {
     padding: 20px;    
 }
 
-
+.pt-pricing-level-popup-content,
 .pt-result-data-delivery-popup-content,
 .pt-result-timing-popup-content,
 .pt-result-cost-popup-content {
@@ -672,7 +699,8 @@ input[disabled] {
 
 #cost-pin,
 #timing-pin,
-#data-delivery-pin {
+#data-delivery-pin,
+#level-pricings-pin {
 
     position: absolute;
     background-color: white;
@@ -684,12 +712,64 @@ input[disabled] {
     transform: rotate(45deg);
 }
 
+.violet {
+    background-color: #6e0cad;
+}
+
+.next-level {
+    background-color: #b3b3b3;
+    color: white;
+    font-size: 10px;
+    text-align: center;
+}
+
+.pt-pricing-level-popup {
+    left: 0;
+    display: none;
+    top: 70px;
+}
+
+.pt-pricing-level-popup-content {
+    width: 300px;
+}
+
+.pricing-level-row {
+    height: 20px;
+}
+
+.pricing-level-row>div {
+    padding: 0;
+    margin-left: 5px;
+    font-size: 12px;
+}
+
+.pt-pricings-info-pin {
+    width: 12px;
+    height: 12px;
+    padding: 0;
+}
+
+.pt-pricing-level-costs-spent {
+    text-align: right;
+    font-weight: bold;
+}
+
+#level-pricings-pin {
+    border-bottom: none;
+    border-top: 5px solid white; 
+    top: -5px;
+}
+
+#level-pricings-pin >div {
+    border-top: 2px solid #a9cbe6;
+    border-bottom: none;
+}
+
 .pt-popup-pin > div {
     border-left: 2px solid #a9cbe6;
     border-bottom: 2px solid #a9cbe6;
     width:10px;
     height: 10px;
-
 }
 
 .pt-popup-pin {
@@ -717,7 +797,7 @@ input[disabled] {
     font-size: 12px;
 }
 
-.pt-summary-table tr td:last-child p{
+.pt-summary-table tr td:last-child p {
     font-weight: bold;
 }
 
@@ -732,10 +812,102 @@ input[disabled] {
 .pt-summary-table tr:last-child {
     background-color: #d6d6d6;
 }
+
+.pt-save-confirm-contact {
+    width:140px;
+    margin-top: 400px;
+}
+
+.pt-save-confirm-contact > div {
+    margin-top: 10px; 
+}
+
+#timing-table td:last-child p {
+    width: 100px;
+}
+
+#data-delivery-table p {
+    width: 150px;
+}
+
+#data-delivery-table td:first-child p {
+    width: 50px;
+}
+
+.warning-dialog-class,
+.order-dialog {
+    background-color: white;
+    box-shadow: 0px 0px 10px black;
+    padding: 20px;
+    z-index: 2000;
+    border-radius: 10px;
+    position: fixed;
+}
+
+.order-dialog label {
+    text-align: right;
+}
+
+.warning-dialog-class input,
+.order-dialog input {
+    margin-bottom: 10px;
+}
+.warning-dialog-class textarea,
+.order-dialog textarea {
+    width: 100%;
+}
+.warning-dialog-class .ui-dialog-titlebar,
+.order-dialog .ui-dialog-titlebar {display: none;}
+
+.order-dialog .ui-dialog-buttonset {
+    width: 200px;
+    margin: auto;
+}
+
+.warning-dialog-class .ui-dialog-buttonset button,
+.order-dialog .ui-dialog-buttonset button {
+    width:90px;
+    height: 50px;
+    background: linear-gradient(to top, #121212, #565656);
+    border-radius: 5px;
+    border: 1px solid black;
+    color: white;
+    font-weight: normal;
+}
+
+.warning-dialog-class .ui-dialog-buttonset button:hover,
+.order-dialog .ui-dialog-buttonset button:hover {
+    background: #121212;
+}
+
+.warning-dialog-class .ui-dialog-buttonset button:first-child,
+.order-dialog .ui-dialog-buttonset button:first-child {
+    margin-right: 20px;
+}
+
+.warning-dialog-class .ui-dialog-buttonset {
+    width: 100px;
+    margin: auto;
+}
+
+.dialog-header {
+    width: 100%;
+    text-align: center;
+    font-weight: bold;
+}
+
+#warning-dialog-message {
+    margin-bottom: 20px;
+}
+
+.warning-dialog-class .ui-dialog-buttonset {
+    width: 100px;
+}
+
 /*
 buttons
  */
-
+.button-controls,
 .button-accept,
 .button-cancel,
 .button-verbatim-translation {
@@ -754,6 +926,7 @@ buttons
     text-transform: none;
 }
 
+.button-controls:hover,
 .button-accept:hover,
 .button-accept:focus,
 .button-verbatim-translation:hover,

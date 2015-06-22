@@ -13,6 +13,15 @@ $(document).ready(function() {
 
     var previousSelectedButton = null;
 
+    var loadStudyTypes = function() {
+    	var toRender = '';
+    	for(var i=0; i<stubs.study_types.length; i++) {
+    		toRender += "<option>"+stubs.study_types[i].name+"</options>"
+    	}
+
+    	$('#study-type').append(toRender);
+    }
+
 	var getSourceLang = function() {
 		var checked_radio = 
 					$("input[name='pt-language-choose']:checked")[0].id;
@@ -74,7 +83,13 @@ $(document).ready(function() {
     	} else {
     		$("#summary-translation-costs-table pt-summary-table-usual-row").remove();
 			$("#summary-translation-costs-table pt-summary-table-summary-row").remove();
-
+	    	var sumForEachCategory = {
+	    		"brand": 0,
+	    		"short": 0,
+	    		"story": 0,
+	    		"likes": 0,
+	    		"long" : 0
+	    	};
 			var toAdd = "";
 			
 			for(var i=1; i<=cell_amount; i++) {
@@ -87,10 +102,32 @@ $(document).ready(function() {
 		    				  "<td><p>"+(data.codebook_translation.for_each_cat[i]["likes"]+data.verbatim_translation.for_each_cat[i]["likes"]).toFixed(2)+" €</p></td>"+
 		    				  "<td><p>"+(data.codebook_translation.for_each_cat[i]["story"]+data.verbatim_translation.for_each_cat[i]["story"]).toFixed(2)+" €</p></td>"+
 		    				  "<td><p>"+(data.codebook_translation.for_each_cat[i]["long"]+data.verbatim_translation.for_each_cat[i]["long"]).toFixed(2)+" €</p></td>"+
-	    					  "<td><p>€</p></td>"+
+	    					  "<td><p>"+(data.codebook_translation.separate["Cell "+i]+data.verbatim_translation.separate["Cell "+i]).toFixed(2)+"€</p></td>"+
 	    				  "</tr>"
     			toAdd += str;
+
+				sumForEachCategory["brand"] += data.codebook_translation.for_each_cat[i]["brand"];
+	    		sumForEachCategory["short"] += data.codebook_translation.for_each_cat[i]["short"];
+	    		sumForEachCategory["likes"] += (data.codebook_translation.for_each_cat[i]["likes"]+data.verbatim_translation.for_each_cat[i]["likes"]);
+	    		sumForEachCategory["story"] += (data.codebook_translation.for_each_cat[i]["story"]+data.verbatim_translation.for_each_cat[i]["story"]);
+	    		sumForEachCategory["long"] += (data.codebook_translation.for_each_cat[i]["long"]+data.verbatim_translation.for_each_cat[i]["long"]);
 			}
+
+			var total =sumForEachCategory["brand"]+
+						sumForEachCategory["short"]+
+						sumForEachCategory["likes"]+
+						sumForEachCategory["story"]+
+						sumForEachCategory["long"];
+			toAdd += 
+				"<tr class='pt-summary-table-summary-row'>"+
+    				"<td><p>total</p></td>"+
+    				"<td><p>"+sumForEachCategory["brand"].toFixed(2)+" €</p></td>"+
+    				"<td><p>"+sumForEachCategory["short"].toFixed(2)+" €</p></td>"+
+    				"<td><p>"+sumForEachCategory["likes"].toFixed(2)+" €</p></td>"+
+    				"<td><p>"+sumForEachCategory["story"].toFixed(2)+" €</p></td>"+
+    				"<td><p>"+sumForEachCategory["long"].toFixed(2)+" €</p></td>"+
+    				"<td><p>"+(data.verbatim_translation.total+data.codebook_translation.total).toFixed(2)+" €</p></td>"+
+    			"</tr>"
 			$("#summary-translation-costs-table .pt-summary-table-header-row").after(toAdd);			
 
     		$(".pt-result-cost-translation-info").show();
@@ -219,9 +256,16 @@ $(document).ready(function() {
 		$('.pt-options-wrapper').css("width", width+"px");
 		$('.pt-options-list').css("width", width+"px");
 		for(var i=1; i<=number_of_cells; i++)
-			$('.pt-options-list').append(
-				"<li id='cell_"+i
-				+"' class='pt-options-tab pt-options-identical-tabs' style='left:"+percents_per_cell*(i-1)+"%;top:"+diff[Math.abs(mid-i)]+";'><a href='#'>"+i+"</a></li>");
+			if(i==1) {
+				$('.pt-options-list').append(
+					"<li id='cell_"+i
+					+"' class='pt-options-tab pt-options-identical-tabs' style='left:"+percents_per_cell*(i-1)+"%;top:"+(parseInt(diff[Math.abs(mid-i)])-10)+"px;'><a href='#'>"+i+"</a></li>");
+			} else {
+				$('.pt-options-list').append(
+					"<li id='cell_"+i
+					+"' class='pt-options-tab pt-options-identical-tabs' style='left:"+percents_per_cell*(i-1)+"%;top:"+diff[Math.abs(mid-i)]+";'><a href='#'>"+i+"</a></li>");
+			}
+		$( '#cell_1' ).addClass('pt-options-tab-active')
 	};
 
     var renderCellTabs = function(){
@@ -244,12 +288,18 @@ $(document).ready(function() {
 			$('.pt-options-wrapper').css("width", width+"px");
 			$('.pt-options-list').css("width", width+"px");
 			for(var i=1; i<=number_of_cells; i++)
-				$('.pt-options-list').append(
-					"<li id='cell_"+i
-					+"' class='pt-options-tab' style='left:"+percents_per_cell*(i-1)+"%;top:"+diff[Math.abs(mid-i)]+";'><a href='#'>"+i+"</a></li>");
+				if(i==1) {
+					$('.pt-options-list').append(
+						"<li id='cell_"+i
+						+"' class='pt-options-tab' style='left:"+percents_per_cell*(i-1)+"%;top:"+(parseInt(diff[Math.abs(mid-i)])-20)+"px;'><a href='#'>"+i+"</a></li>");
+				} else {
+					$('.pt-options-list').append(
+						"<li id='cell_"+i
+						+"' class='pt-options-tab pt-unvisited-tab' style='left:"+percents_per_cell*(i-1)+"%;top:"+diff[Math.abs(mid-i)]+";'><a href='#'>"+i+"</a></li>");
+				}
+			$( '#cell_1' ).addClass('pt-options-tab-active')
 		}
 	}
-
 
     var retainFormData = function(index) {
 		$(".pt-verbatim-translation-languages input").prop("checked", false);
@@ -323,11 +373,58 @@ $(document).ready(function() {
 		}
     };
 
+    var fillTimingsTable = function(data, cell_amount) {
+    	$("#timing-table .pt-summary-table-usual-row").remove();
+    	$("#timing-table .pt-summary-table-summary-row").remove();
+
+    	var toAdd = "";
+    	for(var i=1; i<=cell_amount; i++) {
+    		var cellName = "Cell "+i;
+    		toAdd +=
+    			"<tr class='pt-summary-table-usual-row'>"+
+    				"<td><p>"+cellName+"</p></td>"+
+    				"<td><p>"+calculator.formatTime(data.separate[cellName])+"</p></td>"+
+    			"</tr>"
+    	}
+
+    	$("#timing-table .pt-summary-table-header-row").after(toAdd);
+    }
+
+    var fillDataDeliveryTable = function(data, cell_amount) {
+    	$("#data-delivery-table .pt-summary-table-usual-row").remove();
+    	$("#data-delivery-table .pt-summary-table-summary-row").remove();
+
+    	var toAdd = "";
+
+		for(var i=1; i<=cell_amount; i++) {
+    		var cellName = "Cell "+i;
+    		if(data.separate[cellName] != undefined)
+	    		toAdd +=
+	    			"<tr class='pt-summary-table-usual-row'>"+
+	    				"<td><p>"+cellName+"</p></td>"+
+	    				"<td><p>"+(data.separate[cellName][0])+"</p></td>"+
+		  				"<td><p>"+(data.separate[cellName][1])+"</p></td>"
+	    			"</tr>"
+    	}
+    	$('#data-delivery-table .pt-summary-table-header-row').after(toAdd)
+    }
+
     $('#cells-number').change(function() {
-    	if(!isIdentical)
+    	var cell_number = parseInt($('.pt-options-tab-active')[0].id.substring($('.pt-options-tab-active')[0].id.indexOf('_')+1));
+
+	    if(cell_number==NaN) return;
+		
+		var data = saveDataFromCurrentForm();
+		alert
+    	saveToBuffer(cell_number, data);
+
+    	if(!isIdentical) {
     		renderCellTabs();
-    	else 
+    	}
+    	else {
     		renderIdenticalCellTabs();
+    	}
+    	retainFormData(1);
     });
 
     $('.pt-options-wrapper').on("mouseover",'.pt-options-tab',
@@ -338,6 +435,7 @@ $(document).ready(function() {
 	    		//$(this).animate({top: parseInt(prev_top)-10+"px"});
 	    		$(this).css("top", parseInt(prev_top)-10+"px");
 	    		$('.pt-outher-circle').toggleClass('pt-outher-circle-hover');
+	    		$('.pt-inner-circle').toggleClass('pt-inner-circle-hover');
     		}
     	}
     );
@@ -349,6 +447,7 @@ $(document).ready(function() {
 	    		//$(this).animate({top: parseInt(prev_top)+10+"px"});
 	    		$(this).css("top", parseInt(prev_top)+10+"px");
 	    		$('.pt-outher-circle').toggleClass('pt-outher-circle-hover');
+	    		$('.pt-inner-circle').toggleClass('pt-inner-circle-hover');
 	    	}
     	}
     );
@@ -376,7 +475,9 @@ $(document).ready(function() {
             prev_top = $(this).css("top");
     		$(this).css("top", parseInt(prev_top)-10+"px");
             $(this).addClass('pt-options-tab-active');
-            $('.pt-inner-circle').addClass('pt-inner-circle-show');
+            $(this).removeClass('pt-unvisited-tab');
+            $('.pt-inner-circle').toggleClass('pt-inner-circle-hover');
+            $('.pt-inner-circle').addClass('pt-inner-circle-active');
            	$('.pt-outher-circle').toggleClass('pt-outher-circle-hover');
             $('.pt-outher-circle').addClass('pt-outher-circle-active');
 			$('#datepicker tr td').removeClass('ui-datepicker-current-day');
@@ -412,10 +513,14 @@ $(document).ready(function() {
         function() {
             $(this)
                 .css('border', '2px solid #00F');
+            $(".pt-pricing-level-popup").fadeIn(200);
+            var width = $(".pt-pricing-level-popup-content").css("width");
+            $("#level-pricings-pin").css("left", parseInt(width)/2+"px");
         },
         function() {
             $(this)
                 .css('border', '2px solid #AAA');
+            $(".pt-pricing-level-popup").fadeOut(200);
         }
     );
 
@@ -477,17 +582,31 @@ $(document).ready(function() {
 
 	        	saveToBuffer(cell_number, data);
 	        }
+    		/*
+    		 *	Getting level stub
+    		 */
 
-    		var cell_amount = $("#cells-number")[0].valueAsNumber;
-    		var timestamp = calculator.timeCalculation(formData, cell_amount).total;
-    		var outputData = calculator.countCodingCost(formData, cell_amount)
+    		var level = $("#level-stub").val();
+    		level = parseInt(level.substring(level.lastIndexOf(' ')));
+    		formData['level'] = level;
+
+    		try {
+	    		var cell_amount = $("#cells-number")[0].valueAsNumber;
+	    		var timestamp = calculator.timeCalculation(formData, cell_amount);
+	    		var outputData = calculator.countCodingCost(formData, cell_amount);
+	    		var dataDeliveryData = calculator.getDataDeliveryDate(formData, timestamp, cell_amount);
+	    	} catch(error) {
+	    		$("#warning-dialog-message").text("Probably, you don't filled all cells")
+	    		$("#warning-dialog").dialog("open")
+	    	}
     		$(".pt-result-cost p").text("€"+calculator.formatCurrency(outputData.total+outputData.translation_cost));
-    		//$(".pt-result-timing p").text(calculator.formatTime(timestamp));
-    		$(".pt-result-timing p").text(timestamp);
-    		
-    		//if()
-    		$(".pt-result-data-delivery p").text(calculator.getDataDeliveryDate(formData, cell_amount,timestamp))
+    		$(".pt-result-timing p").text(calculator.formatTime(timestamp.total));
+    		$(".pt-result-data-delivery p").text(dataDeliveryData.total);
+
+
     		fillTablesWithData(outputData, cell_amount);
+    		fillTimingsTable(timestamp, cell_amount);
+    		fillDataDeliveryTable(dataDeliveryData, cell_amount);
 
     		$(lastOpened).fadeOut();
     		$(".buttons-wrapper").fadeOut();
@@ -521,6 +640,23 @@ $(document).ready(function() {
 		}    
     )
 
+    $('#confirm-button').click(
+    	function() {
+	    	$( "#confirm-order-dialog" ).dialog('open');
+    	}
+    );
+
+    $('#save-button').click(
+    	function() {
+    		$("#save-order-dialog").dialog("open");
+    	}
+    );
+
+    $('#contact-button').click(
+    	function() {
+    		$('#contact-dialog').dialog("open");
+    	}
+    );
 
     $("#datepicker").datepicker({
         firstDay: 1,
@@ -532,23 +668,154 @@ $(document).ready(function() {
     $(".pt-result-cost, .pt-result-timing, .pt-result-data-delivery").hover(
     	function() {
     		$('.'+this.className+'-popup').fadeIn(200);
-    		var height = $('.pt-result-cost-popup-content').css("height");
-    		$('.pt-result-cost-popup-content').css("top", -(parseInt(height)/2-35))
+    		var height = $('.'+this.className+'-popup-content').css("height");
+    		$('.'+this.className+'-popup-content').css("top", -(parseInt(height)/2-35))
     	},
     	function() {
     		$('.'+this.className+'-popup').fadeOut(200);
     	}
     );
 
+    $("#study-type").on('change', function() {
+    	var selectedIndex = $('#study-type')[0].selectedIndex;
+    	var studyType = stubs.study_types[selectedIndex];
+
+    	var propMap = {
+    		likes: ["#feeling-likes-question",'like_questions'],
+    		one_word: ["#one-word-question",'short_questions'],
+    		story: ["#story-question","story_questions"]
+    	}
+    	$(".pt-questions-content input").val(0);
+
+    	var questions = studyType.properties.questions
+    	for(var key in questions){
+    		if(questions.hasOwnProperty(key)) {
+    			$(propMap[key][0]).val(questions[key]);
+    		}
+    	}
+
+    	data = saveDataFromCurrentForm();
+
+		for(var i = 1; i<=$("#cells-number")[0].valueAsNumber; i++) {
+			formData[i].questions = data.questions;
+			formData[i].sample_size = data.sample_size;
+		}
+    })
+
+    $( "#confirm-order-dialog" ).dialog({
+    	modal: true,
+    	draggable: false,
+    	dialogClass: "order-dialog",
+    	autoOpen: false,
+    	width: 500,
+    	show: true,
+    	buttons : [
+    		{
+    			text: "Ok",
+    			id: "button-confirm-confirm-project",
+			    click: function() {
+		        	$( this ).dialog( "close" );
+		      	}
+    		},
+    		{
+    			text: "Cancel",
+    			id: "button-cancel-confirm-project",
+    			click: function() {
+		        	$( this ).dialog( "close" );
+		      	}
+    		}
+    	]
+    });
+
+    $( '#save-order-dialog' ).dialog({
+    	modal: true,
+    	draggable: false,
+    	dialogClass: "order-dialog",
+    	autoOpen: false,
+    	width: 500,
+    	show: true,
+    	buttons : [
+    		{
+    			text: "Ok",
+    			id: "button-ok-save-project",
+    			click: function() {
+		        	$( this ).dialog( "close" );
+		      	}
+    		},
+    		{
+    			text: "Cancel",
+    			id: "button-cancel-save-project",
+    			click: function() {
+		        	$( this ).dialog( "close" );
+		      	}
+    		}
+    	]
+    });
+
+    $( '#contact-dialog' ).dialog({
+    	modal: true,
+    	draggable: false,
+    	dialogClass: "order-dialog",
+    	autoOpen: false,
+    	width: 500,
+    	show: true,
+    	buttons : [
+    		{
+    			text: "Ok",
+    			id: "button-ok-contact",
+    			click: function() {
+		        	$( this ).dialog( "close" );
+		      	}
+    		},
+    		{
+    			text: "Cancel",
+    			id: "button-ok-contact",
+    			click: function() {
+		        	$( this ).dialog( "close" );
+		      	}
+    		}
+    	]
+    });
+
+    $( '#warning-dialog' ).dialog({
+    	modal: true,
+    	draggable: false,
+    	dialogClass: "warning-dialog-class",
+    	autoOpen: false,
+    	width: 300,
+    	show: true,
+    	buttons : [
+    		{
+    			text: "Ok",
+    			id: "button-ok-contact",
+    			click: function() {
+		        	$( this ).dialog( "close" );
+		      	}
+    		},
+    	]
+    })
+
+	var unvisitedBlinker = setInterval(function() { 
+		$('.pt-unvisited-tab').animate({opacity:0.6},750);
+		$('.pt-unvisited-tab').animate({opacity:1},750);
+	}, 1500);
+
     // this sections sets defaults values (renders initial amount of cells, checks checkboxes etc)
-    $('#pt-language-english').prop('checked', true);
 	$('#pt-codebook-translation-language-english').prop('disabled', true);
 	$('#pt-verbatim-translation-language-english').prop('disabled', true);
 
+	//$('pt-r')
     renderCellTabs();
+    loadStudyTypes();
 
     $('#codebook-create-new').prop('checked', true);
     $('#codebook-from-previous-job').prop('checked', true);
     $('.ui-datepicker-today').removeClass('ui-datepicker-current-day');
+    $( '#cell_1' ).addClass('pt-options-tab-active')
+    $('.pt-results-wrapper').hide();
+
+    $('#pt-language-english').prop('checked', true);
+    $('.pt-inner-circle').addClass('pt-inner-circle-active');
+    $('.pt-outher-circle').addClass('pt-outher-circle-active');
 });
 

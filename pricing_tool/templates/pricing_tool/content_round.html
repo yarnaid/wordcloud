@@ -5,7 +5,57 @@
         <p><a href="{% url 'pricing_tool' %}">Old version</a></p>
     </div>
 </div>
+<!--<div id="dialog" title="super dialog">dialog</div>-->
 <section class="container pt-wrapper">
+
+    <div id="warning-dialog">
+        <div>
+            <p class='dialog-header'>Warning</p>
+            <div class="line"></div>
+            <p id="warning-dialog-message">You don't filled all cells!</p>
+        </div>
+    </div>
+    <div id="save-order-dialog">
+        <div>
+            <p class='dialog-header'>Save project</p>
+            <div class="line"></div>
+            <label for="save-order-clients-name" class="col-md-4">Your name:</label>
+            <input id="save-order-clients-name" type="text" class="col-md-8"></input>
+            <label for="save-order-project-name" class="col-md-4">Project name:</label>
+            <input id="save-order-project-name" type="text" class="col-md-8"></input>
+            <label for="save-order-project-number" class="col-md-4">Project number</label>
+            <input id="save-order-project-number" type="text" class="col-md-8"></input>
+        </div>
+    </div>
+
+    <div id="confirm-order-dialog">
+        <div>
+            <p class='dialog-header'>Confirm project</p>
+            <div class="line"></div>
+            <label for="order-clients-name" class="col-md-4">Your name:</label>
+            <input id="order-clients-name" type="text" class="col-md-8"></input>
+            <label for="order-project-name" class="col-md-4">Project name:</label>
+            <input id="order-project-name" type="text" class="col-md-8"></input>
+            <label for="order-project-number" class="col-md-4">Project number</label>
+            <input id="order-project-number" type="text" class="col-md-8"></input>
+            <label>Your comments</label>
+            <textarea rows="5">Input your comments:</textarea>
+            <a >Attach file...</a> 
+        </div>
+    </div>
+
+    <div id="contact-dialog">
+        <div>
+            <p class='dialog-header'>Contact with us:</p>
+            <div class="line"></div>
+            <label for="contact-clients-name" class="col-md-4">Your name:</label>
+            <input id="contact-clients-name" type="text" class="col-md-8"></input>
+            <label for="contact-question" class="col-md-4">Your question:</label>
+            <textarea id="contact-question" rows="5">Input your comments:</textarea>
+        </div>
+    </div>
+
+
     <div class="row">
         <aside class="col-md-3 col-sm-12 pt-left-menu">
             <form action="#" method="post" class="pt-aside-form form-inline">
@@ -13,9 +63,7 @@
                 <div class="row form-group">
                     <label for="study-type" class="col-sm-7">Study type:</label>
                     <select name="study-type" id="study-type" class="col-sm-5 form-control">
-                        <option value="Choice 1">Choice 1</option>
-                        <option value="Choice 2">Choice 2</option>
-                        <option value="Choice 3">Choice 3</option>
+
                     </select>
                 </div>
                 <div class="row form-group">
@@ -33,6 +81,13 @@
                         </label>
                     </div>
                 </div>
+                <label for="level-stub">Level stub:</label>
+                <select name="current-level" id="level-stub">
+                    <option>Level 1</option>
+                    <option>Level 2</option>
+                    <option>Level 3</option>
+                    <option>Level 4</option>
+                </select>
             </form>
         </aside>
         <aside class="pt-progress-bar-container col-md-3 col-md-offset-6">
@@ -56,6 +111,38 @@
                         <div class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100"></div>
                     </div>
                 </div>
+                <div class="pt-pricing-level-popup">
+                    <div>
+                        <div id="level-pricings-pin" class="pt-popup-pin">
+                            <div></div>
+                        </div>
+                        <div class="pt-pricing-level-popup-content">
+                            <div>
+                                <div class="pricing-level-row">
+                                    <div id="pt-plb-1" class="pt-pricings-info-pin violet col-md-1"></div>
+                                    <div class="col-md-8">Costs spent this month:</div>
+                                    <div class="pt-pricing-level-costs-spent col-md-2">145€</div>
+                                </div>
+                                <div class="pricing-level-row">
+                                    <div id="pt-plb-2" class="pt-pricings-info-pin next-level col-md-1">2</div>
+                                    <div class="col-md-8">Left to reach LEVEL 2:</div>
+                                    <div class="pt-pricing-level-costs-spent col-md-2">1245€</div>
+                                </div>
+                                <div class="line"></div>
+                                <div class="pricing-level-row">
+                                    <div id="pt-plb-3" class="pt-pricings-info-pin violet col-md-1"></div>
+                                    <div  class="col-md-8">Current discount:</div>
+                                    <div class="pt-pricing-level-costs-spent col-md-2">0%</div>
+                                </div >
+                                <div class="pricing-level-row">
+                                    <div id="pt-plb-4" class="pt-pricings-info-pin next-level col-md-1">2</div>
+                                    <div class="col-md-8">Next level discount</div>
+                                    <div class="pt-pricing-level-costs-spent col-md-2">5%</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </aside>
         <section class="col-md-9 cols-sm-12 pt-body">
@@ -74,7 +161,7 @@
                     <div class="pt-inner-circle-selector-wrapper">
                         <div class="pt-language-selector">
                             <svg width="243" height="85">
-                                <g transform="translate(0.000000,85.000000) scale(0.100000,-0.100000)" fill="#50677e" stroke="none">
+                                <g transform="translate(0.000000,85.000000) scale(0.100000,-0.100000)" fill="#99aabb" stroke="none">
                                     <path d="M920 839 c-129 -13 -310 -44 -438 -75 -199 -48 -488 -152 -480 -173 1 -5 59 -137 127 -293 l125 -285 85 34 c503 197 1077 213 1592 42 65 -21 143 -50 173 -63 l56 -25 14 27 c8 15 55 119 106 232 51 113 105 233 120 267 l28 61 -127 50 c-223 89 -471 154 -711 187 -138 19 -535 28 -670 14z " />
                                 </g>
                                 <defs>
@@ -88,7 +175,7 @@
                         </div>
                         <div class="pt-sample-size-selector">
                             <svg width="181" height="206">
-                                <g transform="translate(0.000000,206.000000) scale(0.100000,-0.100000)" fill="#50677e" stroke="none">
+                                <g transform="translate(0.000000,206.000000) scale(0.100000,-0.100000)" fill="#99aabb" stroke="none">
                                     <path d="M146 1778 c-104 -203 -142 -285 -133 -291 6 -4 61 -36 121 -72 475 -285 851 -759 1016 -1280 18 -55 35 -107 38 -116 6 -14 46 -6 312 64 168 43 307 81 309 83 7 7 -56 207 -104 329 -223 572 -627 1073 -1138 1408 -104 69 -256 157 -270 157 -3 0 -71 -127 -151 -282z" />
                                 </g>
                                 <defs>
@@ -102,7 +189,7 @@
                         </div>
                         <div class="pt-questions-selector">
                             <svg width="111" height="238">
-                                <g transform="translate(0.000000,238.000000) scale(0.100000,-0.100000)" fill="#50677e" stroke="none">
+                                <g transform="translate(0.000000,238.000000) scale(0.100000,-0.100000)" fill="#99aabb" stroke="none">
                                     <path d="M 705 2308 c -159 -33 -291 -61 -292 -62 -1 -1 4 -38 12 -81 78 -437 14 -935 -172 -1349 -51 -113 -144 -280 -208 -373 l-43 -61 256 -189 c141 -103 258 -188 261 -188 12 0 159 229 223 347 164 304 273 635 330 998 19 124 22 185 22 425 0 240 -3 300 -22 422 -26 169 -28 173 -56 172 -11 0 -151 -28 -311 -61z" />
                                 </g>
                                 <defs>
@@ -116,7 +203,7 @@
                         </div>
                         <div class="pt-codebooks-selector">
                             <svg viewBox="0 0 220.000000 148.000000" preserveAspectRatio="xMidYMid meet">
-                                <g transform="translate(0.000000,148.000000) scale(0.100000,-0.100000)" fill="#50677e" stroke="none">
+                                <g transform="translate(0.000000,148.000000) scale(0.100000,-0.100000)" fill="#99aabb" stroke="none">
                                     <path d="M1605 1362 c-403 -417 -911 -652 -1534 -708 l-74 -6 6 -226 c4 -124
                                             7 -268 7 -320 l0 -95 103 7 c649 45 1250 287 1747 704 96 80 340 324 340 340
                                             0 7 -351 310 -460 397 l-25 21 -110 -114z" />
@@ -132,7 +219,7 @@
                         </div>
                         <div class="pt-codebook-translation-selector">
                             <svg viewBox="0 0 221.000000 146.000000" preserveAspectRatio="xMidYMid meet">
-                                <g transform="translate(0.000000,146.000000) scale(0.100000,-0.100000)" fill="#50677e" stroke="none">
+                                <g transform="translate(0.000000,146.000000) scale(0.100000,-0.100000)" fill="#99aabb" stroke="none">
                                     <path d="M239 1252 c-131 -113 -239 -210 -239 -216 0 -17 295 -304 390 -380
                                             481 -383 1082 -615 1686 -652 l112 -7 6 174 c11 327 12 469 1 469 -73 1 -281
                                             27 -395 50 -455 91 -849 302 -1189 636 l-133 131 -239 -205z" />
@@ -148,7 +235,7 @@
                         </div>
                         <div class="pt-verbatim-translation-selector">
                             <svg viewBox="0 0 110.000000 237.000000" preserveAspectRatio="xMidYMid meet">
-                                <g transform="translate(0.000000,237.000000) scale(0.100000,-0.100000)" fill="#50677e" stroke="none">
+                                <g transform="translate(0.000000,237.000000) scale(0.100000,-0.100000)" fill="#99aabb" stroke="none">
                                     <path d="M37 2258 c-64 -428 -45 -828 58 -1223 63 -244 157 -480 270 -687 67
                                             -122 216 -349 226 -346 16 7 508 374 508 380 1 4 -19 35 -43 70 -330 477 -472
                                             1079 -391 1657 9 58 17 113 20 121 5 14 -164 52 -611 138 -19 3 -22 -5 -37
@@ -165,7 +252,7 @@
                         </div>
                         <div class="pt-date-availability-selector">
                             <svg viewBox="0 0 182.000000 207.000000" preserveAspectRatio="xMidYMid meet">
-                                <g transform="translate(0.000000,207.000000) scale(0.100000,-0.100000)" fill="#50677e" stroke="none">
+                                <g transform="translate(0.000000,207.000000) scale(0.100000,-0.100000)" fill="#99aabb" stroke="none">
                                     <path d="M1415 2014 c-581 -331 -1051 -873 -1294 -1494 -46 -115 -123 -352
                                             -117 -358 2 -1 135 -36 297 -77 162 -42 301 -78 310 -80 12 -4 20 9 34 62 63
                                             239 214 540 385 768 94 127 326 359 451 453 86 64 290 194 320 204 13 4 -279
@@ -415,15 +502,6 @@
                                                 <td><p>long</p></td>
                                                 <td><p>total</p></td>
                                             </tr>
-                                            <tr class="pt-summary-table-usual-row">
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                            </tr>
                                             <tr class="pt-summary-table-summary-row">
                                                 <td><p>total</p></td>
                                                 <td></td>
@@ -465,7 +543,23 @@
                                     <div></div>
                                 </div>
                                 <div class="pt-result-timing-popup-content">
-                                    <div></div>
+                                    <div>
+                                        <p>Time required:</p>
+                                        <table id="timing-table" class="pt-summary-table">
+                                            <tr class="pt-summary-table-header-row">
+                                                <td><p>cell</p></td>
+                                                <td><p>time</p></td>
+                                            </tr>
+                                            <tr class="pt-summary-table-usual-row">
+                                                <td></td>
+                                                <td></td>
+                                            </tr>
+                                            <tr class="pt-summary-table-summary-row">
+                                                <td><p>total</p></td>
+                                                <td></td>
+                                            </tr>
+                                        </table>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -480,11 +574,29 @@
                         <div class="pt-result-data-delivery-popup">
                             <div>
                                 <div id="data-delivery-pin" class="pt-popup-pin">
-                                    <div>
-                                    </div>
+                                    <div></div>
                                 </div>
                                 <div class="pt-result-data-delivery-popup-content">
-                                    <div></div>
+                                    <div>
+                                        <p>Data delivery:</p>
+                                        <table id="data-delivery-table" class="pt-summary-table">
+                                            <tr class="pt-summary-table-header-row">
+                                                <td><p>cell</p></td>
+                                                <td><p>start</p></td>
+                                                <td><p>end</p></td>
+                                            </tr>
+                                            <tr class="pt-summary-table-usual-row">
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                            </tr>
+                                            <tr class="pt-summary-table-summary-row">
+                                                <td><p>total</p></td>
+                                                <td></td>
+                                                <td></td>
+                                            </tr>
+                                        </table>
+                                    </div>
                                 </div>
                             </div>
                         </div>    
@@ -495,6 +607,11 @@
                     </div>
                 </div>
             </div>
+            <div class="pt-save-confirm-contact col-md-offset-10">
+                <div id="save-button" class="btn button-controls">Save</div>
+                <div id="confirm-button" class="btn button-controls">Confirm</div>
+                <div id="contact-button" class="btn button-controls">Contact</div>
+            </div>
         </section>
     </div>
 </section>
@@ -503,4 +620,5 @@
 <script src="http://code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
 <script type="text/javascript" src="{% static 'pricing_tool/js/pricing-tool.js' %}"></script>
 <script type="text/javascript" src="{% static 'pricing_tool/js/calculation_functions.js' %}"></script>
+<script type="text/javascript" src="{% static 'pricing_tool/js/stubs.js' %}"></script>
 {% endaddtoblock %} {% endblock %}

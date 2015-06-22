@@ -26,7 +26,7 @@ var calculator = {
 		1: 0.2,
 		2: 0.16,
 		3: 0.12,
-		4: 1
+		4: 0.1
 	},
 
 	timing_costs : {
@@ -89,7 +89,7 @@ var calculator = {
 			var A = this.language_rates[data[i].source_language];
 			var B = data[i].sample_size;
 			var C = this.previous_codebook_rate[data[i].previous_codebook.uses];
-			var J = this.pricing_levels[1];
+			var J = this.pricing_levels[data.level];
 
 			var D1 = (A*B*C*J)*this.questions_categories.D1 * data[i].questions.brand_questions;
 			var D2 = (A*B*C*J)*this.questions_categories.D2 * data[i].questions.short_questions;
@@ -135,6 +135,9 @@ var calculator = {
 		var total_sum = 0;
 		var sum_for_separate_cell = {};
 
+		var translationTime = this.computeVerbatimTranslationTime(data, cell_amount);
+		var codebookTranslationCost = this.computeCodebookTranslationTime(data, cell_amount);
+		
 		for(var i=1; i<=cell_amount; i++) {
 
 			var A = this.language_rates[data[i].source_language];
@@ -142,23 +145,26 @@ var calculator = {
 			var C = this.previous_codebook_rate[data[i].previous_codebook.uses];
 			var Ht = this.timing_costs[cell_amount];
 
-			var D1 = this.questions_categories.D1 * data[i].questions.brand_questions;
-			var D2 = this.questions_categories.D2 * data[i].questions.short_questions;
-			var D3 = this.questions_categories.D3 * data[i].questions.like_questions;
+			var D1 = (A*B*C)*Ht*9.5*this.questions_categories.D1 * data[i].questions.brand_questions;
+			var D2 = (A*B*C)*Ht*9.5*this.questions_categories.D2 * data[i].questions.short_questions;
+			var D3 = (A*B*C)*Ht*9.5*this.questions_categories.D3 * data[i].questions.like_questions;
 			var D4 = 0;//this.questions_categories.D3 * data[i].questions._questions;
-			var D5 = this.questions_categories.D5 * data[i].questions.story_questions;
-			var D6 = this.questions_categories.D6 * data[i].questions.long_questions;
+			var D5 = (A*B*C)*Ht*9.5*this.questions_categories.D5 * data[i].questions.story_questions;
+			var D6 = (A*B*C)*Ht*9.5*this.questions_categories.D6 * data[i].questions.long_questions;
 
-			var cell_cost = (A*B*C)*(D1+D2+D3+D4+D5+D6)*Ht*9.5;
+			var cell_cost = (D1+D2+D3+D4+D5+D6);
 			var cell_name = "Cell "+i;
+
+			if(translationTime.separate[cell_name] != undefined)
+				cell_cost += translationTime.separate[cell_name];
+
+			if(codebookTranslationCost.separate[cell_name] != undefined)
+				cell_cost += codebookTranslationCost.separate[cell_name];
 
 			sum_for_separate_cell[cell_name] = cell_cost;
 
 			total_sum += cell_cost;
 		}
-
-		var translationTime = this.computeVerbatimTranslationTime(data, cell_amount);
-		var codebookTranslationCost = this.computeCodebookTranslationTime(data, cell_amount);
 
 		return {
 			total : total_sum+translationTime.total+codebookTranslationCost.total,
@@ -184,7 +190,7 @@ var calculator = {
 				E += this.language_rates[data[i].codebook_translation_languages[j]];
 			}
 			
-			var J = this.pricing_levels[1];
+			var J = this.pricing_levels[data.level];
 			var C = this.previous_codebook_rate[data[i].previous_codebook.uses];
 			
 			var H = this.timing_costs[cell_amount];
@@ -276,7 +282,7 @@ var calculator = {
 				F += this.language_rates[data[i].verbatim_translation_languages[j]];
 			}
 
-			var J = this.pricing_levels[1];
+			var J = this.pricing_levels[data.level];
 			var G6 = (A*F)*2*J*this.verbatim_extractions.G6 * data[i].verbatims_translation.long_question_translation;
 			var G3 = (A*F)*2*J*this.verbatim_extractions.G3 * data[i].verbatims_translation.likes_question_translation;
 			var G5 = (A*F)*2*J*this.verbatim_extractions.G5 * data[i].verbatims_translation.story_question_translation;
@@ -335,24 +341,47 @@ var calculator = {
 		}
 	},
 
-	getDataDeliveryDate: function(data, cell_amount, duration) {
+	getDataDeliveryDate: function(data, timings, cell_amount) {
 
 		var latest = 0;
+		var separate = {}
 
 		for(var i=1; i<=cell_amount; i++) {
-			date = data[i].date_availability;
+			var date = data[i].date_availability;
+			var cell_name = "Cell "+i;
 			if(date != undefined) {
-				if (date.getTime()>latest)
-					latest = date.getTime();
+				var time = date.getTime();
+				if(data[i].am_or_pm == "PM")
+					time += 60*60*13*1000;
+				if (time>latest)
+					latest = time;
+				date = new Date(time);
+				
+				var lastDate = new Date(date.getTime()+timings.separate[cell_name]*1000);
+				var am_pm = (date.getUTCHours()>13 ? "PM" : "AM");
+				
+				separate[cell_name] = [];
+				separate[cell_name].push(data[i].am_or_pm +" "+date.getDate()+" "+
+					this.month_names[date.getMonth()]+" "+date.getFullYear());
+				
+				var am_pm = (lastDate.getUTCHours()>13)? "PM" : "AM";
+				separate[cell_name].push(am_pm +" "+lastDate.getDate()+" "+
+					this.month_names[lastDate.getMonth()]+" "+lastDate.getFullYear());
 			}
 		}
 		if(latest!=0) {
-			var lastDate = new Date(latest+duration*1000);
-			var am_pm = (lastDate.getUTCHours()>13)? "PM" : "AM";
+			var lastDate = new Date(latest+timings.total*1000);
+			var am_pm = ((lastDate.getUTCHours()>13)? "PM" : "AM");
 
-			return am_pm +" "+lastDate.getDate()+" "+this.month_names[lastDate.getMonth()]+" "+lastDate.getFullYear();
+			return {
+				total: am_pm +" "+lastDate.getDate()+" "+this.month_names[lastDate.getMonth()]+" "+lastDate.getFullYear(),
+				separate: separate
+			}
 		} else 
-			return ""
+			return { 
+				total : "",
+				separate: separate
+			}
 	},
 
 	formatCurrency : function(str) {
