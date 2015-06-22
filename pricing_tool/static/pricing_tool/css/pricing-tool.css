@@ -331,7 +331,7 @@ input[disabled] {
     -webkit-transition: 0.3s all;
     -ms-transition: 0.3s all;
     transition: 0.3s all;
-    z-index: 105;
+    z-index: 100;
 }
 
 .pt-inner-circle-active,
@@ -834,6 +834,7 @@ input[disabled] {
     width: 50px;
 }
 
+.warning-dialog-class,
 .order-dialog {
     background-color: white;
     box-shadow: 0px 0px 10px black;
@@ -847,14 +848,15 @@ input[disabled] {
     text-align: right;
 }
 
+.warning-dialog-class input,
 .order-dialog input {
     margin-bottom: 10px;
 }
-
+.warning-dialog-class textarea,
 .order-dialog textarea {
     width: 100%;
 }
-
+.warning-dialog-class .ui-dialog-titlebar,
 .order-dialog .ui-dialog-titlebar {display: none;}
 
 .order-dialog .ui-dialog-buttonset {
@@ -862,6 +864,7 @@ input[disabled] {
     margin: auto;
 }
 
+.warning-dialog-class .ui-dialog-buttonset button,
 .order-dialog .ui-dialog-buttonset button {
     width:90px;
     height: 50px;
@@ -872,12 +875,19 @@ input[disabled] {
     font-weight: normal;
 }
 
+.warning-dialog-class .ui-dialog-buttonset button:hover,
 .order-dialog .ui-dialog-buttonset button:hover {
     background: #121212;
 }
 
+.warning-dialog-class .ui-dialog-buttonset button:first-child,
 .order-dialog .ui-dialog-buttonset button:first-child {
     margin-right: 20px;
+}
+
+.warning-dialog-class .ui-dialog-buttonset {
+    width: 100px;
+    margin: auto;
 }
 
 .dialog-header {
@@ -885,6 +895,15 @@ input[disabled] {
     text-align: center;
     font-weight: bold;
 }
+
+#warning-dialog-message {
+    margin-bottom: 20px;
+}
+
+.warning-dialog-class .ui-dialog-buttonset {
+    width: 100px;
+}
+
 /*
 buttons
  */

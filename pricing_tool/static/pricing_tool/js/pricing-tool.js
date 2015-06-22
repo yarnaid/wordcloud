@@ -590,11 +590,15 @@ $(document).ready(function() {
     		level = parseInt(level.substring(level.lastIndexOf(' ')));
     		formData['level'] = level;
 
-    		var cell_amount = $("#cells-number")[0].valueAsNumber;
-    		var timestamp = calculator.timeCalculation(formData, cell_amount);
-    		var outputData = calculator.countCodingCost(formData, cell_amount);
-    		var dataDeliveryData = calculator.getDataDeliveryDate(formData, timestamp, cell_amount);
-    		
+    		try {
+	    		var cell_amount = $("#cells-number")[0].valueAsNumber;
+	    		var timestamp = calculator.timeCalculation(formData, cell_amount);
+	    		var outputData = calculator.countCodingCost(formData, cell_amount);
+	    		var dataDeliveryData = calculator.getDataDeliveryDate(formData, timestamp, cell_amount);
+	    	} catch(error) {
+	    		$("#warning-dialog-message").text("Probably, you don't filled all cells")
+	    		$("#warning-dialog").dialog("open")
+	    	}
     		$(".pt-result-cost p").text("€"+calculator.formatCurrency(outputData.total+outputData.translation_cost));
     		$(".pt-result-timing p").text(calculator.formatTime(timestamp.total));
     		$(".pt-result-data-delivery p").text(dataDeliveryData.total);
@@ -704,6 +708,7 @@ $(document).ready(function() {
     	dialogClass: "order-dialog",
     	autoOpen: false,
     	width: 500,
+    	show: true,
     	buttons : [
     		{
     			text: "Ok",
@@ -728,6 +733,7 @@ $(document).ready(function() {
     	dialogClass: "order-dialog",
     	autoOpen: false,
     	width: 500,
+    	show: true,
     	buttons : [
     		{
     			text: "Ok",
@@ -752,6 +758,7 @@ $(document).ready(function() {
     	dialogClass: "order-dialog",
     	autoOpen: false,
     	width: 500,
+    	show: true,
     	buttons : [
     		{
     			text: "Ok",
@@ -769,6 +776,24 @@ $(document).ready(function() {
     		}
     	]
     });
+
+    $( '#warning-dialog' ).dialog({
+    	modal: true,
+    	draggable: false,
+    	dialogClass: "warning-dialog-class",
+    	autoOpen: false,
+    	width: 300,
+    	show: true,
+    	buttons : [
+    		{
+    			text: "Ok",
+    			id: "button-ok-contact",
+    			click: function() {
+		        	$( this ).dialog( "close" );
+		      	}
+    		},
+    	]
+    })
 
 	var unvisitedBlinker = setInterval(function() { 
 		$('.pt-unvisited-tab').animate({opacity:0.6},750);
