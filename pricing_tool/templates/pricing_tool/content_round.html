@@ -71,13 +71,13 @@
                     <input type="number" name="cells-number" id="cells-number" class="col-sm-5 form-control" min="1" max="9" step="1" value="1">
                 </div>
                 <div id="identical-cells-field" class="row form-group">
-                    <label for="identical-cells-yes" class="col-sm-7">Identical cells:</label>
+                    <label for="identical-cells-yes" class="col-sm-6">Identical cells:</label>
                     <div>
-                        <label for="identical-cells-yes">
-                            <input type="radio" name="identical-cells" id="identical-cells-yes" value="Yes" > Yes
+                        <input type="radio" name="identical-cells" id="identical-cells-yes" value="Yes" ></input> 
+                        <label for="identical-cells-yes" class="radio">Yes
                         </label>
-                        <label for="identical-cells-no">
-                            <input type="radio" name="identical-cells" id="identical-cells-no" value="No" checked> No
+                        <input type="radio" name="identical-cells" id="identical-cells-no" value="No" checked="checked"></input>
+                        <label for="identical-cells-no" class="radio">No
                         </label>
                     </div>
                 </div>
@@ -274,31 +274,31 @@
                             <div class="pt-row-top pt-language-content">
                                 <div class="radio form-group">
                                     <input type="radio" name="pt-language-choose" id="pt-language-german">
-                                    <label class="control-label" for="pt-language-german">German</label>
+                                    <label class="control-label" class='radio' for="pt-language-german">German</label>
                                 </div>
                                 <div class="radio form-group">
                                     <input type="radio" name="pt-language-choose" id="pt-language-spanish">
-                                    <label class="control-label" for="pt-language-spanish">Spanish</label>
+                                    <label class="control-label" class='radio' for="pt-language-spanish">Spanish</label>
                                 </div>
                                 <div class="radio form-group">
                                     <input type="radio" name="pt-language-choose" id="pt-language-english" checked='true'>
-                                    <label class="control-label" for="pt-language-english">English</label>
+                                    <label class="control-label" class='radio' for="pt-language-english">English</label>
                                 </div>
                                 <div class="radio form-group">
                                     <input type="radio" name="pt-language-choose" id="pt-language-french">
-                                    <label class="control-label" for="pt-language-french">French</label>
+                                    <label class="control-label" class='radio' for="pt-language-french">French</label>
                                 </div>
                                 <div class="radio form-group">
                                     <input type="radio" name="pt-language-choose" id="pt-language-mandarin">
-                                    <label class="control-label" for="pt-language-mandarin">Mandarin</label>
+                                    <label class="control-label" class='radio' for="pt-language-mandarin">Mandarin</label>
                                 </div>
                                 <div class="radio form-group">
                                     <input type="radio" name="pt-language-choose" id="pt-language-italian">
-                                    <label class="control-label" for="pt-language-italian">Italian</label>
+                                    <label class="control-label" class='radio' for="pt-language-italian">Italian</label>
                                 </div>
                                 <div class="radio form-group">
                                     <input type="radio" name="pt-language-choose" id="pt-language-portuguese">
-                                    <label class="control-label" for="pt-language-portuguese">Portuguese</label>
+                                    <label class="control-label" class='radio' for="pt-language-portuguese">Portuguese</label>
                                 </div>
                             </div>
                             <div class="pt-row-top pt-sample-size-content">
@@ -363,12 +363,12 @@
                                     <label class="control-label" for="pt-codebook-translation-language-mandarin">Mandarin</label>
                                 </div>
                                 <div class="checkbox form-group">
-                                    <input type="checkbox" name="pt-codebook-translation-language-choose" id="pt-codebook-translation-language-italian">
-                                    <label class="control-label" for="pt-codebook-translation-language-italian">Italian</label>
+                                    <input type="checkbox" name="pt-codebook-translation-language-choose" id="pt-language-portuguese">
+                                    <label class="control-label checkbox-label" for="pt-codebook-translation-language-portuguese">Portuguese</label>
                                 </div>
                                 <div class="checkbox form-group">
-                                    <input type="checkbox" name="pt-codebook-translation-language-choose" id="pt-language-portuguese">
-                                    <label class="control-label" for="pt-codebook-translation-language-portuguese">Portuguese</label>
+                                    <input type="checkbox" name="pt-codebook-translation-language-choose" id="pt-codebook-translation-language-italian">
+                                    <label class="control-label" for="pt-codebook-translation-language-italian">Italian</label>
                                 </div>
                             </div>
                             <div class="pt-row-top pt-verbatim-translation-content">
@@ -379,7 +379,7 @@
                                 <div class="pt-verbatim-translation-languages form_group">
                                     <div class="checkbox form-group row">
                                         <input type="checkbox" name="pt-verbatim-translation-language-german" id="pt-verbatim-translation-language-german">
-                                        <label class="control-label" for="pt-verbatim-translation-language-german">German</label>
+                                        <label class="control-label " for="pt-verbatim-translation-language-german">German</label>
                                     </div>
                                     <div class="checkbox form-group row">
                                         <input type="checkbox" name="pt-verbatim-translation-language-spanish" id="pt-verbatim-translation-language-spanish">
@@ -428,23 +428,23 @@
                                 </div>
                             </div>
                             <div class="pt-row-top pt-codebooks-content">
-                                <div class="form_group row">
-                                    <input class="col-md-3" type="radio" id="codebook-use-previous" name="codebook-choose">
-                                    <label for="codebook-use-previous" class="col-md-9">Use previous code book:</label>
+                                <div class="form_group">
+                                    <input type="radio" id="codebook-use-previous" name="codebook-choose">
+                                    <label for="codebook-use-previous" class="radio ">Use previous code book:</label>
                                 </div>
-                                <div class="form_group row">
-                                    <input class="col-md-3" type="radio" name="codebook-choose" id="codebook-create-new" >
-                                    <label for="codebook-create-new" class="col-md-9">Create new codebook:</label>
+                                <div class="form_group">
+                                    <input type="radio" name="codebook-choose" id="codebook-create-new" >
+                                    <label for="codebook-create-new" class="radio ">Create new codebook:</label>
                                 </div>
                                 <div class="pt-codebook-use-previous-content">
                                     <div class="line"></div>
-                                    <div class="form_group row">
-                                        <input class="col-md-3" type="radio" id="codebook-from-previous-job" name="codebook-cell-or-job-choose" >
-                                        <label for="codebook-from-previous-job" class="col-md-9">From previous job:</label>
+                                    <div class="form_group">
+                                        <input type="radio" id="codebook-from-previous-job" name="codebook-cell-or-job-choose" >
+                                        <label for="codebook-from-previous-job" class="radio ">From previous job:</label>
                                     </div>
-                                    <div class="form_group row">
-                                        <input class="col-md-3" type="radio" id="codebook-from-other-cell" name="codebook-cell-or-job-choose">
-                                        <label for="codebook-from-other-cell" class="col-md-9">From other cell:</label>
+                                    <div class="form_group">
+                                        <input type="radio" id="codebook-from-other-cell" name="codebook-cell-or-job-choose">
+                                        <label for="codebook-from-other-cell" class="radio ">From other cell:</label>
                                     </div>
                                     <div class="line"></div>
                                     <div id="codebook-job-number-combobox" class="form_group row">
@@ -455,7 +455,7 @@
                                             <option>3</option>
                                         </select>
                                     </div>
-                                    <div id="codebook-cell-number-combobox" class="form_group row">
+                                    <div id="codebook-cell-number-combobox" class="form_group">
                                         <label for="codebook-cell-number" class="col-md-6">Cell number:</label>
                                         <select id="select-cell-number">
                                             <option>1</option>
@@ -468,9 +468,9 @@
                             <div class="pt-row-top pt-date-availability-content">
                                 <div class="form_group row pt-choose-time-format">
                                     <input type="radio" id="date-availability-am" name="date-availability-choose" checked="true"></input>
-                                    <label for="date-availability-am">AM</label>
+                                    <label for="date-availability-am" class='radio col-md-5'>AM</label>
                                     <input type="radio" id="date-availability-pm" name="date-availability-choose"></input>
-                                    <label for="date-availability-pm">PM</label>
+                                    <label for="date-availability-pm" class='radio col-md-5'>PM</label>
                                 </div>
                                 <div id="datepicker" class="row"></div>
                             </div>
