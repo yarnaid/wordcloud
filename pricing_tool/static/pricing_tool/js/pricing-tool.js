@@ -3,6 +3,9 @@ $(document).ready(function() {
     var lastOpened = '';
     var isIdentical = false;
     var lastOpenedSelector = '';
+    var multiple_select = false;
+    var selected_cells = [1,]
+
 	var diff = {
 		4: "65px",
 		3: "35px",
@@ -50,12 +53,12 @@ $(document).ready(function() {
     		var cellName = "Cell "+i;
     		var str = "<tr class='pt-summary-table-usual-row'>"+
     					  "<td><p>"+cellName+"</p></td>"+
-	    				  "<td><p>"+data.for_each_cat[i]["brand"]+" €</p></td>"+
-	    				  "<td><p>"+data.for_each_cat[i]["short"]+" €</p></td>"+
-	    				  "<td><p>"+data.for_each_cat[i]["likes"]+" €</p></td>"+
+	    				  "<td><p>"+data.for_each_cat[i]["brand"].toFixed(2)+" €</p></td>"+
+	    				  "<td><p>"+data.for_each_cat[i]["short"].toFixed(2)+" €</p></td>"+
+	    				  "<td><p>"+data.for_each_cat[i]["likes"].toFixed(2)+" €</p></td>"+
 	    				  "<td><p>"+data.for_each_cat[i]["story"]+" €</p></td>"+
-	    				  "<td><p>"+data.for_each_cat[i]["long"]+" €</p></td>"+
-    					  "<td><p>"+data.separate[cellName]+" €</p></td>"+
+	    				  "<td><p>"+data.for_each_cat[i]["long"].toFixed(2)+" €</p></td>"+
+    					  "<td><p>"+data.separate[cellName].toFixed(2)+" €</p></td>"+
     				  "</tr>"
     		toAdd += str;
 
@@ -68,12 +71,12 @@ $(document).ready(function() {
     	}
     	toAdd += "<tr class='pt-summary-table-summary-row'>"+
     				"<td><p>total</p></td>"+
-    				"<td><p>"+sumForEachCategory["brand"]+" €</p></td>"+
-    				"<td><p>"+sumForEachCategory["short"]+" €</p></td>"+
-    				"<td><p>"+sumForEachCategory["likes"]+" €</p></td>"+
-    				"<td><p>"+sumForEachCategory["story"]+" €</p></td>"+
-    				"<td><p>"+sumForEachCategory["long"]+" €</p></td>"+
-    				"<td><p>"+data.total+" €</p></td>"+
+    				"<td><p>"+sumForEachCategory["brand"].toFixed(2)+" €</p></td>"+
+    				"<td><p>"+sumForEachCategory["short"].toFixed(2)+" €</p></td>"+
+    				"<td><p>"+sumForEachCategory["likes"].toFixed(2)+" €</p></td>"+
+    				"<td><p>"+sumForEachCategory["story"].toFixed(2)+" €</p></td>"+
+    				"<td><p>"+sumForEachCategory["long"].toFixed(2)+" €</p></td>"+
+    				"<td><p>"+data.total.toFixed(2)+" €</p></td>"+
     			"</tr>"
 
     	$("#summary-costs-table .pt-summary-table-header-row").after(toAdd);
@@ -298,6 +301,7 @@ $(document).ready(function() {
 						+"' class='pt-options-tab pt-unvisited-tab' style='left:"+percents_per_cell*(i-1)+"%;top:"+diff[Math.abs(mid-i)]+";'><a href='#'>"+i+"</a></li>");
 				}
 			$( '#cell_1' ).addClass('pt-options-tab-active')
+			selected_cells = [1,]
 		}
 	}
 
@@ -415,8 +419,10 @@ $(document).ready(function() {
 	    if(cell_number==NaN) return;
 		
 		var data = saveDataFromCurrentForm();
-		alert
-    	saveToBuffer(cell_number, data);
+        for(var i=0; i<selected_cells.length; i++) {
+    		saveToBuffer(selected_cells[i], data);
+		}
+
 
     	if(!isIdentical) {
     		renderCellTabs();
@@ -434,8 +440,8 @@ $(document).ready(function() {
 			if(this.className.indexOf('pt-options-tab-active')==-1) {
 	    		//$(this).animate({top: parseInt(prev_top)-10+"px"});
 	    		$(this).css("top", parseInt(prev_top)-10+"px");
-	    		$('.pt-outher-circle').toggleClass('pt-outher-circle-hover');
-	    		$('.pt-inner-circle').toggleClass('pt-inner-circle-hover');
+	    		$('.pt-outher-circle').addClass('pt-outher-circle-hover');
+	    		$('.pt-inner-circle').addClass('pt-inner-circle-hover');
     		}
     	}
     );
@@ -446,8 +452,8 @@ $(document).ready(function() {
     		if(this.className.indexOf('pt-options-tab-active')==-1) {
 	    		//$(this).animate({top: parseInt(prev_top)+10+"px"});
 	    		$(this).css("top", parseInt(prev_top)+10+"px");
-	    		$('.pt-outher-circle').toggleClass('pt-outher-circle-hover');
-	    		$('.pt-inner-circle').toggleClass('pt-inner-circle-hover');
+	    		$('.pt-outher-circle').removeClass('pt-outher-circle-hover');
+	    		$('.pt-inner-circle').removeClass('pt-inner-circle-hover');
 	    	}
     	}
     );
@@ -456,36 +462,64 @@ $(document).ready(function() {
         function() {
 
 			if($('.pt-options-tab-active')[0] != undefined ) {
-	 	       	var cell_number = parseInt($('.pt-options-tab-active')[0].id.substring(this.id.indexOf('_')+1));
-
-	 	       	if(cell_number==NaN) return;
+	 	       	
         		var data = saveDataFromCurrentForm();
-	        	saveToBuffer(cell_number, data);
+        		for(var i=0; i<selected_cells.length; i++) {
+	        		saveToBuffer(selected_cells[i], data);
+        		}
 
 	        	var new_number = parseInt(this.id.substring(this.id.indexOf('_')+1));
 	            var prev_top = $('.pt-options-tab-active').css("top");
 	            
-	            if(cell_number == new_number) {
-	            	return;
-	            } else {
-		        	$('.pt-options-tab-active').css("top", parseInt(prev_top)+20+"px");;
-		            $('.pt-options-tab-active').removeClass('pt-options-tab-active');
-		        }
+	            if(!multiple_select) {
+	            	selected_cells = []
+	            	selected_cells.push(new_number)
+	            	if(formData[new_number] != undefined) {
+            			retainFormData(new_number);
+            		}
+			      
+			    } else {
+			    	if(selected_cells.length>0){
+			    		if(selected_cells.indexOf(new_number)!=-1) {
+			    			selected_cells.splice(selected_cells.indexOf(new_number),1);
+			    		} 
+			    		selected_cells.push(new_number)
+			    	} else
+			    		selected_cells.push(new_number)
+			    }
+			    
 		    } 
-            prev_top = $(this).css("top");
-    		$(this).css("top", parseInt(prev_top)-10+"px");
-            $(this).addClass('pt-options-tab-active');
-            $(this).removeClass('pt-unvisited-tab');
-            $('.pt-inner-circle').toggleClass('pt-inner-circle-hover');
-            $('.pt-inner-circle').addClass('pt-inner-circle-active');
-           	$('.pt-outher-circle').toggleClass('pt-outher-circle-hover');
-            $('.pt-outher-circle').addClass('pt-outher-circle-active');
+
+           	var number_of_cells = $('#cells-number').val();
+        	var mid = Math.floor(number_of_cells/2)+1;
+        	
+        	if(number_of_cells%2==0)
+				mid = mid-1;
+            
+            for(var i = 1; i<=number_of_cells; i++) {
+
+	            var cell_name = "#cell_"+i;
+	            $(cell_name).css('top', diff[Math.abs(mid-i)]);
+		        $(cell_name).removeClass('pt-options-tab-active');
+		        $(cell_name).removeClass('pt-options-tab:hover');
+	            if(selected_cells.indexOf(i)!=-1) {
+            		prev_top = $(cell_name).css("top");
+	    			$(cell_name).css("top", (parseInt(prev_top)-20)+"px");
+	            	$(cell_name).addClass('pt-options-tab-active');
+	            	$(cell_name).removeClass('pt-unvisited-tab');
+		        } 
+		        
+	        }
+	        if(!multiple_select) {
+	        	$('.pt-inner-circle').toggleClass('pt-inner-circle-hover');
+	            $('.pt-inner-circle').addClass('pt-inner-circle-active');
+	           	$('.pt-outher-circle').toggleClass('pt-outher-circle-hover');
+	            $('.pt-outher-circle').addClass('pt-outher-circle-active');
+	        }     
 			$('#datepicker tr td').removeClass('ui-datepicker-current-day');
 
             $('.pt-verbatim-translation-languages input').prop("checked", false);
-            if(formData[new_number] != undefined) {
-            	retainFormData(new_number, data);
-            }
+            $('.pt-codebook-translation-content input').prop("checked", false);
         }
     );
 
@@ -574,6 +608,10 @@ $(document).ready(function() {
     $("#perform-calculations").click(
     	function() {
     		var data = saveDataFromCurrentForm();
+		    for(var i=0; i<selected_cells.length; i++) {
+        		saveToBuffer(selected_cells[i], data);
+    		}
+
     		var arr = $('.pt-options-tab-active');
     		
     		if(arr.length!=0) {
@@ -702,6 +740,26 @@ $(document).ready(function() {
 		}
     })
 
+
+    $(document).keydown(function(event) {
+    	if(event.ctrlKey) {
+    		multiple_select=true;
+    		$('body').css('cursor', 'pointer');
+    		$('.ctrl-button-overlay').fadeIn();
+    		$('.pt-options-tab').css('z-index', 3000);
+    	}
+
+    });
+
+    $(document).keyup(function(event) {
+    	if(!event.ctrlKey){
+    		multiple_select=false;
+    		$('body').css('cursor', 'default');
+			$('.ctrl-button-overlay').fadeOut();
+			$('.pt-options-tab').css('z-index', 0);
+    	}
+
+    }); 
     $( "#confirm-order-dialog" ).dialog({
     	modal: true,
     	draggable: false,
@@ -812,8 +870,9 @@ $(document).ready(function() {
     $('#codebook-from-previous-job').prop('checked', true);
     $('.ui-datepicker-today').removeClass('ui-datepicker-current-day');
     $( '#cell_1' ).addClass('pt-options-tab-active')
-    $('.pt-results-wrapper').hide();
 
+    $('.pt-results-wrapper').hide();
+    $('body').append('<div class="ctrl-button-overlay"></div>');
     $('#pt-language-english').prop('checked', true);
     $('.pt-inner-circle').addClass('pt-inner-circle-active');
     $('.pt-outher-circle').addClass('pt-outher-circle-active');

@@ -189,17 +189,16 @@ var calculator = {
 			for(var j=0; j<data[i].codebook_translation_languages.length; j++) {
 				E += this.language_rates[data[i].codebook_translation_languages[j]];
 			}
-			
+			var B = data[i].sample_size;
 			var J = this.pricing_levels[data.level];
-			var C = this.previous_codebook_rate[data[i].previous_codebook.uses];
 			
 			var H = this.timing_costs[cell_amount];
-			var D1 = (A*E*H)*(C/10)*J*this.questions_categories.D1 * data[i].questions.brand_questions;
-			var D2 = (A*E*H)*(C/10)*J*this.questions_categories.D2 * data[i].questions.short_questions;
-			var D3 = (A*E*H)*(C/10)*J*this.questions_categories.D3 * data[i].questions.like_questions;
+			var D1 = (A*E*H)*(B/10)*J*this.questions_categories.D1 * data[i].questions.brand_questions;
+			var D2 = (A*E*H)*(B/10)*J*this.questions_categories.D2 * data[i].questions.short_questions;
+			var D3 = (A*E*H)*(B/10)*J*this.questions_categories.D3 * data[i].questions.like_questions;
 			var D4 = 0;//this.questions_categories.D3 * data[i].questions._questions;
-			var D5 = (A*E*H)*(C/10)*J*this.questions_categories.D5 * data[i].questions.story_questions;
-			var D6 = (A*E*H)*(C/10)*J*this.questions_categories.D6 * data[i].questions.long_questions;
+			var D5 = (A*E*H)*(B/10)*J*this.questions_categories.D5 * data[i].questions.story_questions;
+			var D6 = (A*E*H)*(B/10)*J*this.questions_categories.D6 * data[i].questions.long_questions;
 
 			var cell_cost = (D1+D2+D3+D4+D5+D6);
 			var cell_name = "Cell "+i;
