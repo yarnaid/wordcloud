@@ -392,6 +392,7 @@ input[disabled] {
     display: table-cell;
     margin: 0;
     padding: 0;
+
     color: #ffffff;
     border-radius: 19px 19px 0 0;
     vertical-align: middle;
@@ -558,6 +559,9 @@ input[disabled] {
 .pt-codebooks-selector:hover g,
 .pt-date-availability-selector:hover g {
     fill: #0083e8;
+    -webkit-transition: 0.2s all;
+    -ms-transition: 0.2s all;
+    transition: 0.2s all;
 }
 /* svg active state */
 
@@ -593,6 +597,9 @@ input[disabled] {
 
 .radio > label:hover {
     color: #0083e8;
+    -webkit-transition: 0.2s all;
+    -ms-transition: 0.2s all;
+    transition: 0.2s all;
 }
 
 .buttons-wrapper {
@@ -716,9 +723,10 @@ input[disabled] {
     padding-top: 15px;
     border-radius: 12px;
     color: #ffffff;
-    background: #50677e;
+    background: #3fa2ee;
     text-align: center;
     cursor: pointer;
+
     -webkit-transition: 0.2s all;
     -ms-transition: 0.2s all;
     transition: 0.2s all;
@@ -730,6 +738,9 @@ input[disabled] {
 .pt-result-timing:hover,
 .pt-result-data-delivery:hover {
     background: #0083e8;
+    -webkit-transition: 0.2s all;
+    -ms-transition: 0.2s all;
+    transition: 0.2s all;
 }
 
 .pt-results-wrapper h2 {
@@ -984,6 +995,9 @@ input[disabled] {
 .warning-dialog-class .ui-dialog-buttonset button:hover,
 .order-dialog .ui-dialog-buttonset button:hover {
     background: #121212;
+    -webkit-transition: 0.2s all;
+    -ms-transition: 0.2s all;
+    transition: 0.2s all;
 }
 
 .warning-dialog-class .ui-dialog-buttonset button:first-child,
@@ -1021,7 +1035,7 @@ buttons
     padding: 8px 25px;
     font-size: 14px;
     color: #ffffff;
-    background: #aaaaaa;
+    background: #3fa2ee;
     text-transform: uppercase;
     text-align: center;
     border-radius: 15px;
@@ -1034,20 +1048,22 @@ buttons
 
 .button-controls:hover,
 .button-accept:hover,
-.button-accept:focus,
-.button-verbatim-translation:hover,
-.button-verbatim-translation:focus,
-.button-verbatim-translation-selected:focus {
+.button-verbatim-translation:hover{
     color: #ffffff;
     background: #0083e8;
+    -webkit-transition: 0.2s all;
+    -ms-transition: 0.2s all;
+    transition: 0.2s all;
 }
 
 .button-verbatim-translation-selected {
     background: #6e0cad;
 }
 
-.button-cancel:hover,
-.button-cancel:focus {
+.button-cancel:hover {
     color: #ffffff;
     background: #e84c00;
+  /*  -webkit-transition: 0.2s all;
+    -ms-transition: 0.2s all;
+    transition: 0.2s all;*/
 }
