@@ -48,8 +48,8 @@ $(document).ready(function() {
 	    		$("#warning-dialog").dialog("open")
 	    	}
     		$(".pt-result-cost p").text("€"+calculator.formatCurrency(outputData.total+outputData.translation_cost));
-			//$(".pt-result-timing p").text(calculator.formatTime(timestamp.total));
-			$(".pt-result-timing p").text(timestamp.total);
+			$(".pt-result-timing p").text(calculator.formatTime(timestamp.total));
+			//$(".pt-result-timing p").text(timestamp.total);
     		$(".pt-result-data-delivery p").text(dataDeliveryData.total);
 
 
@@ -436,8 +436,8 @@ $(document).ready(function() {
     		toAdd +=
     			"<tr class='pt-summary-table-usual-row'>"+
     				"<td><p>"+cellName+"</p></td>"+
-					//"<td><p>"+calculator.formatTime(data.separate[cellName])+"</p></td>"+
-					"<td><p>"+(data.separate[cellName])+"</p></td>"+
+					"<td><p>"+calculator.formatTime(data.separate[cellName])+"</p></td>"+
+					//"<td><p>"+(data.separate[cellName])+"</p></td>"+
     			"</tr>"
     	}
 

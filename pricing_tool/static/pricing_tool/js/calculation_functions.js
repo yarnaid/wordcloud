@@ -344,6 +344,8 @@ var calculator = {
 
 		var latest = 0;
 		var separate = {}
+		var secondsInDay = 60*60*8;
+		var secondsTo8AM = 60*60*8;
 
 		for(var i=1; i<=cell_amount; i++) {
 			var date = data[i].date_availability;
@@ -355,8 +357,9 @@ var calculator = {
 				if (time>latest)
 					latest = time;
 				date = new Date(time);
-				
-				var lastDate = new Date(date.getTime()+timings.separate[cell_name]*1000);
+				var fullDays = timings.separate[cell_name]/secondsInDay;
+				var left = timings.separate[cell_name]-fullDays*secondsInDay+secondsTo8AM;
+				var lastDate = new Date(date.getTime()+fullDays*secondsInDay*4*1000+left);
 				var am_pm = (date.getUTCHours()>13 ? "PM" : "AM");
 				
 				separate[cell_name] = [];
@@ -390,7 +393,7 @@ var calculator = {
 	},
 
 	formatTime : function(seconds) {
-		var secondsInDay = 60*60*24;
+		var secondsInDay = 60*60*8;
 		var fullDays = Math.floor(seconds/secondsInDay);
 		var left = seconds - fullDays*secondsInDay;
 		if(left - secondsInDay/2>0) {
