@@ -12,6 +12,20 @@
 
 }
 
+input[type='number'],
+select {
+    border: 1px solid black;
+    height: 20px;
+    background: transparent;
+}
+
+input:after {
+    content: "n";
+    width: 20px;
+    height: 20px;
+    background-color: yellow;
+}
+
 input[type='radio']:not(checked),
 input[type='checkbox']:not(checked) {
     display: none;
@@ -95,14 +109,6 @@ input[type='checkbox']:disabled+label::after {
 textarea {
     resize:none;
 }
-
-/*input[type='radio']:checked+label::after {
-    content: '●';
-    color: black;
-    position: relative;
-    font-size: 35px;
-}*/
-
 
 /*
 bootstrap overrides
@@ -320,6 +326,16 @@ input[disabled] {
 .pt-progress-bar-wrapper {
     border-radius: 25px;
     border: 2px solid #aaaaaa;
+}
+
+.pt-aside-form {
+    font-size: 12px;
+}
+
+.pt-aside-form input,
+.pt-aside-form select {
+    width: 50%;
+    padding-left: 0px;
 }
 
 .pt-outher-circle {
@@ -932,10 +948,10 @@ input[disabled] {
 
 .pt-save-confirm-contact {
     width:140px;
-    margin-top: 400px;
+    margin-top: 450px;
 }
 
-.pt-save-confirm-contact > div {
+.pt-save-confirm-contact button {
     margin-top: 10px; 
 }
 

@@ -236,7 +236,7 @@ var calculator = {
 			for(var j=0; j<data[i].codebook_translation_languages.length; j++) {
 				E += this.language_rates[data[i].codebook_translation_languages[j]];
 			}
-			var C = this.previous_codebook_rate[data[i].previous_codebook.uses];
+			var B = data[i].sample_size;
 			var Ht = this.timing_costs[data[i].cells_number];
 			
 			var D1 = this.questions_categories.D1 * data[i].questions.brand_questions || 0;
@@ -247,7 +247,7 @@ var calculator = {
 			var D6 = this.questions_categories.D6 * data[i].questions.long_questions || 0;
 		
 			var cell_cost = 0;
-			cell_cost = (A*E)*(D1+D2+D3+D4+D5+D6)*(C/10)*Ht*9.5;
+			cell_cost = (A*E)*(D1+D2+D3+D4+D5+D6)*(B/10)*Ht*9.5;
 			var cell_name = "Cell "+i;
 
 			sum_for_separate_cell[cell_name] = cell_cost;
@@ -344,6 +344,7 @@ var calculator = {
 
 		var latest = 0;
 		var separate = {}
+		var latestDay = undefined;
 		var secondsInDay = 60*60*8;
 		var secondsTo8AM = 60*60*8;
 
@@ -354,12 +355,11 @@ var calculator = {
 				var time = date.getTime();
 				if(data[i].am_or_pm == "PM")
 					time += 60*60*13*1000;
-				if (time>latest)
-					latest = time;
+
 				date = new Date(time);
-				var fullDays = timings.separate[cell_name]/secondsInDay;
+				var fullDays = Math.floor(timings.separate[cell_name]/secondsInDay);
 				var left = timings.separate[cell_name]-fullDays*secondsInDay+secondsTo8AM;
-				var lastDate = new Date(date.getTime()+fullDays*secondsInDay*4*1000+left);
+				var lastDate = new Date(date.getTime()+fullDays*secondsInDay*4*1000+left*1000);
 				var am_pm = (date.getUTCHours()>13 ? "PM" : "AM");
 				
 				separate[cell_name] = [];
@@ -369,10 +369,14 @@ var calculator = {
 				var am_pm = (lastDate.getUTCHours()>13)? "PM" : "AM";
 				separate[cell_name].push(am_pm +" "+lastDate.getDate()+" "+
 					this.month_names[lastDate.getMonth()]+" "+lastDate.getFullYear());
+				if (time>latest){
+					latest = time;
+					latestDay = lastDate;
+				}
 			}
 		}
 		if(latest!=0) {
-			var lastDate = new Date(latest+timings.total*1000);
+			var lastDate = latestDay;
 			var am_pm = ((lastDate.getUTCHours()>13)? "PM" : "AM");
 
 			return {

@@ -14,53 +14,75 @@ $(document).ready(function() {
 		0: "0px",
 	};
 
+	var defaultForm = {
+			source_language: 'English',
+			sample_size: 150,
+			previous_codebook: {uses:false},
+			date_availability: undefined,
+			verbatim_translation_languages: [], 
+			codebook_translation_languages: [],
+			verbatims_translation: {
+				likes_question_translation: 0,
+				story_question_translation: 0,
+				long_question_translation: 0,
+			},
+			verbatim_translation_languages: [],
+			am_or_pm: 'AM',
+			questions: {
+				brand_questions: 0,
+				short_questions: 0,
+				like_questions : 0,
+				story_questions: 0,
+				long_questions : 0,
+			}
+		};
     var previousSelectedButton = null;
 
     var performCalculation = function() {
-    		var data = saveDataFromCurrentForm();
-		    for(var i=0; i<selected_cells.length; i++) {
-        		saveToBuffer(selected_cells[i], data);
-    		}
+		var data = saveDataFromCurrentForm();
+	    for(var i=0; i<selected_cells.length; i++) {
+    		saveToBuffer(selected_cells[i], data);
+		}
 
-    		var arr = $('.pt-options-tab-active');
-    		
-    		if(arr.length!=0) {
-    			var activeCellString = arr[0].id;
-    			var cell_number = parseInt(activeCellString.substring(activeCellString.indexOf("_")+1));
+		var arr = $('.pt-options-tab-active');
+		
+		if(arr.length!=0) {
+			var activeCellString = arr[0].id;
+			var cell_number = parseInt(activeCellString.substring(activeCellString.indexOf("_")+1));
 
-	        	saveToBuffer(cell_number, data);
-	        }
-    		/*
-    		 *	Getting level stub
-    		 */
+        	saveToBuffer(cell_number, data);
+        }
+		/*
+		 *	Getting level stub
+		 */
 
-    		var level = $("#level-stub").val();
-    		level = parseInt(level.substring(level.lastIndexOf(' ')));
-    		formData['level'] = level;
+		var level = $("#level-stub").val();
+		level = parseInt(level.substring(level.lastIndexOf(' ')));
+		formData['level'] = level;
 
-    		try {
-	    		var cell_amount = $("#cells-number")[0].valueAsNumber;
-	    		var timestamp = calculator.timeCalculation(formData, cell_amount);
-	    		var outputData = calculator.countCodingCost(formData, cell_amount);
-	    		var dataDeliveryData = calculator.getDataDeliveryDate(formData, timestamp, cell_amount);
-	    	} catch(error) {
-	    		$("#warning-dialog-message").text("Probably, you don't filled all cells")
-	    		$("#warning-dialog").dialog("open")
-	    	}
-    		$(".pt-result-cost p").text("€"+calculator.formatCurrency(outputData.total+outputData.translation_cost));
-			$(".pt-result-timing p").text(calculator.formatTime(timestamp.total));
-			//$(".pt-result-timing p").text(timestamp.total);
-    		$(".pt-result-data-delivery p").text(dataDeliveryData.total);
-
-
-    		fillTablesWithData(outputData, cell_amount);
-    		fillTimingsTable(timestamp, cell_amount);
-    		fillDataDeliveryTable(dataDeliveryData, cell_amount);
-
-    		$(lastOpened).fadeOut();
-    		$(".buttons-wrapper").fadeOut();
-    		$(".pt-results-wrapper").fadeIn();
+		try {
+    		var cell_amount = $("#cells-number")[0].valueAsNumber;
+    		var timestamp = calculator.timeCalculation(formData, cell_amount);
+    		var outputData = calculator.countCodingCost(formData, cell_amount);
+    		var dataDeliveryData = calculator.getDataDeliveryDate(formData, timestamp, cell_amount);
+    	} catch(error) {
+    		$("#warning-dialog-message").text("Probably, you don't filled all cells")
+    		$("#warning-dialog").dialog("open")
     	}
+		$(".pt-result-cost p").text("€"+calculator.formatCurrency(outputData.total+outputData.translation_cost));
+		//$(".pt-result-timing p").text(calculator.formatTime(timestamp.total));
+		$(".pt-result-timing p").text(timestamp.total);
+		$(".pt-result-data-delivery p").text(dataDeliveryData.total);
+
+
+		fillTablesWithData(outputData, cell_amount);
+		fillTimingsTable(timestamp, cell_amount);
+		fillDataDeliveryTable(dataDeliveryData, cell_amount);
+
+		$(lastOpened).fadeOut();
+		$(".buttons-wrapper").fadeOut();
+		$(".pt-results-wrapper").fadeIn();
+	}
 
     var loadStudyTypes = function() {
     	var toRender = '';
@@ -436,8 +458,8 @@ $(document).ready(function() {
     		toAdd +=
     			"<tr class='pt-summary-table-usual-row'>"+
     				"<td><p>"+cellName+"</p></td>"+
-					"<td><p>"+calculator.formatTime(data.separate[cellName])+"</p></td>"+
-					//"<td><p>"+(data.separate[cellName])+"</p></td>"+
+					//"<td><p>"+calculator.formatTime(data.separate[cellName])+"</p></td>"+
+					"<td><p>"+(data.separate[cellName])+"</p></td>"+
     			"</tr>"
     	}
 
@@ -468,6 +490,15 @@ $(document).ready(function() {
 		if(wrapper_displayed!='none')
 			performCalculation();
 	}
+
+	$('#clear-button').click(
+		function() {
+			for(var key in formData) {
+				saveToBuffer(key, defaultForm)
+			}
+			retainFormData(1);
+		}
+	);
 
     $('#cells-number').change(function() {
     	var cell_number = parseInt($('.pt-options-tab-active')[0].id.substring($('.pt-options-tab-active')[0].id.indexOf('_')+1));
@@ -828,8 +859,8 @@ $(document).ready(function() {
 			$('.ctrl-button-overlay').fadeOut();
 			$('.pt-options-tab').css('z-index', 0);
     	}
-
     }); 
+
     $( "#confirm-order-dialog" ).dialog({
     	modal: true,
     	draggable: false,

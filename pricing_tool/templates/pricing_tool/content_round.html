@@ -61,14 +61,14 @@
             <form action="#" method="post" class="pt-aside-form form-inline">
                 {% csrf_token %}
                 <div class="row form-group">
-                    <label for="study-type" class="col-sm-7">Study type:</label>
-                    <select name="study-type" id="study-type" class="col-sm-5 form-control">
+                    <label for="study-type" class="col-sm-5">Study type:</label>
+                    <select name="study-type" id="study-type" class="col-sm-7">
 
                     </select>
                 </div>
                 <div class="row form-group">
-                    <label for="cells-number" class="col-sm-7">Number of cell(s):</label>
-                    <input type="number" name="cells-number" id="cells-number" class="col-sm-5 form-control" min="1" max="9" step="1" value="1">
+                    <label for="cells-number" class="col-sm-5">Number of cell(s):</label>
+                    <input type="number" name="cells-number" id="cells-number" class="col-sm-7" min="1" max="9" step="1" value="1">
                 </div>
                 <div id="identical-cells-field" class="row form-group">
                     <label for="identical-cells-yes" class="col-sm-6">Identical cells:</label>
@@ -81,13 +81,15 @@
                         </label>
                     </div>
                 </div>
-                <label for="level-stub">Pricing Level:</label>
-                <select name="current-level" id="level-stub" class='form-control'>
-                    <option>Level 1</option>
-                    <option>Level 2</option>
-                    <option>Level 3</option>
-                    <option>Level 4</option>
-                </select>
+                <div class="row form-group">
+                    <label for="level-stub" class="col-sm-5">Pricing Level:</label>
+                    <select name="current-level" id="level-stub" class='col-sm-7'>
+                        <option>Level 1</option>
+                        <option>Level 2</option>
+                        <option>Level 3</option>
+                        <option>Level 4</option>
+                    </select>
+                </div>  
             </form>
         </aside>
         <aside class="pt-progress-bar-container col-md-3 col-md-offset-6">
@@ -606,13 +608,14 @@
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="pt-save-confirm-contact col-md-offset-10">
-                <div id="save-button" class="btn button-controls">Save quote</div>
-                <div id="confirm-button" class="btn button-controls">Confirm</div>
-                <div id="contact-button" class="btn button-controls">Contact</div>
-            </div>
         </section>
+        <div class="pt-save-confirm-contact col-md-offset-10">
+            <button id='clear-button' class="btn button-controls">Clear</button>
+            <div class='line'></div>
+            <button id="save-button" class="btn button-controls">Save quote</button>
+            <button id="confirm-button" class="btn button-controls">Confirm</button>
+            <button id="contact-button" class="btn button-controls">Contact</button>
+        </div>
     </div>
 </section>
 {% endblock %} {% if not settings.DEBUG %} {% block footer %} {% endblock footer %} {% endif %} {% block css %} {% addtoblock 'css' %}
