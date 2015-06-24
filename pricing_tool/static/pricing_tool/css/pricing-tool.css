@@ -11,12 +11,39 @@
     display: none;
 
 }
+.select-wrapper {
+    position: relative;
+    width: 60%;
+    padding: 0;
+}
 
-input[type='number'],
-select {
-    border: 1px solid black;
-    height: 20px;
+.descriptive-label {
+    width: 40%;
+}
+
+.select-wrapper:after {
+    content: '▼';
+    position: absolute;
+    text-align: center;
+    font-size: 10px;
+    right: 0;
+    top:0;
+    padding-top:5px;
+    width: 25px;
+    height: 100%;
+    border: 1px solid #bbbbbb; 
+    background-color: #e9f2f8; 
+}
+
+/*.pt-aside-form input[type='number'],*/
+.pt-aside-form select {
+    border: 1px solid #bbbbbb;
+    height: 25px;
+    width: 100%;
+    padding-left: 0px;
     background: transparent;
+    -moz-appearance: none;
+    -webkit-appearance: none;
 }
 
 input:after {
@@ -280,7 +307,7 @@ input[disabled] {
 
 .pt-aside-form .form-group {
     margin-bottom: 10px;
-    width: 100%;
+
 }
 
 .pt-wheel {
@@ -330,12 +357,6 @@ input[disabled] {
 
 .pt-aside-form {
     font-size: 12px;
-}
-
-.pt-aside-form input,
-.pt-aside-form select {
-    width: 50%;
-    padding-left: 0px;
 }
 
 .pt-outher-circle {

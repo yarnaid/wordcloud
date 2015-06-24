@@ -60,17 +60,18 @@
         <aside class="col-md-3 col-sm-12 pt-left-menu">
             <form action="#" method="post" class="pt-aside-form form-inline">
                 {% csrf_token %}
-                <div class="row form-group">
-                    <label for="study-type" class="col-sm-5">Study type:</label>
-                    <select name="study-type" id="study-type" class="col-sm-7">
-
-                    </select>
+                <div class="row form-group col-sm-12">
+                    <label class='descriptive-label col-sm-5' for="study-type">Study type:</label>
+                    <label class="select-wrapper col-sm-7" >
+                        <select name="study-type" id="study-type">
+                        </select>
+                    </label>
                 </div>
-                <div class="row form-group">
-                    <label for="cells-number" class="col-sm-5">Number of cell(s):</label>
+                <div class="row form-group col-sm-12">
+                    <label for="cells-number" for='cells-number' class="descriptive-label col-sm-5">Number of cell(s):</label>
                     <input type="number" name="cells-number" id="cells-number" class="col-sm-7" min="1" max="9" step="1" value="1">
                 </div>
-                <div id="identical-cells-field" class="row form-group">
+                <div id="identical-cells-field" class="row form-group col-sm-12">
                     <label for="identical-cells-yes" class="col-sm-6">Identical cells:</label>
                     <div>
                         <input type="radio" name="identical-cells" id="identical-cells-yes" value="Yes" ></input> 
@@ -81,14 +82,16 @@
                         </label>
                     </div>
                 </div>
-                <div class="row form-group">
-                    <label for="level-stub" class="col-sm-5">Pricing Level:</label>
-                    <select name="current-level" id="level-stub" class='col-sm-7'>
-                        <option>Level 1</option>
-                        <option>Level 2</option>
-                        <option>Level 3</option>
-                        <option>Level 4</option>
-                    </select>
+                <div class="row form-group col-sm-12">
+                    <label for="level-stub" class="descriptive-label col-sm-5">Pricing Level:</label>
+                    <label class="select-wrapper col-sm-7" >
+                        <select name="current-level" id="level-stub">
+                            <option>Level 1</option>
+                            <option>Level 2</option>
+                            <option>Level 3</option>
+                            <option>Level 4</option>
+                        </select>
+                    </label>
                 </div>  
             </form>
         </aside>
