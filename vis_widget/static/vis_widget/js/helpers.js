@@ -13,7 +13,7 @@ var show_menu = function(id_, div_id) {
     var width = '0%';
     var opacity = 0;
     if (!$(id_).hasClass('hidden_menu')) {
-        width = '40%';
+        width = '30%';
         opacity = 1;
     }
     if (opacity == 1) {

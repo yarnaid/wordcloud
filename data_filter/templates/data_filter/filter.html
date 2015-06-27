@@ -1,25 +1,27 @@
 {% load sekizai_tags static i18n %}
 <div class="container-fluid" id="sel-List-{{ id }}">
 
-    <div class="row">
-        <div class="col-md-6 col-xs-6 col-sm-6 text-right"><label for="sel-Visualization-{{id}}">Visualization:</label></div>
-        <div class="col-md-6 col-xs-6 col-sm-6 text-left">
-            <select id="sel-Visualization-{{id}}">
+    <div class="row menu_row">
+        <div class="col-md-12 col-xs-12 col-sm-12 text-left"><label for="sel-Visualization-{{id}}">Visualization:</label></div>
+        <div class="col-md-12 col-xs-12 col-sm-12 text-left div-select">
+            <select class="btn form-control" id="sel-Visualization-{{id}}">
                     <option value="0">Cloud</option>
                     <option value="1">Tree</option>
             </select>
         </div>
+        <div class="select-caret col-md-1 col-xs-1 col-sm-1"><span class="caret"></span></div>
     </div>
 
-<div class="row">
-    <div class="col-md-6 col-xs-6 col-sm-6 text-right"><label for="sel-Job-{{id}}">Job:</label></div>
-    <div class="col-md-6 col-xs-6 col-sm-6 text-left">
-        <select id="sel-Job-{{id}}">
+<div class="row menu_row">
+    <div class="col-md-12 col-xs-12 col-sm-12 text-left"><label for="sel-Job-{{id}}">Job:</label></div>
+    <div class="col-md-12 col-xs-12 col-sm-12 text-left div-select">
+        <select class="btn form-control" id="sel-Job-{{id}}">
             {% for job in jobs %}
                 <option value="{{job.0}}">{{job.2}} - {{job.1}}</option>
             {% endfor %}
         </select>
     </div>
+    <div class="select-caret col-md-1 col-xs-1 col-sm-1"><span class="caret"></span></div>
 </div>
 
     {% include "data_filter/selector.html" with label="Question" options=question_names id_=id %}

@@ -5,15 +5,34 @@
 GENERAL
 */
 
+$select-hight: 24px;
+
 select {
-   border: 1px solid #ccc;
-   // background-color: lightgreen;
-   // @include border-radius(0px);
-   // border-bottom-left-radius: 0px;
-   // border-top-left-radius: 0px;
-   // border-bottom-right-radius: 0px;
-   // border-top-right-radius: 0px;
+  background: transparent;
+  font-size: 14px;
+  border: 1px solid $gray !important;
+  border-radius: 0 !important;
+  -webkit-appearance: none !important;
+  -moz-appearance: none !important;
+  appearance: none !important;
+  max-height: $select-hight;
+  padding: 0px 12px !important;
 }
+
+.div-select + div.select-caret {
+    margin-left: -39px;
+    margin-top: 0px;
+    max-width: $select-hight !important;
+    width: $select-hight !important;
+    padding-left: 5px !important;
+    padding-right: 0px !important;
+}
+
+div.select-caret {
+  border: 1px solid $gray;
+  max-height: $select-hight;
+}
+
 
 html,
 body {

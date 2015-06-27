@@ -1,10 +1,11 @@
-<div class="row">
-    <div class="col-md-6 col-xs-6 col-sm-6 text-right"><label for="sel-{{label}}-{{id_}}">{{label}}:</label></div>
-    <div class="col-md-6 col-xs-6 col-sm-6 text-left">
-        <select id="sel-{{label}}-{{id_}}">
+<div class="row menu_row">
+    <div class="col-md-10 col-xs-10 col-sm-10 text-left"><label for="sel-{{label}}-{{id_}}">{{label}}:</label></div>
+    <div class="col-md-12 col-xs-12 col-sm-12 text-left div-select">
+        <select class="btn form-control" id="sel-{{label}}-{{id_}}">
             {% for id in options %}
                 <option value="{{id}}">{{id}}</option>
             {% endfor %}
         </select>
     </div>
+    <div class="select-caret col-md-1 col-xs-1 col-sm-1"><span class="caret"></span></div>
 </div>
