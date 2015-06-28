@@ -25,6 +25,8 @@ var Cluster = function(_parent_id, _data, _eventHandler, _fps) {
     self.max_lengh = 0;
     self.max_depth = 0;
     self.max_verbatim_count = 0;
+    self.verbatim_count = 0;
+
 
 
     this.min_radius = 4.5;
@@ -99,6 +101,7 @@ Cluster.prototype.init = function() {
         $.each(root.children, function(k, v) {
             v.overcode = false;
             v.parent = root;
+            v.repondants = v.verbatim_count / root.verbatim_count;
             self.nodes.push(v);
             add_nodes(v);
         });
@@ -142,7 +145,6 @@ Cluster.prototype.init = function() {
         .attr('class', set_class)
         .call(this.force.drag)
         .on("mouseover", function(d) {
-            console.log(d);
             self.tooltip_elem.transition()
                 .duration(self.duration)
                 .style("opacity", 1);
@@ -323,12 +325,18 @@ Cluster.prototype.update = function() {};
 Cluster.prototype.wrangle = function() {
     var self = this;
 
+    $(self.data.question.children).each(function(k, v) {
+        self.verbatim_count += v.verbatim_count;
+    });
+
     var nodes = [];
     nodes.push(self.data.question);
     self.full_count = 0;
     var children_len = 0;
     while (nodes.length > 0) {
         var root = nodes.pop();
+        root.total = root.verbatim_count / self.verbatim_count;
+        console.log(root);
         self.max_lengh = Math.max(self.max_lengh, root.title.length);
         self.max_depth = Math.max(self.max_depth || 0, root.code_depth);
         self.max_verbatim_count =  Math.max(self.max_verbatim_count || 0, root.verbatim_count);
@@ -342,6 +350,7 @@ Cluster.prototype.wrangle = function() {
     self.max_depth += 1;
     self.raduis_scale.range([self.min_radius, self.width/children_len/2])
         .domain([1, self.full_count]);
+
 
     self.display_data = self.data;
 };
