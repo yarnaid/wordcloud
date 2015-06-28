@@ -325,9 +325,7 @@ Cluster.prototype.update = function() {};
 Cluster.prototype.wrangle = function() {
     var self = this;
 
-    $(self.data.question.children).each(function(k, v) {
-        self.verbatim_count += v.verbatim_count;
-    });
+    self.verbatim_count = self.data.question.verbatim_count;
 
     var nodes = [];
     nodes.push(self.data.question);
@@ -336,7 +334,6 @@ Cluster.prototype.wrangle = function() {
     while (nodes.length > 0) {
         var root = nodes.pop();
         root.total = root.verbatim_count / self.verbatim_count;
-        console.log(root);
         self.max_lengh = Math.max(self.max_lengh, root.title.length);
         self.max_depth = Math.max(self.max_depth || 0, root.code_depth);
         self.max_verbatim_count =  Math.max(self.max_verbatim_count || 0, root.verbatim_count);

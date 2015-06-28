@@ -123,7 +123,8 @@ class VerbatimsFilteredSet(APIView):
                 'title': question.title,
                 'text': question.text,
                 'name': question.name,
-                'kind': question.kind
+                'kind': question.kind,
+                'verbatim_count': 0,
             }
         }
 
@@ -134,17 +135,11 @@ class VerbatimsFilteredSet(APIView):
         overcodes_array = self.go_through_children(question, query_parameters_dict)
 
         response_body['question']['children'] = overcodes_array
+        for child in overcodes_array:
+            response_body['question']['verbatim_count'] += child['verbatim_count']
+        for child in overcodes_array:
+            child['total'] = child['verbatim_count'] / response_body['question']['verbatim_count']
         return Response(response_body)
-
-    # def verbatims_count_evaluate(self, root):
-    #     ''' Evaluates number of children verbatims to root
-    #     '''
-    #     queue = deque()
-    #     queue.push(root)
-    #     while len(queue) > 0:
-    #         root_ = queue.pop()
-    #         for child in queue['children']:
-    #             root_
 
     def go_through_children(self, question, query_parameters_dict):
         ''' Represents all children overcodes of the question as dict

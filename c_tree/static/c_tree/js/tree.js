@@ -17,6 +17,7 @@ var Tree = function(_parent_id, _data, _event_handler) {
     self.max_lengh = 0;
     self.max_depth = 0;
     self.max_verbatim_count = 0;
+    self.verbatim_count = 0;
 
     self.min_r = 3;
     self.t_offset = 13;
@@ -88,10 +89,13 @@ Tree.prototype.init = function() {
 Tree.prototype.process_data = function() {
     var self = this;
 
+    self.verbatim_count = self.data.question.verbatim_count;
+
     var nodes = [];
     nodes.push(self.data.question);
     while (nodes.length > 0) {
         var root = nodes.pop();
+        root.total = root.verbatim_count / self.verbatim_count;
         self.max_lengh = Math.max(self.max_lengh, root.title.length);
         self.max_depth = Math.max(self.max_depth || 0, root.code_depth);
         self.max_verbatim_count =  Math.max(self.max_verbatim_count || 0, root.verbatim_count);
@@ -117,6 +121,10 @@ Tree.prototype.update = function(source) {
 
     nodes.forEach(function(d) {
         d.y = self.depth_scale(d.depth);
+        console.log(d);
+        if (d.parent)
+          if (d.parent.verbatim_count)
+            d.repondants = d.verbatim_count / d.parent.verbatim_count;
     });
 
     var node = self.svg.selectAll('g.node')
