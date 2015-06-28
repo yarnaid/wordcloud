@@ -50,7 +50,7 @@ input[type='checkbox']:not(checked) + label:before {
     font-size: 0;
     width: 20px;
     height: 20px;
-    border: 3px solid #6e0cad;     
+    border: 3px solid #6e0cad;
 }
 
 input[type='checkbox']:disabled + label:before {
@@ -61,7 +61,7 @@ input[type='checkbox']:disabled + label:before {
     font-size: 0;
     width: 20px;
     height: 20px;
-    border: 3px solid #acacac;     
+    border: 3px solid #acacac;
 }
 
 input[type='radio']:checked+label::after {
@@ -124,16 +124,16 @@ bootstrap overrides
 END bootstrap overrides
  */
 
-.ui-widget-overlay { 
-    position: absolute; 
-    top: 0; 
-    left: 0; 
-    width: 100%; 
-    height: 100%; 
+.ui-widget-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
 
     background-color: black;
      opacity: .50;
-     filter:Alpha(Opacity=50); 
+     filter:Alpha(Opacity=50);
      position: fixed;
 }
 /* datepicker override */
@@ -369,7 +369,7 @@ input[disabled] {
     font-weight: 100;
     border-radius: 19px 19px 10px 10px;
     cursor: pointer;
-    padding: 16px; 
+    padding: 16px;
     padding-top: 5px;
 }
 
@@ -798,7 +798,7 @@ input[disabled] {
 .pt-result-cost-popup-content > div{
     position: relative;
     border: 2px solid #a9cbe6;
-    padding: 20px;    
+    padding: 20px;
 }
 
 .pt-pricing-level-popup-content,
@@ -809,7 +809,7 @@ input[disabled] {
     background-color: white;
     left:6px;
     top: -50%;
-    box-shadow: 0 10px 20px rgba(0,0,0,0.5); 
+    box-shadow: 0 10px 20px rgba(0,0,0,0.5);
     border: 5px solid white;
     border-radius: 5px;
 }
@@ -873,7 +873,7 @@ input[disabled] {
 
 #level-pricings-pin {
     border-bottom: none;
-    border-top: 5px solid white; 
+    border-top: 5px solid white;
     top: -5px;
 }
 
@@ -892,11 +892,11 @@ input[disabled] {
 .pt-popup-pin {
     border-left: 5px solid white;
     border-bottom: 5px solid white;
-    border-radius: 5px;   
+    border-radius: 5px;
 }
 
 .pt-summary-table {
-    background-color: #f2f2f2;    
+    background-color: #f2f2f2;
 }
 
 .pt-result-cost-popup-content p {
@@ -936,7 +936,7 @@ input[disabled] {
 }
 
 .pt-save-confirm-contact > div {
-    margin-top: 10px; 
+    margin-top: 10px;
 }
 
 #timing-table td:last-child p {

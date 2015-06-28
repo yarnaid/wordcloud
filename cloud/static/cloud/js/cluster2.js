@@ -142,12 +142,13 @@ Cluster.prototype.init = function() {
         .attr('class', set_class)
         .call(this.force.drag)
         .on("mouseover", function(d) {
+            console.log(d);
             self.tooltip_elem.transition()
                 .duration(self.duration)
                 .style("opacity", 1);
             self.tooltip_elem.html(self.tooltip_html(d))
-                .style("left", (d3.event.pageX) + "px")
-                .style("top", (d3.event.pageY - 28) + "px");
+                .style("left", (d3.event.pageX + d.radius) + "px")
+                .style("top", (d3.event.pageY - 75) + "px");
         })
         .on("mouseout", function(d) {
             self.tooltip_elem.transition()

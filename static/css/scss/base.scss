@@ -17,6 +17,10 @@ select {
   appearance: none !important;
   max-height: $select-hight;
   padding: 0px 12px !important;
+  text-shadow: none !important;
+  &.btn:hover, &.btn:focus {
+    color: #000000 !important;
+  }
 }
 
 .div-select + div.select-caret {
@@ -254,8 +258,11 @@ div.tooltip {
 .tooltip {
     @include box-shadow(rgba(black, 0.4) 0 0 25px);
     div {
+        border: 2px solid #a9cbe6;
+        padding-top: 1em;
         .table {
             margin: 0px;
+            width: 100% !important;
             tr {
                 td:nth-child(1) {
                     text-align: right;
