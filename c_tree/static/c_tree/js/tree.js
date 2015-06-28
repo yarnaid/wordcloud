@@ -102,6 +102,10 @@ Tree.prototype.process_data = function() {
         for (var i = 0; i < root.children.length; ++i) {
             nodes.push(root.children[i]);
         }
+        if (root.children.length > 0 && !root.overcode && !root.codebook_name) {
+          root._children = root.children;
+          root.children = null;
+        }
     }
 
     self.max_depth += 1;
@@ -121,7 +125,6 @@ Tree.prototype.update = function(source) {
 
     nodes.forEach(function(d) {
         d.y = self.depth_scale(d.depth);
-        console.log(d);
         if (d.parent)
           if (d.parent.verbatim_count)
             d.repondants = d.verbatim_count / d.parent.verbatim_count;

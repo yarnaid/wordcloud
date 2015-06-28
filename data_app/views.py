@@ -137,6 +137,7 @@ class VerbatimsFilteredSet(APIView):
         response_body['question']['children'] = overcodes_array
         for child in overcodes_array:
             response_body['question']['verbatim_count'] += child['verbatim_count']
+            child['overcode'] = True
         for child in overcodes_array:
             child['total'] = child['verbatim_count'] / response_body['question']['verbatim_count']
         return Response(response_body)
