@@ -1,8 +1,8 @@
 {% load sekizai_tags static i18n %}
-<div class="container-fluid" id="sel-List-{{ id }}">
+<div class="container-fluid window-menu" id="sel-List-{{ id }}">
 
     <div class="row menu_row">
-        <div class="col-md-12 col-xs-12 col-sm-12 text-left"><label for="sel-Visualization-{{id}}">Visualization:</label></div>
+        <div class="col-md-12 col-xs-12 col-sm-12 text-left item-label"><label for="sel-Visualization-{{id}}">Visualization:</label></div>
         <div class="col-md-12 col-xs-12 col-sm-12 text-left div-select">
             <select class="btn form-control" id="sel-Visualization-{{id}}">
                     <option value="0">Cloud</option>
@@ -12,20 +12,31 @@
         <div class="select-caret col-md-1 col-xs-1 col-sm-1"><span class="caret"></span></div>
     </div>
 
-<div class="row menu_row">
-    <div class="col-md-12 col-xs-12 col-sm-12 text-left"><label for="sel-Job-{{id}}">Job:</label></div>
-    <div class="col-md-12 col-xs-12 col-sm-12 text-left div-select">
-        <select class="btn form-control" id="sel-Job-{{id}}">
-            {% for job in jobs %}
-                <option value="{{job.0}}">{{job.2}} - {{job.1}}</option>
-            {% endfor %}
-        </select>
-    </div>
-    <div class="select-caret col-md-1 col-xs-1 col-sm-1"><span class="caret"></span></div>
-</div>
+  <div>
+  <div class="row menu_row">
+      <div class="col-md-12 col-xs-12 col-sm-12 text-left item-label"><label for="sel-Job-{{id}}">Job:</label></div>
+      <div class="col-md-12 col-xs-12 col-sm-12 text-left div-select">
+          <select class="btn form-control" id="sel-Job-{{id}}">
+              {% for job in jobs %}
+                  <option value="{{job.0}}">{{job.2}} - {{job.1}}</option>
+              {% endfor %}
+          </select>
+      </div>
+      <div class="select-caret col-md-1 col-xs-1 col-sm-1"><span class="caret"></span></div>
+  </div>
+  </div>
 
-    {% include "data_filter/selector.html" with label="Question" options=question_names id_=id %}
-    <script type="text/javascript">
+  {% include "data_filter/selector.html" with label="Question" options=question_names id_=id %}
+
+</div>
+<div class="hidden" id="sel-Template">
+    {% include "data_filter/selector.html" %}
+</div>
+{# MEDIA #}
+{% block js %}
+{% addtoblock 'js' %}
+    <script type="text/javascript" src="{% static 'js/vis_helpers.js' %}"></script>
+    <script type="text/javascript" id="some-script-{{id}}">
     var params_ids_{{ id }} = [];
     var params_names_{{ id }} = [];
     var get_filter_params_{{ id }} = function() {
@@ -113,14 +124,6 @@
 
     });
     </script>
-</div>
-<div class="hidden" id="sel-Template">
-    {% include "data_filter/selector.html" %}
-</div>
-{# MEDIA #}
-{% block js %}
-{% addtoblock 'js' %}
-    <script type="text/javascript" src="{% static 'js/vis_helpers.js' %}"></script>
 {% endaddtoblock %}
 {% endblock %}
 {% block css %} {% addtoblock 'css' %} {% endaddtoblock %} {% endblock %}
