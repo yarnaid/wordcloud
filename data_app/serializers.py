@@ -3,11 +3,9 @@ __author__ = 'yarnaid'
 from data_app.models import Job, Question, Code, Variable, Verbatim, CodeBook
 from rest_framework import serializers
 
-
 class RecursiveField(serializers.Serializer):
     def to_native(self, value):
         return self.parent.to_native(value)
-
 
 class JobSerializer(serializers.HyperlinkedModelSerializer):
 
@@ -39,7 +37,7 @@ class QuestionIdSerializer(serializers.HyperlinkedModelSerializer):
         fields = ('id', 'name')
 
 
-class VerbatimSerialier(serializers.HyperlinkedModelSerializer):
+class VerbatimSerializer(serializers.HyperlinkedModelSerializer):
     parent = CodeIdSerializer()
     variable = VariableSerializer()
     question = QuestionIdSerializer()
@@ -76,7 +74,7 @@ class ShortCodeSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class CodeSerializer(serializers.HyperlinkedModelSerializer):
-    children_verbatims = VerbatimSerialier(many=True)
+    children_verbatims = VerbatimSerializer(many=True)
     job = JobSerializer()
     code_book = CodeBookIdSerializer()
     parent = CodeIdSerializer()
@@ -162,3 +160,25 @@ class VisDataSerializer(serializers.HyperlinkedModelSerializer):
         model = Question
         depth = 1
         fields = ('name', 'text', 'title', 'id', 'children_questions', )
+
+class CodesRecursiveField(serializers.HyperlinkedModelSerializer):
+    children_verbatims = VerbatimSerializer(many=True)
+    children_codes = CodeSerializer(many='true')
+
+    def to_native(self, value):
+        return self.parent.to_native(value)
+
+    class Meta:
+        model = Code
+        fields = ('title_en','children_verbatims', 'children_codes')
+
+class SubnetVerbatims(serializers.HyperlinkedModelSerializer):
+    children_codes = CodesRecursiveField(many=True)
+    children_verbatims = VerbatimSerializer(many=True)
+
+    class Meta:
+        model = Code
+        fields = ('id', 'title_en', 'children_codes', 'children_verbatims')
+
+
+

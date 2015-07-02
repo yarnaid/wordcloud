@@ -81,6 +81,17 @@ Rest.prototype.get_variables = function(job_id) {
     return variables;
 };
 
+Rest.prototype.get_all_verbatims_of_subnet = function(subnet_id) {
+    var verbatims;
+    $.ajax({
+        async: false,
+        url: '/data/subnet_verbatims/?format=json&id='+subnet_id,
+        success: function(vars) {
+            verbatims = vars
+        }
+    })
+    return verbatims;
+}
 
 Rest.prototype.get_variable_codes = function(var_id) {
     var self = this;
@@ -129,23 +140,46 @@ var helpers_init = function() {
 var show_verbatims = function(d) {
     if (d.overcode)
         return;
-    var rest = new Rest();
-    var verbatims = rest.get_verbatims(d.id, d.question_id);
-    if (verbatims.length < 1) {
-        return;
-    }
-    verbatims = verbatims.filter(function(v) {return parseInt(v.variable.uid) >= 0;});
-    verbatims.forEach(function(v) {
-        v.uid = v.variable.uid;
-        // 'sex', 'age_bands', 'reg_quota',
-                  // 'csp_quota', 'main_cell_text'
-                  v.sex = v.variable.sex;
-                  v.age = v.variable.age_bands;
-                  v.region = v.variable.reg_quota;
-                  v.csp = v.variable.csp_quota;
-                  v.main_cell_text = v.variable.main_cell_text;
-              });
+    else {
+        var rest = new Rest();
 
+        if(d.children.length != 0) {//DIRTY HACK
+            var code_tree = rest.get_all_verbatims_of_subnet(d.id, d.question_id);
+            
+            var dfs = function(arr) {
+
+                function dfs(arr,res) {
+                    if(arr.length==0) 
+                        return res;
+
+                    var children_codes = [];
+                    for(var i = 0; i<arr.length; i++) {
+                        res = res.concat(arr[i].children_verbatims);
+                        children_codes = children_codes.concat(arr[i].children_codes)
+                    }
+                    return dfs(children_codes, res)
+                }
+
+                return dfs(arr, [])
+            }
+            var verbatims = dfs(code_tree)
+        }
+        else {
+            var verbatims = rest.get_verbatims(d.id, d.question_id);
+            if (verbatims.length < 1) {
+                return;
+            }
+        }
+        verbatims.forEach(function(v) {
+            v.uid = v.variable.uid;
+            v.sex = v.variable.sex;
+            v.age = v.variable.age_bands;
+            v.region = v.variable.reg_quota;
+            v.csp = v.variable.csp_quota;
+            v.main_cell_text = v.variable.main_cell_text;
+        });
+        verbatims = verbatims.filter(function(v) {return parseInt(v.variable.uid) >= 0;});
+    }
     bootbox.dialog({
         backdrop: false,
         message: '<table id="table-methods-table" data-search="true" data-show-refresh="true" data-show-toggle="true" data-show-export="true" data-pagination="true" data-show-columns="true" data-toggle="table">' +
@@ -181,6 +215,7 @@ var show_verbatims = function(d) {
             fileName: 'verbatim'
         }
     });
+
 };
 
 var tooltip_html = function(d) {
