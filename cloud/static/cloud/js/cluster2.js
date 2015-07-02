@@ -159,6 +159,7 @@ Cluster.prototype.init = function() {
         })
         .on("click", self.show_verbatims);
 
+    this.subnode = this.svg.selectAll('.subnet')
 
 
     // Resolves collisions between d and all other circles.

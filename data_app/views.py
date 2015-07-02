@@ -78,7 +78,7 @@ class CodeViewSet(viewsets.ModelViewSet):
 
 class VerbatimViewSet(viewsets.ModelViewSet):
     queryset = models.Verbatim.objects.all().prefetch_related('parent', 'variable', 'question')
-    serializer_class = serializers.VerbatimSerialier
+    serializer_class = serializers.VerbatimSerializer
     filter_class = VerbatimFilter
 
 
@@ -92,6 +92,11 @@ class VisDataViewSet(viewsets.ModelViewSet):
     queryset = models.Job.objects.all()
     serializer_class = serializers.VisDataSerializer
     filter_fields = ('id', 'children_questions')
+
+class SubnetVerbatims(viewsets.ModelViewSet):
+    queryset = models.Code.objects.all().prefetch_related('children_codes')
+    serializer_class = serializers.SubnetVerbatims
+    filter_fields = ('id',)
 
 class VerbatimsFilteredSet(APIView):
     ''' Class appointed to fast access to Verbatims statistics and data
