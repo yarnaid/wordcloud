@@ -23,6 +23,24 @@ select {
   }
 }
 
+.item-label {
+  font-style: italic;
+  color: $vis-pink;
+}
+
+.window-menu > div:nth-child(even) div {
+  background: $even-menu;
+}
+
+div.menu_row:nth-child(2n+2) {
+  background: $even-menu;
+}
+
+.menu_row {
+    border: 1px solid $gray !important;
+    padding: 8px;
+}
+
 .div-select + div.select-caret {
     margin-left: -39px;
     margin-top: 0px;
