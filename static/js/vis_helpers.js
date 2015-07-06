@@ -143,7 +143,8 @@ var show_verbatims = function(d) {
     else {
         var rest = new Rest();
 
-        if(d.children.length != 0) {//DIRTY HACK
+        if(d.children != null || d._children !=null) 
+        {//DIRTY HACK
             var code_tree = rest.get_all_verbatims_of_subnet(d.id, d.question_id);
             
             var dfs = function(arr) {
