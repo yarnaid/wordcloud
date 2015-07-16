@@ -7,7 +7,7 @@ from data_app import serializers
 import rest_framework_filters as filters
 from rest_framework.views import APIView
 from rest_framework.response import Response
-
+import json
 
 class JobViewSet(viewsets.ModelViewSet):
     queryset = models.Job.objects.all()
@@ -98,15 +98,51 @@ class SubnetVerbatims(viewsets.ModelViewSet):
     serializer_class = serializers.SubnetVerbatims
     filter_fields = ('id',)
 
+
+class CoocurrenceView(APIView):
+    def get(self, request):
+        query_params = request.QUERY_PARAMS.dict()
+        query_params.pop('format', None)
+        query_params.pop('visualization', None)
+        question_id = query_params.pop('question', None)
+        job_id = query_params.pop("job", None)
+        question = models.Question.objects.get(pk=question_id, parent__pk=job_id)
+        verbatims = models.Verbatim.objects.filter(question=question)
+
+        codes = [(v.parent, v.variable) for v in verbatims]
+        #import ipdb; ipdb.set_trace()
+        codes_variables = dict()
+        for code in codes:
+            if code[0] not in codes_variables.keys():
+                codes_variables[code[0]] = list()
+            else:
+                codes_variables[code[0]].append(code[1])
+
+        #import ipdb; ipdb.set_trace()
+        links = list()
+        rest_of_codes = codes_variables.copy()
+        for code, ls_of_variables in codes_variables.iteritems():
+            rest_of_codes.pop(code, None)
+            for another_code, another_ls_of_variables in rest_of_codes.iteritems():
+                count = 0
+                for verbatim in ls_of_variables:
+                    if verbatim in another_ls_of_variables:
+                        count += 1
+                if count != 0:
+                    links.append({"source": code.id, "target": another_code.id, "value": count})
+        #import ipdb; ipdb.set_trace()
+
+        return Response(links)
+
 class VerbatimsFilteredSet(APIView):
     ''' Class appointed to fast access to Verbatims statistics and data
 
-    Supports GET method with URL query parameters format:
-    /visualization_data?job={job Id}&id={question Id}[&{field name of Variable}={restriction value for field}]
+        Supports GET method with URL query parameters format:
+        /visualization_data?job={job Id}&id={question Id}[&{field name of Variable}={restriction value for field}]
 
-    For example:
-    /visualization_data?job=126&id=3&age_bands=3&csp_quota=2
-    '''
+        For example:
+        /visualization_data?job=126&id=3&age_bands=3&csp_quota=2
+        '''
     #TODO: Is there any possibility to simplify names of fields in Variable class (such as 'reg_quota' to 'reg', 'csp_quota' to csp, etc)?
 
     def get(self, request, format=None):

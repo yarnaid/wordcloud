@@ -13,9 +13,11 @@ router.register(r'codes', views.CodeViewSet)
 router.register(r'verbatims', views.VerbatimViewSet)
 router.register(r'variables', views.VariableViewSet)
 router.register(r'viz_data', views.VisDataViewSet)
+
 router.register(r'subnet_verbatims', views.SubnetVerbatims)
 
 urlpatterns = (
     url(r'^', include(router.urls)),
     url(r'visualization_data', views.VerbatimsFilteredSet.as_view()),
+    url(r'coocurence', views.CoocurrenceView.as_view())
 )

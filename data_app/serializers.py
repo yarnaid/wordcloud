@@ -72,6 +72,8 @@ class ShortCodeSerializer(serializers.HyperlinkedModelSerializer):
         fields = ('text', 'title', 'code', 'id', )
         filter_fields = ('overcode', )
 
+class Link(serializers.Serializer):
+    c = serializers.IntegerField()
 
 class CodeSerializer(serializers.HyperlinkedModelSerializer):
     children_verbatims = VerbatimSerializer(many=True)
