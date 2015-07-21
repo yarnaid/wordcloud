@@ -5,7 +5,7 @@
 var Tree = function(_parent_id, _data, _event_handler) {
     var self = this;
     self.parent_id = _parent_id;
-    self.data = _data;
+    self.data = _data.hierarchy;
     self.event_handler = _event_handler;
     self.margin = {
         top: 10,

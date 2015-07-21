@@ -125,7 +125,6 @@ Rest.prototype.get_verbatims = function(code_id, question_id) {
     return verbatims;
 };
 
-
 var helpers_init = function() {
     this.percentage = d3.format('.1%');
 
@@ -251,19 +250,42 @@ var tooltip_html = function(d) {
     return res;
 };
 
+var coocurence_tooltip_html = function(d) {
+    var self = this;
+    var code_html = '<tr>' +
+    '<td><i>Code number:</i></td>' +
+    '<td>' + d.code + '</td>' +
+    '</tr>';
+    var code = d.code ? code_html : '';
+    var res = '<div id="tooltip-border"><table class="table table-striped table-hover table-condensed">' +
+    '<caption class="text-center">Number of coocurences</caption>' +
+    '<tbody>' +
+    '<tr>' +
+    '<td><i>Value:</i></td>' +
+    '<td>' + d.value + '</td>' +
+    '</tr>' +
+    '</tbody>' +
+    '</table></div>';
+    return res;
+};
+
 var get_vis_data = function(job_id, question_name, col) {
     col = col || 1;
     var overcodes = {},
         codes = [],
         verbatims = {},
-        res;
+        response,
+        coocurence_,
+        hierarchy_;
     var rest = new Rest();
     var question = rest.get_short_questions(job_id, "&name="+question_name)[0];
     var filter_params = eval('get_filter_params_'+col+'()');
     var url_ = '/data/visualization_data/?format=json';
+    var url_coocurence = '/data/coocurence/?format=json'
     $.each(filter_params, function(k, v) {
         if (v !== '-1') {
             url_ += '&' + k + '=' + v;
+            url_coocurence += '&' + k + '=' + v;
         }
     });
 
@@ -271,11 +293,19 @@ var get_vis_data = function(job_id, question_name, col) {
         async: false,
         url: url_,
         success: function(data_) {
-            res = data_;
+            hierarchy_ = data_;
         }
     });
 
-    return res;
+    $.ajax({
+        async: false,
+        url: url_coocurence,
+        success: function(data_) {
+            coocurence_ = data_;
+        }
+    });
+
+    return {coocurence: coocurence_, hierarchy: hierarchy_};
 };
 
 

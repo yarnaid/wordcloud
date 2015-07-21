@@ -1,9 +1,11 @@
-'use strict';
+'use strict'
 
 var Cluster = function(_parent_id, _data, _eventHandler, _fps) {
     var self = this;
+    this.is_coocurence = false;
     this.parent_id = _parent_id;
-    this.data = _data;
+    this.data = _data.hierarchy;
+    this.coocurence = _data.coocurence;
     this.event_handler = _eventHandler;
     this.fps = _fps || 40;
     this.gravity = 0.1;
@@ -12,7 +14,7 @@ var Cluster = function(_parent_id, _data, _eventHandler, _fps) {
     $(this.parent_id).addClass('motion');
 
     this.padding = -5; // separation between same-color nodes
-    this.clusterPadding = 2; // separation between different-color nodes
+    this.clusterPadding = 0.5; // separation between different-color nodes
     this.maxRadius = 300;
     this.codes_overlap = 5;
     this.margin = {
@@ -61,11 +63,29 @@ var Cluster = function(_parent_id, _data, _eventHandler, _fps) {
     // this.venn = venn.VennDiagram();
     this.pack = d3.layout.pack().size([this.width, this.height]);
 
-    this.init();
+    this.switchVisualization();
+
+    d3.selectAll("input[name='coocurences-setup']")
+    	.on('change', function() {
+    		if( this.id == 'disable-coocurence')
+    			self.is_coocurence = false;
+    		else
+    			self.is_coocurence = true; 
+    		self.switchVisualization();
+    	})
 };
 
+Cluster.prototype.switchVisualization = function() {
+	if (this.svg) d3.selectAll(this.parent_id + ' svg').remove()
 
-Cluster.prototype.init = function() {
+	if(this.is_coocurence == false)
+		this.initUsual()
+	else 
+		this.initCoocurence()
+
+}
+
+Cluster.prototype.initUsual = function() {
     var self = this;
     self.helpers_init();
 
@@ -73,6 +93,8 @@ Cluster.prototype.init = function() {
         self.svg.attr('transform',
             'translate(' + self.zoom.translate() + ') scale(' + self.zoom.scale() + ')');
     };
+    this.links = [];
+    this.nodes = [];
 
     this.svg = d3.select(this.parent_id).append('svg')
         .attr('width', this.width)
@@ -108,6 +130,7 @@ Cluster.prototype.init = function() {
     };
     $.each(clusters, function(k, v) {
         v.overcode = true;
+        delete v.parent;
         self.nodes.push(v);
         add_nodes(v);
     });
@@ -316,7 +339,189 @@ Cluster.prototype.init = function() {
     this.update();
 };
 
+Cluster.prototype.initCoocurence =  function() {
+    var self = this;
+    self.helpers_init();
+
+    var zoom = function() {
+        self.svg.attr('transform',
+            'translate(' + self.zoom.translate() + ') scale(' + self.zoom.scale() + ')');
+    };
+
+    this.svg = d3.select(this.parent_id).append('svg')
+        .attr('width', this.width)
+        .attr('height', this.height)
+        .attr('class', 'cloud')
+        // .attr('pointer-events', 'all')
+        .append('svg:g')
+        .call(self.zoom.on('zoom', zoom))
+        .append('svg:g');
+
+    this.svg.append('rect') // scaling rectangle
+        .attr('class', 'hidden')
+        .attr('width', this.width)
+        .attr('height', this.height)
+        .attr('transform', 'translate(' + this.width*0.1 + ',' + this.height*0.1 + ') scale(0.8)')
+        .style('fill', 'none');
+
+       // update data
+    this.wrangle();
+
+    this.nodes = [];
+
+    this.nodes = this.coocurence.nodes.slice()
+
+    this.nodes.forEach(function(n) {
+        n.radius = self.radius(n);
+        n.weight = n.radius;
+    });
+
+   var force = d3.layout.force()
+        .gravity(.05)
+        .distance(70)
+        .charge(-100)
+        .size([this.width, this.height]);
+    var json = this.coocurence
+
+    force
+        .nodes(json.nodes)
+        .links(json.links)
+        .start();
+
+	this.link = this.svg.selectAll(".link")
+        .data(json.links)
+        .enter().append("line")
+        .attr("class", "link")
+        .style("stroke-width",function(d) { return d.value;})
+        .style("stroke", "rgb(0,0,255)")
+        .on("mouseover", function(d, i) {
+            self.tooltip_elem.transition()
+                .duration(self.duration)
+                .style("opacity", 1);
+
+            self.tooltip_elem.html(self.coocurence_tooltip_html(d))
+                .style("left", (d3.event.pageX) + "px")
+                .style("top", (d3.event.pageY - 75) + "px");
+
+            d3.select(this)
+            	.style("stroke-width", function(d) {return 2*d.value;})
+            	.style("stroke", "rgb(255,0,0)")
+        })        
+        .on("mouseout", function(d) {
+            self.tooltip_elem.transition()
+                .duration(self.duration)
+                .style("opacity", 0);
+	        d3.select(this)
+	        	.style("stroke-width", function(d) {return d.value;})
+            	.style("stroke", "rgb(0,0,255)")
+        })       
+    this.node = this.svg.selectAll(".node")
+        .data(json.nodes)
+        .enter().append("g")
+        .attr("class", "code")
+        .call(force.drag)
+        .on("mouseover", function(d) {
+            self.tooltip_elem.transition()
+                .duration(self.duration)
+                .style("opacity", 1);
+            self.tooltip_elem.html(self.tooltip_html(d))
+                .style("left", (d3.event.pageX + d.radius) + "px")
+                .style("top", (d3.event.pageY - 75) + "px");
+        })        
+        .on("mouseout", function(d) {
+            self.tooltip_elem.transition()
+                .duration(self.duration)
+                .style("opacity", 0);
+        })
+        .on("click", self.show_verbatims);
+
+    this.node.append("circle")
+		.attr("r", function(d) {return d.radius || self.min_radius;})
+
+    /*this.node.append("text")
+        .attr("dx", 0)
+        .attr("dy", ".35em")
+        .text(function(d) { return d.title });*/
+
+    force.on("tick", function() {
+        self.link
+        	.attr("x1", function(d) { return d.source.x; })
+	        .attr("y1", function(d) { return d.source.y; })
+	        .attr("x2", function(d) { return d.target.x; })
+	        .attr("y2", function(d) { return d.target.y; });
+
+        self.node.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
+    })
+
+    var wrap = function(text, width) {
+        width = width || text.attr('width');
+        text.each(function() {
+            var text = d3.select(this),
+                words = text.text().split(/\s+/).reverse(),
+                word,
+                line = [],
+                lineNumber = 0,
+                lineHeight = text.style('font-size').slice(0, -2), // px
+                y = text.attr("y"),
+                dy = parseFloat(text.attr("dy")),
+                tspan = text.text(null).append("tspan").attr("x", 0).attr("y", y).attr("dy", dy + "px");
+            while (word = words.pop()) {
+                line.push(word);
+                tspan.text(line.join(" "));
+                if (tspan.node().getComputedTextLength() > width) {
+                    line.pop();
+                    tspan.text(line.join(" "));
+                    line = [word];
+                    tspan = text.append("tspan").attr("x", 0).attr("y", y).attr("dy", ++lineNumber * lineHeight + dy + "px").text(word);
+                }
+            }
+        });
+    };
+
+    var text_area = this.node.append('g');
+    text_area.append('rect')
+        .attr('width', function(d) {
+            return d.radius * 1.4;
+        })
+        .attr('height', function(d) {
+            return d.radius * 1.4;
+        })
+        .attr('x', function(d) {
+            return -d.radius * 0.7;
+        })
+        .attr('y', function(d) {
+            return -d.radius * 0.7;
+        })
+        .attr('id', 'two')
+        .attr('fill', 'none');
+
+    text_area.append('text')
+        // .attr('id', 'one')
+        .attr('y', function(d) {
+            return -(d.radius * 0.7) / 2;
+        })
+        .attr('dy', '3px')
+        .attr('class', 'circle-text')
+        .attr('width', function(d) {
+            return d.radius * 2;
+        })
+        .text(function(d) {
+            return d.title;
+        })
+        .style('font-size', function(d) {
+            return Math.max(3, Math.min(2 * d.radius, (2 * d.radius - 8) / this.getComputedTextLength() * 12)) + "px";
+        })
+        .style('text-anchor', 'middle')
+        .call(wrap);
+
+
+
+    this.update();
+};
+
 Cluster.prototype.tooltip_html = tooltip_html;
+Cluster.prototype.coocurence_tooltip_html = coocurence_tooltip_html;
+
 Cluster.prototype.show_verbatims = show_verbatims;
 Cluster.prototype.helpers_init = helpers_init;
 

@@ -5,7 +5,15 @@
 {% block window %}
     <div id="window_{{ col }}">
 
-        <div class="bordered" id="svg_{{ col }}"></div>
+        <div class="bordered" id="svg_{{ col }}">
+            <div class="coocurence">
+                <label for="enable-coocurence">Coocurence</label>
+                <input type="radio" id="enable-coocurence" name="coocurences-setup">
+                <label for="disable-coocurence">Hierarchical</label>
+                <input type="radio" checked id="disable-coocurence" name="coocurences-setup">
+            </div>
+        </div>
+
         <script type="text/javascript">$(function() {
             var visualizations = [Cluster, Tree];
             make_svg(visualizations, "#stop-{{col}}", "#svg_{{col}}", "{{col}}");

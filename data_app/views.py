@@ -100,6 +100,15 @@ class SubnetVerbatims(viewsets.ModelViewSet):
 
 
 class CoocurrenceView(APIView):
+    ''' Allows to get coocurences graph. Only method is get(), overrided from base class.
+        Returns object, that has two properties - 'links' and 'nodes'.
+            - 'nodes' is a list of graph nodes, that contains information about each node.
+            - 'links' is a list of links, that are objects consisting of three properties - 'source', 'target' and
+        'value':
+            - 'source' - index of node in 'nodes' array the link comes from
+            - 'source' - index of node in 'nodes' array the link comes to
+            - 'value' - weight of link
+    '''
     def get(self, request):
         query_params = request.QUERY_PARAMS.dict()
         query_params.pop('format', None)
@@ -110,7 +119,6 @@ class CoocurrenceView(APIView):
         verbatims = models.Verbatim.objects.filter(question=question)
 
         codes = [(v.parent, v.variable) for v in verbatims]
-        #import ipdb; ipdb.set_trace()
         codes_variables = dict()
         for code in codes:
             if code[0] not in codes_variables.keys():
@@ -118,21 +126,45 @@ class CoocurrenceView(APIView):
             else:
                 codes_variables[code[0]].append(code[1])
 
-        #import ipdb; ipdb.set_trace()
         links = list()
+        nodes = list()
+        node_id__index = dict()
         rest_of_codes = codes_variables.copy()
         for code, ls_of_variables in codes_variables.iteritems():
             rest_of_codes.pop(code, None)
+            if code.id not in nodes:
+                nodes.append({
+                    'id': code.id,
+                    'title': code.title,
+                    'verbatim_count': models.Verbatim.objects.filter(parent=code).count(),
+                    'question_id': question_id
+                })
+                index = len(nodes)-1
+                node_id__index[code.id] = index
+            else:
+                index = nodes.index(code.id)
             for another_code, another_ls_of_variables in rest_of_codes.iteritems():
                 count = 0
                 for verbatim in ls_of_variables:
                     if verbatim in another_ls_of_variables:
                         count += 1
                 if count != 0:
-                    links.append({"source": code.id, "target": another_code.id, "value": count})
-        #import ipdb; ipdb.set_trace()
+                    try:
+                        to = node_id__index[another_code.id]
+                    except:
+                        nodes.append({
+                            'id': code.id,
+                            'title': code.title,
+                            'verbatim_count': models.Verbatim.objects.filter(parent=another_code).count(),
+                            'question_id': question_id
+                        })
+                        to = len(nodes)-1
+                        node_id__index[code.id] = to
 
-        return Response(links)
+                    links.append({"source": index, "target": to, "value": count})
+
+
+        return Response({"nodes": nodes, "links": links})
 
 class VerbatimsFilteredSet(APIView):
     ''' Class appointed to fast access to Verbatims statistics and data
