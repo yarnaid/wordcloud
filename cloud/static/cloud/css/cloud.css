@@ -32,7 +32,11 @@
   stroke: #398dcf;
   fill: rgba(57, 141, 207, 0.05);
 }
+.code-coocurence {
+   stroke: #398dcf;
+  fill:blue;
 
+}
 /* line 32, scss/cloud.scss */
 .subnet {
   stroke: #398dcf;
@@ -45,6 +49,11 @@
   fill: rgba(57, 141, 207, 0.5);
 }
 
+.code-coocurence:hover {
+    stroke: #398dcf;
+  fill: rgba(57, 141, 207, 1);
+}
+
 /* line 42, scss/cloud.scss */
 .code > g > .circle-text {
   fill: #398dcf;
@@ -55,6 +64,12 @@
   fill: #AF61CB;
   stroke: none;
   position: absolute;
+}
+
+.circle-text-coocurence {
+    fill: white;
+    stroke: none;
+    position: absolute;
 }
 
 /* line 52, scss/cloud.scss */

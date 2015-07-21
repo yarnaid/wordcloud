@@ -2,7 +2,7 @@
 
 var Cluster = function(_parent_id, _data, _eventHandler, _fps) {
     var self = this;
-    this.is_coocurence = false;
+    this.is_coocurence = true;
     this.parent_id = _parent_id;
     this.data = _data.hierarchy;
     this.coocurence = _data.coocurence;
@@ -368,7 +368,7 @@ Cluster.prototype.initCoocurence =  function() {
     this.wrangle();
 
     this.nodes = [];
-
+    this.links = []
     this.nodes = this.coocurence.nodes.slice()
 
     this.nodes.forEach(function(n) {
@@ -378,8 +378,8 @@ Cluster.prototype.initCoocurence =  function() {
 
    var force = d3.layout.force()
         .gravity(.05)
-        .distance(70)
-        .charge(-100)
+        .distance(200)
+        .charge(-200)
         .size([this.width, this.height]);
     var json = this.coocurence
 
@@ -392,7 +392,7 @@ Cluster.prototype.initCoocurence =  function() {
         .data(json.links)
         .enter().append("line")
         .attr("class", "link")
-        .style("stroke-width",function(d) { return d.value;})
+        .style("stroke-width",function(d) { return d.value+"px";})
         .style("stroke", "rgb(0,0,255)")
         .on("mouseover", function(d, i) {
             self.tooltip_elem.transition()
@@ -406,6 +406,10 @@ Cluster.prototype.initCoocurence =  function() {
             d3.select(this)
             	.style("stroke-width", function(d) {return 2*d.value;})
             	.style("stroke", "rgb(255,0,0)")
+                .style("z-index", 1000)
+            d3.select(self.node[0][d.target.index]).style("stroke","red")
+            d3.select(self.node[0][d.source.index]).style("stroke","red")
+
         })        
         .on("mouseout", function(d) {
             self.tooltip_elem.transition()
@@ -414,11 +418,14 @@ Cluster.prototype.initCoocurence =  function() {
 	        d3.select(this)
 	        	.style("stroke-width", function(d) {return d.value;})
             	.style("stroke", "rgb(0,0,255)")
+                .style("z-index", 0)
+            d3.select(self.node[0][d.target.index]).style("stroke","#398dcf")
+            d3.select(self.node[0][d.source.index]).style("stroke","#398dcf")
         })       
     this.node = this.svg.selectAll(".node")
         .data(json.nodes)
         .enter().append("g")
-        .attr("class", "code")
+        .attr("class", "code-coocurence")
         .call(force.drag)
         .on("mouseover", function(d) {
             self.tooltip_elem.transition()
@@ -501,7 +508,7 @@ Cluster.prototype.initCoocurence =  function() {
             return -(d.radius * 0.7) / 2;
         })
         .attr('dy', '3px')
-        .attr('class', 'circle-text')
+        .attr('class', 'circle-text-coocurence')
         .attr('width', function(d) {
             return d.radius * 2;
         })

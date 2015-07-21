@@ -116,15 +116,21 @@ class CoocurrenceView(APIView):
         question_id = query_params.pop('question', None)
         job_id = query_params.pop("job", None)
         question = models.Question.objects.get(pk=question_id, parent__pk=job_id)
-        verbatims = models.Verbatim.objects.filter(question=question)
+        if len(query_params.keys()) != 0:
+            #import ipdb; ipdb.set_trace()
+            variables = models.Variable.objects.filter(job_id=job_id, **query_params)
+            verbatims = models.Verbatim.objects.filter(question=question, variable__in = variables)
+        else:
+            verbatims = models.Verbatim.objects.filter(question=question)
 
         codes = [(v.parent, v.variable) for v in verbatims]
         codes_variables = dict()
         for code in codes:
             if code[0] not in codes_variables.keys():
                 codes_variables[code[0]] = list()
-            else:
-                codes_variables[code[0]].append(code[1])
+                codes_variables[code[0]] = list()
+
+            codes_variables[code[0]].append(code[1])
 
         links = list()
         nodes = list()
@@ -132,35 +138,41 @@ class CoocurrenceView(APIView):
         rest_of_codes = codes_variables.copy()
         for code, ls_of_variables in codes_variables.iteritems():
             rest_of_codes.pop(code, None)
-            if code.id not in nodes:
-                nodes.append({
-                    'id': code.id,
-                    'title': code.title,
-                    'verbatim_count': models.Verbatim.objects.filter(parent=code).count(),
-                    'question_id': question_id
-                })
-                index = len(nodes)-1
-                node_id__index[code.id] = index
+
+            if code.id not in node_id__index.keys():
+                if len(ls_of_variables)>0:
+                    nodes.append({
+                        'id': code.id,
+                        'title': code.title,
+                        'verbatim_count': len(ls_of_variables),
+                        'question_id': question_id
+                    })
+                    index = len(nodes)-1
+                    node_id__index[code.id] = index
+                else: 
+                    continue
             else:
-                index = nodes.index(code.id)
+                index = node_id__index[code.id]
+
             for another_code, another_ls_of_variables in rest_of_codes.iteritems():
                 count = 0
                 for verbatim in ls_of_variables:
                     if verbatim in another_ls_of_variables:
                         count += 1
-                if count != 0:
-                    try:
-                        to = node_id__index[another_code.id]
-                    except:
-                        nodes.append({
-                            'id': code.id,
-                            'title': code.title,
-                            'verbatim_count': models.Verbatim.objects.filter(parent=another_code).count(),
-                            'question_id': question_id
-                        })
-                        to = len(nodes)-1
-                        node_id__index[code.id] = to
 
+                if another_code.id in node_id__index.keys():
+                    to = node_id__index[another_code.id]
+                else:
+                    nodes.append({
+                        'id': another_code.id,
+                        'title': another_code.title,
+                        'verbatim_count': len(another_ls_of_variables),
+                        'question_id': question_id
+                    })
+                    to = len(nodes)-1
+                    node_id__index[another_code.id] = to
+
+                if count>0:
                     links.append({"source": index, "target": to, "value": count})
 
 
