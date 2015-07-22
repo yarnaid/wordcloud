@@ -176,8 +176,6 @@ class CoocurrenceView(APIView):
                     links.append({"source": index, 
                                   "target": to,
                                   "value": count,
-                                  "source_id": code.id,
-                                  "target.id": another_code.id,
                                   "question_id": question_id});
 
 

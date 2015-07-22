@@ -112,8 +112,8 @@ Rest.prototype.get_last_question = function(job_id) {
 };
 
 Rest.prototype.get_verbatims_on_link = function(link) {
-    var source_verbatims = this.get_verbatims(link.source_id, link.question_id)
-    var target_verbatims = this.get_verbatims(link.target_id, link.question_id)
+    var source_verbatims = this.get_verbatims(link.source.id, link.question_id)
+    var target_verbatims = this.get_verbatims(link.target.id, link.question_id)
 
     return target_verbatims.concat(source_verbatims);
 }
