@@ -173,7 +173,12 @@ class CoocurrenceView(APIView):
                     node_id__index[another_code.id] = to
 
                 if count>0:
-                    links.append({"source": index, "target": to, "value": count})
+                    links.append({"source": index, 
+                                  "target": to,
+                                  "value": count,
+                                  "source_id": code.id,
+                                  "target.id": another_code.id,
+                                  "question_id": question_id});
 
 
         return Response({"nodes": nodes, "links": links})

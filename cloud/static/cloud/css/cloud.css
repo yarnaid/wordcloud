@@ -32,11 +32,13 @@
   stroke: #398dcf;
   fill: rgba(57, 141, 207, 0.05);
 }
+
 .code-coocurence {
    stroke: #398dcf;
   fill:blue;
 
 }
+
 /* line 32, scss/cloud.scss */
 .subnet {
   stroke: #398dcf;

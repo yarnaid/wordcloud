@@ -399,17 +399,32 @@ Cluster.prototype.initCoocurence =  function() {
                 .duration(self.duration)
                 .style("opacity", 1);
 
-            self.tooltip_elem.html(self.coocurence_tooltip_html(d))
-                .style("left", (d3.event.pageX) + "px")
-                .style("top", (d3.event.pageY - 75) + "px");
 
             d3.select(this)
-            	.style("stroke-width", function(d) {return 2*d.value;})
-            	.style("stroke", "rgb(255,0,0)")
+                .style("stroke-width", function(d) {return 2*d.value;})
+                .style("stroke", "rgb(255,0,0)")
                 .style("z-index", 1000)
-            d3.select(self.node[0][d.target.index]).style("stroke","red")
-            d3.select(self.node[0][d.source.index]).style("stroke","red")
+                
+            var cell_1 = d3.select(self.node[0][d.target.index]).style("stroke","red");
+            var cell_2 = d3.select(self.node[0][d.source.index]).style("stroke","red");
 
+            cell_1 = d3.select(cell_1[0][0]).data()[0];
+            cell_2 = d3.select(cell_2[0][0]).data()[0];
+
+            var data = {
+                value: d.value,
+                cell_1: {
+                    value: cell_1.verbatim_count,
+                    title: cell_1.title
+                },
+                cell_2: {
+                    value: cell_2.verbatim_count,
+                    title: cell_2.title
+                },
+            }
+            self.tooltip_elem.html(self.coocurence_tooltip_html(data))
+                .style("left", (d3.event.pageX) + "px")
+                .style("top", (d3.event.pageY - 75) + "px");
         })        
         .on("mouseout", function(d) {
             self.tooltip_elem.transition()
@@ -421,7 +436,9 @@ Cluster.prototype.initCoocurence =  function() {
                 .style("z-index", 0)
             d3.select(self.node[0][d.target.index]).style("stroke","#398dcf")
             d3.select(self.node[0][d.source.index]).style("stroke","#398dcf")
-        })       
+        })
+        .on("click", self.show_verbatims_on_link)
+
     this.node = this.svg.selectAll(".node")
         .data(json.nodes)
         .enter().append("g")
@@ -521,8 +538,6 @@ Cluster.prototype.initCoocurence =  function() {
         .style('text-anchor', 'middle')
         .call(wrap);
 
-
-
     this.update();
 };
 
@@ -530,6 +545,7 @@ Cluster.prototype.tooltip_html = tooltip_html;
 Cluster.prototype.coocurence_tooltip_html = coocurence_tooltip_html;
 
 Cluster.prototype.show_verbatims = show_verbatims;
+Cluster.prototype.show_verbatims_on_link = show_verbatims_on_link
 Cluster.prototype.helpers_init = helpers_init;
 
 Cluster.prototype.update = function() {};

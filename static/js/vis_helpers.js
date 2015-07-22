@@ -111,6 +111,12 @@ Rest.prototype.get_last_question = function(job_id) {
     return _(this.get_questions(job_id)).last();
 };
 
+Rest.prototype.get_verbatims_on_link = function(link) {
+    var source_verbatims = this.get_verbatims(link.source_id, link.question_id)
+    var target_verbatims = this.get_verbatims(link.target_id, link.question_id)
+
+    return target_verbatims.concat(source_verbatims);
+}
 
 Rest.prototype.get_verbatims = function(code_id, question_id) {
     var self = this;
@@ -170,16 +176,20 @@ var show_verbatims = function(d) {
                 return;
             }
         }
-        verbatims.forEach(function(v) {
-            v.uid = v.variable.uid;
-            v.sex = v.variable.sex;
-            v.age = v.variable.age_bands;
-            v.region = v.variable.reg_quota;
-            v.csp = v.variable.csp_quota;
-            v.main_cell_text = v.variable.main_cell_text;
-        });
-        verbatims = verbatims.filter(function(v) {return parseInt(v.variable.uid) >= 0;});
+        display_table_with_verbatims(verbatims);
     }
+};
+
+var display_table_with_verbatims = function(verbatims) {
+    verbatims.forEach(function(v) {
+        v.uid = v.variable.uid;
+        v.sex = v.variable.sex;
+        v.age = v.variable.age_bands;
+        v.region = v.variable.reg_quota;
+        v.csp = v.variable.csp_quota;
+        v.main_cell_text = v.variable.main_cell_text;
+    });
+    verbatims = verbatims.filter(function(v) {return parseInt(v.variable.uid) >= 0;});
     bootbox.dialog({
         backdrop: false,
         message: '<table id="table-methods-table" data-search="true" data-show-refresh="true" data-show-toggle="true" data-show-export="true" data-pagination="true" data-show-columns="true" data-toggle="table">' +
@@ -196,7 +206,7 @@ var show_verbatims = function(d) {
         '</tr>' +
         '</thead>' +
         '</table>',
-        title: d.question,
+        title: "",
         buttons: {
             success: {
                 label: 'Ok',
@@ -207,6 +217,7 @@ var show_verbatims = function(d) {
             return;
         }
     });
+
     var $table = $('#table-methods-table').bootstrapTable({
         data: verbatims,
         showExport: true,
@@ -215,8 +226,12 @@ var show_verbatims = function(d) {
             fileName: 'verbatim'
         }
     });
+}
 
-};
+var show_verbatims_on_link = function(d) {
+    var verbatims = new Rest().get_verbatims_on_link(d);
+    display_table_with_verbatims(verbatims);
+}
 
 var tooltip_html = function(d) {
     var self = this;
@@ -263,6 +278,14 @@ var coocurence_tooltip_html = function(d) {
     '<tr>' +
     '<td><i>Value:</i></td>' +
     '<td>' + d.value + '</td>' +
+    '</tr>' +
+    '<tr>' +
+    '<td><i>'+d.cell_1.title+'</i></td>' +
+    '<td>' + d.cell_1.value + '</td>' +
+    '</tr>' +
+    '<tr>' +
+    '<td><i>'+d.cell_2.title+'</i></td>' +
+    '<td>' + d.cell_2.value + '</td>' +
     '</tr>' +
     '</tbody>' +
     '</table></div>';
