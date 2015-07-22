@@ -2,10 +2,9 @@
 
 var Cluster = function(_parent_id, _data, _eventHandler, _fps) {
     var self = this;
-    this.is_coocurence = true;
     this.parent_id = _parent_id;
-    this.data = _data.hierarchy;
-    this.coocurence = _data.coocurence;
+    this.data = _data.data;
+    this.coocurence = _data.data;
     this.event_handler = _eventHandler;
     this.fps = _fps || 40;
     this.gravity = 0.1;
@@ -62,28 +61,20 @@ var Cluster = function(_parent_id, _data, _eventHandler, _fps) {
     this.zoom = d3.behavior.zoom();
     // this.venn = venn.VennDiagram();
     this.pack = d3.layout.pack().size([this.width, this.height]);
-
-    this.switchVisualization();
-
-    d3.selectAll("input[name='coocurences-setup']")
+    if(_data.checked) 
+        this.initCoocurence()
+    else 
+        this.initUsual()
+/*
+    d3.selectAll("input[name='coocurences-setup-"+_parent_id+"]")
     	.on('change', function() {
     		if( this.id == 'disable-coocurence')
     			self.is_coocurence = false;
     		else
     			self.is_coocurence = true; 
     		self.switchVisualization();
-    	})
+    	})*/
 };
-
-Cluster.prototype.switchVisualization = function() {
-	if (this.svg) d3.selectAll(this.parent_id + ' svg').remove()
-
-	if(this.is_coocurence == false)
-		this.initUsual()
-	else 
-		this.initCoocurence()
-
-}
 
 Cluster.prototype.initUsual = function() {
     var self = this;
@@ -113,8 +104,8 @@ Cluster.prototype.initUsual = function() {
         .style('fill', 'none');
 
     // update data
-    this.wrangle();
 
+    this.wrangle();
 
     this.nodes = [];
     var clusters = this.display_data.question.children;
@@ -365,7 +356,7 @@ Cluster.prototype.initCoocurence =  function() {
         .style('fill', 'none');
 
        // update data
-    this.wrangle();
+    this.wrangleCoocurence();
 
     this.nodes = [];
     this.links = []
@@ -562,10 +553,7 @@ Cluster.prototype.wrangle = function() {
     var children_len = 0;
     while (nodes.length > 0) {
         var root = nodes.pop();
-        root.total = root.verbatim_count / self.verbatim_count;
-        self.max_lengh = Math.max(self.max_lengh, root.title.length);
-        self.max_depth = Math.max(self.max_depth || 0, root.code_depth);
-        self.max_verbatim_count =  Math.max(self.max_verbatim_count || 0, root.verbatim_count);
+
         self.full_count += root.verbatim_count || 0;
         for (var i = 0; i < root.children.length; ++i) {
             nodes.push(root.children[i]);
@@ -574,12 +562,34 @@ Cluster.prototype.wrangle = function() {
     }
 
     self.max_depth += 1;
-    self.raduis_scale.range([self.min_radius, self.width/children_len/2])
+    self.raduis_scale.range([self.min_radius, self.width/children_len])
         .domain([1, self.full_count]);
 
 
     self.display_data = self.data;
 };
+
+Cluster.prototype.wrangleCoocurence = function() {
+    var self = this;
+
+    self.verbatim_count = self.data.question.verbatim_count;
+
+    var nodes = [];
+    nodes = self.data.nodes.slice();
+    self.full_count = 0;
+    var children_len = 0;
+    while (nodes.length > 0) {
+        var root = nodes.pop();
+        self.full_count += root.verbatim_count || 0;
+        children_len = Math.max(children_len, nodes.length);
+    }
+
+    self.raduis_scale.range([self.min_radius, self.width/children_len])
+        .domain([1, self.full_count]);
+
+    self.display_data = self.data;
+};
+
 
 Cluster.prototype.toggle_motion = function() {
     var self = this;

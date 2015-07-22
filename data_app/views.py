@@ -179,7 +179,7 @@ class CoocurrenceView(APIView):
                                   "question_id": question_id});
 
 
-        return Response({"nodes": nodes, "links": links})
+        return Response({"nodes": nodes, "links": links, "question": {"verbatim_count": len(verbatims)}})
 
 class VerbatimsFilteredSet(APIView):
     ''' Class appointed to fast access to Verbatims statistics and data

@@ -43,7 +43,8 @@
         var res = {
             visualization: $("select#sel-Visualization-{{ id }}").val(),
             job: $("select#sel-Job-{{ id }}").val(),
-            question: $("select#sel-Question-{{ id }}").val()
+            question: $("select#sel-Question-{{ id }}").val(),
+            checked: $("input[name='coocurences-setup-{{ id }}']:checked")[0].id != "disable-coocurence-{{ col }}"
         };
         for (i in params_ids_{{ id }}) {
             res[params_names_{{ id }}[i]] = $("select#" + params_ids_{{ id }}[i]).val();
@@ -68,7 +69,9 @@
         $("select#sel-Question-{{ id }}").change(function(event) {
             $(event_handler).trigger('filter_menu_update');
         });
-
+        $("input[name='coocurences-setup-{{ id }}']").change(function(event) {
+            $(event_handler).trigger('filter_menu_update');
+        });
         var update_questions = function(job_id) {
                 var questions = rest.get_short_questions(job_id);
                 var q_sel = $("#sel-Question-{{ id }}");

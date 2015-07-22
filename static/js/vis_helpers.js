@@ -298,37 +298,38 @@ var get_vis_data = function(job_id, question_name, col) {
         codes = [],
         verbatims = {},
         response,
-        coocurence_,
-        hierarchy_;
+        _data
     var rest = new Rest();
     var question = rest.get_short_questions(job_id, "&name="+question_name)[0];
     var filter_params = eval('get_filter_params_'+col+'()');
     var url_ = '/data/visualization_data/?format=json';
     var url_coocurence = '/data/coocurence/?format=json'
+    var _checked = filter_params["checked"]
+    delete filter_params["checked"]
     $.each(filter_params, function(k, v) {
         if (v !== '-1') {
             url_ += '&' + k + '=' + v;
             url_coocurence += '&' + k + '=' + v;
         }
     });
+    if(!_checked)
+        $.ajax({
+            async: false,
+            url: url_,
+            success: function(data_) {
+                _data = data_;
+            }
+        });
+    else 
+        $.ajax({
+            async: false,
+            url: url_coocurence,
+            success: function(data_) {
+                _data = data_;
+            }
+        });
 
-    $.ajax({
-        async: false,
-        url: url_,
-        success: function(data_) {
-            hierarchy_ = data_;
-        }
-    });
-
-    $.ajax({
-        async: false,
-        url: url_coocurence,
-        success: function(data_) {
-            coocurence_ = data_;
-        }
-    });
-
-    return {coocurence: coocurence_, hierarchy: hierarchy_};
+    return {data: _data, checked: _checked};
 };
 
 
