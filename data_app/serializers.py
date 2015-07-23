@@ -48,7 +48,7 @@ class VerbatimSerializer(serializers.HyperlinkedModelSerializer):
         fields = ('variable', 'verbatim', 'parent', 'id', 'question')
 
 
-class VerbatimIdSerialier(serializers.HyperlinkedModelSerializer):
+class VerbatimIdSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Verbatim

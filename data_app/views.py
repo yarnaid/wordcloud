@@ -7,6 +7,7 @@ from data_app import serializers
 import rest_framework_filters as filters
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework import generics
 import json
 
 class JobViewSet(viewsets.ModelViewSet):
@@ -87,7 +88,6 @@ class VariableViewSet(viewsets.ModelViewSet):
     serializer_class = serializers.VariableSerializer
     filter_class = VariableFilter
 
-
 class VisDataViewSet(viewsets.ModelViewSet):
     queryset = models.Job.objects.all()
     serializer_class = serializers.VisDataSerializer
@@ -98,6 +98,21 @@ class SubnetVerbatims(viewsets.ModelViewSet):
     serializer_class = serializers.SubnetVerbatims
     filter_fields = ('id',)
 
+class JointVerbatims(generics.ListCreateAPIView):
+    serializer_class = serializers.VerbatimSerializer
+
+    def get_queryset(self):
+        target = self.request.query_params["target"]
+        source = self.request.query_params["source"]
+
+        verbatims_source = models.Verbatim.objects.filter(parent_id=source)
+        
+        variables_source = verbatims_source.select_related('variable').values_list("variable_id", flat=True)
+        
+        verbatims_target = models.Verbatim.objects.filter(parent_id=target, variable_id__in=variables_source)
+        variables_target = verbatims_target.values_list('variable_id', flat=True)
+        verbatims_source = verbatims_source.filter(variable_id__in=variables_target)        
+        return verbatims_source | verbatims_target
 
 class CoocurrenceView(APIView):
     ''' Allows to get coocurences graph. Only method is get(), overrided from base class.
@@ -146,7 +161,7 @@ class CoocurrenceView(APIView):
                         'title': code.title,
                         'verbatim_count': len(ls_of_variables),
                         'question_id': question_id
-                    })
+                    })  
                     index = len(nodes)-1
                     node_id__index[code.id] = index
                 else: 

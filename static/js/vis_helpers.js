@@ -107,16 +107,22 @@ Rest.prototype.get_variable_codes = function(var_id) {
 };
 
 
+Rest.prototype.get_verbatims_on_link = function(link) {
+    var verbatims;
+    $.ajax({
+        async: false,
+        url: '/data/joint/?format=json&source='+link.source.id+'&target='+link.target.id,
+        success: function(vars) {
+            verbatims = vars
+        }
+    })
+    return verbatims;    
+}
+
 Rest.prototype.get_last_question = function(job_id) {
     return _(this.get_questions(job_id)).last();
 };
 
-Rest.prototype.get_verbatims_on_link = function(link) {
-    var source_verbatims = this.get_verbatims(link.source.id, link.question_id)
-    var target_verbatims = this.get_verbatims(link.target.id, link.question_id)
-
-    return target_verbatims.concat(source_verbatims);
-}
 
 Rest.prototype.get_verbatims = function(code_id, question_id) {
     var self = this;
