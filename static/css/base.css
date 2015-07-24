@@ -24,10 +24,29 @@ select.btn:hover, select.btn:focus {
   color: #000000 !important;
 }
 
+.vis-window {
+  position: relative;
+}
+
+.vis-window .bordered {
+  height: 100%;
+  width: 100%;
+  position: relative;
+}
+
+.bordered svg{
+    height: 100%;
+    width: 100%;
+}
 /* line 26, scss/base.scss */
 .item-label {
   font-style: italic;
   color: #d69ae6;
+}
+
+.window-menu {
+  overflow-y: scroll;
+  height: 100%;
 }
 
 /* line 31, scss/base.scss */

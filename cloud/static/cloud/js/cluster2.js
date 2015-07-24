@@ -36,7 +36,7 @@ var Cluster = function(_parent_id, _data, _eventHandler, _fps) {
 
 
     this.width = $(this.parent_id).width() - this.margin.left - this.margin.right;
-    this.height = $(this.parent_id).height();
+    this.height = $(".bordered").height();
     this.height = Math.max(window.innerHeight, this.height);
     this.height = this.height - this.margin.top - this.margin.bottom;
 
@@ -65,15 +65,12 @@ var Cluster = function(_parent_id, _data, _eventHandler, _fps) {
         this.initCoocurence()
     else 
         this.initUsual()
-/*
-    d3.selectAll("input[name='coocurences-setup-"+_parent_id+"]")
-    	.on('change', function() {
-    		if( this.id == 'disable-coocurence')
-    			self.is_coocurence = false;
-    		else
-    			self.is_coocurence = true; 
-    		self.switchVisualization();
-    	})*/
+
+    d3.select(window).on("resize", function() {
+        var b=d3.select(".bordered").node().getBoundingClientRect();
+        d3.selectAll("svg").attr("width",b.width).attr("height",b.height)
+    })
+
 };
 
 Cluster.prototype.initUsual = function() {
@@ -86,10 +83,11 @@ Cluster.prototype.initUsual = function() {
     };
     this.links = [];
     this.nodes = [];
+    var b=d3.select(".bordered").node().getBoundingClientRect();
 
     this.svg = d3.select(this.parent_id).append('svg')
-        .attr('width', this.width)
-        .attr('height', this.height)
+        .attr('width', b.width)
+        .attr('height', b.height)
         .attr('class', 'cloud')
         // .attr('pointer-events', 'all')
         .append('svg:g')
@@ -338,10 +336,11 @@ Cluster.prototype.initCoocurence =  function() {
         self.svg.attr('transform',
             'translate(' + self.zoom.translate() + ') scale(' + self.zoom.scale() + ')');
     };
+    var b=d3.select(".bordered").node().getBoundingClientRect();
 
     this.svg = d3.select(this.parent_id).append('svg')
-        .attr('width', this.width)
-        .attr('height', this.height)
+        .attr('width', b.width)
+        .attr('height', b.height)
         .attr('class', 'cloud')
         // .attr('pointer-events', 'all')
         .append('svg:g')

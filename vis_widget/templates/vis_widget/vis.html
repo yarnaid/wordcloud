@@ -3,7 +3,7 @@
 {% include "vis_widget/vis_menu.html" %}
 
 {% block window %}
-    <div id="window_{{ col }}">
+    <div class="vis_window" id="window_{{ col }}">
 
         <div class="bordered" id="svg_{{ col }}">
             <div class="coocurence">
@@ -22,7 +22,7 @@
 
 
         <div class="row-flud svg-menu" id="menu_{{ col }}">
-            <a onclick="show_menu('#vis_menu_{{col}}', '#svg_{{ col }}');"><div class="col-md-2 svg-menu-item left">{% trans "Options" %}</div></a>
+            <a onclick="show_menu('#vis_menu_{{col}}', '#window_{{ col }}');"><div class="col-md-2 svg-menu-item left">{% trans "Options" %}</div></a>
 
             <a onclick="return false;" href="" id="stop-{{cols}}"><div class="col-md-2 svg-menu-item">{% trans "Stop motion" %}
             </div></a>
