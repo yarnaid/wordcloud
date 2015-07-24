@@ -2,6 +2,12 @@
  * Created by yarnaid on 22/04/2015.
  */
 
+d3.selection.prototype.moveToFront = function() {
+  return this.each(function(){
+    this.parentNode.appendChild(this);
+  });
+};
+
 var Tree = function(_parent_id, _data, _event_handler) {
     var self = this;
     self.parent_id = _parent_id;
@@ -84,6 +90,7 @@ Tree.prototype.init = function() {
     self.display_data.x0 = self.height / 2. + self.margin.left;
     self.display_data.y0 = 0;
     self.update(self.display_data);
+
 };
 
 Tree.prototype.process_data = function() {
@@ -176,6 +183,7 @@ Tree.prototype.update = function(source) {
         })
         .on('click', click);
 
+
     nodeEnter.append('rect')
         .attr('height', 1e-6) // function(d) {
     // return Math.max(self.radius(d), self.min_r) || self.min_r;
@@ -254,7 +262,8 @@ Tree.prototype.update = function(source) {
     var link = self.svg.selectAll('path.link')
         .data(links, function(d) {
             return d.target.id;
-        });
+        })
+
 
     link.enter().insert('path', 'g')
         .attr('class', function(d) {
@@ -265,15 +274,19 @@ Tree.prototype.update = function(source) {
                 x: source.x0,
                 y: source.y0
             };
-            return self.diagonal({
+            return self.make_lines_quadratic(self.diagonal({
                 source: o,
                 target: o
-            });
-        });
+            }));
+        })        
+        .on("mouseover", function(d){
+    		d3.select(this).moveToFront();
+    		d3.selectAll(".node").moveToFront();
+    	});;
 
     link.transition()
         .duration(self.duration)
-        .attr("d", self.diagonal);
+        .attr("d",function(d,i){ return self.make_lines_quadratic(self.diagonal(d,i));});
 
     link.exit().transition()
         .duration(self.duration)
@@ -282,10 +295,10 @@ Tree.prototype.update = function(source) {
                 x: source.x,
                 y: source.y
             };
-            return self.diagonal({
+            return self.make_lines_quadratic(self.diagonal({
                 source: o,
                 target: o
-            });
+            }));
         })
         .remove();
 
@@ -294,6 +307,23 @@ Tree.prototype.update = function(source) {
         d.y0 = d.y;
     });
 };
+
+Tree.prototype.wrap_line_drawing = function(d) {
+	var diag = this.diagonal(d)
+	return this.make_lines_quadratic()
+}
+
+Tree.prototype.make_lines_quadratic = function(attr) {
+		//var attr = (d3.select(d).attr("d"));
+		var regexp = /M(\S+),(\S+)C(\S+),(\S+) (\S+),(\S+) (\S+),(\S+)/
+		var match = regexp.exec(attr)
+		var x_1 = parseFloat(match[1])
+		var y_1 = parseFloat(match[2])
+		var x_2 = parseFloat(match[7])
+		var y_2 = parseFloat(match[8])
+		console.log([x_1, y_1, x_2, y_2])
+		return "M"+x_1+","+y_1+"L"+((x_1+x_2)/2)+","+y_1+" L"+((x_1+x_2)/2)+","+y_2+" L"+x_2+","+y_2
+}
 
 Tree.prototype.tooltip_html = tooltip_html;
 Tree.prototype.show_verbatims = show_verbatims;

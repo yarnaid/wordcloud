@@ -61,6 +61,11 @@
             return event_handler;
         };
         $("select#sel-Visualization-{{ id }}").change(function(event) {
+            if($(this).val()=="1") {
+                $("#disable-coocurence-{{ id }}").prop("checked", true)
+                $("input[name='coocurences-setup-{{ id }}']").attr("disabled", "true")
+            } else
+                $("input[name='coocurences-setup-{{ id }}']").removeAttr("disabled")
             $(event_handler).trigger('filter_menu_update');
         });
         $("select#sel-Job-{{ id }}").change(function(event) {

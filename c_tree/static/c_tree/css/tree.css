@@ -71,3 +71,9 @@
 .tree * .collapsed {
   fill: lightsteelblue;
 }
+
+
+.tree * .link:hover {
+  stroke: red;
+  fill:none;
+}
