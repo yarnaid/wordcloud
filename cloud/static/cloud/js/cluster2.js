@@ -11,10 +11,10 @@ var Cluster = function(_parent_id, _data, _eventHandler, _fps) {
     this.link_strength = 2;
     $(this.parent_id).addClass('motion');
 
-    this.padding = -5; // separation between same-color nodes
-    this.clusterPadding = 2; // separation between different-color nodes
+    this.padding = 0; // separation between same-color nodes
+    this.clusterPadding = 100; // separation between different-color nodes
     this.maxRadius = 300;
-    this.codes_overlap = 5;
+    this.codes_overlap = 10;
     this.margin = {
         top: 10,
         right: 0,
@@ -160,13 +160,15 @@ Cluster.prototype.init = function() {
         .on("click", self.show_verbatims);
 
     this.subnode = this.svg.selectAll('.subnet')
-
+    var svg_ = this.svg
 
     // Resolves collisions between d and all other circles.
     var collide = function(alpha) {
         var quadtree = d3.geom.quadtree(self.nodes);
+        d3.select(self.parent_id).select("svg").selectAll(".intersection").remove();
+
         return function(d) {
-            var r = d.radius + self.maxRadius + Math.max(self.padding, self.clusterPadding),
+            var r = d.radius,
                 nx1 = d.x - r,
                 nx2 = d.x + r,
                 ny1 = d.y - r,
@@ -176,9 +178,23 @@ Cluster.prototype.init = function() {
                     var x = d.x - quad.point.x,
                         y = d.y - quad.point.y,
                         l = Math.sqrt(x * x + y * y),
-                        r = d.radius + quad.point.radius + (d.cluster === quad.point.cluster ? self.padding : self.clusterPadding);
+                        r = d.radius + quad.point.radius,
+                        real_r = d.radius + quad.point.radius
                     if (l < r) {
                         l = (l - r) / l * alpha;
+                        var pts = intersection(d.x, d.y, d.radius, quad.point.x,quad.point.y, quad.point.radius)
+                        //d3.select(d).selectAll("path").remove()
+
+                            d3.select(self.parent_id).select("svg").select("g").select("g")
+                                .append("g").attr("class","intersection").append("path")
+                                    .attr("d", "M"+pts[0]+" "+pts[1]+" A"+d.radius+" "+d.radius+" 0 0 1 "+pts[2]+" "+pts[3])
+                                    .style('stroke', 'red')
+                            d3.select(self.parent_id).select("svg").select("g").select("g")
+                                .append("g").attr("class","intersection").append("path")
+                                    .attr("d", "M"+pts[0]+" "+pts[1]+" A"+d.radius+" "+d.radius+" 0 0 0 "+pts[2]+" "+pts[3])
+                                    .style('stroke', 'red')
+
+
                         d.x -= x *= l;
                         d.y -= y *= l;
                         quad.point.x += x;
@@ -315,6 +331,61 @@ Cluster.prototype.init = function() {
 
     this.update();
 };
+
+function intersection(x0, y0, r0, x1, y1, r1) {
+        var a, dx, dy, d, h, rx, ry;
+        var x2, y2;
+
+        /* dx and dy are the vertical and horizontal distances between
+         * the circle centers.
+         */
+        dx = x1 - x0;
+        dy = y1 - y0;
+
+        /* Determine the straight-line distance between the centers. */
+        d = Math.sqrt((dy*dy) + (dx*dx));
+
+        /* Check for solvability. */
+        if (d > (r0 + r1)) {
+            /* no solution. circles do not intersect. */
+            return false;
+        }
+        if (d < Math.abs(r0 - r1)) {
+            /* no solution. one circle is contained in the other */
+            return false;
+        }
+
+        /* 'point 2' is the point where the line through the circle
+         * intersection points crosses the line between the circle
+         * centers.  
+         */
+
+        /* Determine the distance from point 0 to point 2. */
+        a = ((r0*r0) - (r1*r1) + (d*d)) / (2.0 * d) ;
+
+        /* Determine the coordinates of point 2. */
+        x2 = x0 + (dx * a/d);
+        y2 = y0 + (dy * a/d);
+
+        /* Determine the distance from point 2 to either of the
+         * intersection points.
+         */
+        h = Math.sqrt((r0*r0) - (a*a));
+
+        /* Now determine the offsets of the intersection points from
+         * point 2.
+         */
+        rx = -dy * (h/d);
+        ry = dx * (h/d);
+
+        /* Determine the absolute intersection points. */
+        var xi = x2 + rx;
+        var xi_prime = x2 - rx;
+        var yi = y2 + ry;
+        var yi_prime = y2 - ry;
+
+        return [xi, yi, xi_prime, yi_prime];
+    }
 
 Cluster.prototype.tooltip_html = tooltip_html;
 Cluster.prototype.show_verbatims = show_verbatims;
