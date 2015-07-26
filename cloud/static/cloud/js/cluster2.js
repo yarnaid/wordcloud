@@ -3,7 +3,7 @@
 var Cluster = function(_parent_id, _data, col, _eventHandler, _fps) {
     var self = this;
     this.parent_id = _parent_id;
-
+    this.col = col;
     this.data = _data.data;
     this.coocurence = _data.data;
 
@@ -14,8 +14,8 @@ var Cluster = function(_parent_id, _data, col, _eventHandler, _fps) {
     this.link_strength = 2;
     $(this.parent_id).addClass('motion');
 
-    this.padding = 0; // separation between same-color nodes
-    this.clusterPadding = 100; // separation between different-color nodes
+    this.padding = -5; // separation between same-color nodes
+    this.clusterPadding = 0.5; // separation between different-color nodes
 
     this.maxRadius = 300;
     this.codes_overlap = 10;
@@ -204,8 +204,8 @@ Cluster.prototype.initUsual = function() {
                         r = d.radius + quad.point.radius,
                         real_r = d.radius + quad.point.radius
                     if (l < r) {
-                        var pts = intersection(d.x, d.y, d.radius, quad.point.x,quad.point.y, quad.point.radius)
-                        if(pts[0] && pts[1] && pts[2] && pts[3]) {   
+                        var pts = self.intersection(d.x, d.y, d.radius, quad.point.x,quad.point.y, quad.point.radius)
+                        if(!d.hovered && pts[0] && pts[1] && pts[2] && pts[3]) {   
                             d3.select(self.parent_id).select("svg").select("g").select("g")
                                 .append("g").attr("class","id_"+d.id).append("path")
                                     .attr("d", "M"+pts[0]+" "+pts[1]+" A"+d.radius+" "+d.radius+" 0 0 0 "+pts[2]+" "+pts[3])
@@ -459,7 +459,7 @@ Cluster.prototype.initCoocurence =  function() {
             d3.select(self.node[0][d.target.index]).style("stroke","#398dcf")
             d3.select(self.node[0][d.source.index]).style("stroke","#398dcf")
         })
-        .on("click", self.show_verbatims_on_link)
+        .on("click",function(d){ return self.show_verbatims_on_link(d, self.col);})
 
     this.node = this.svg.selectAll(".node")
         .data(json.nodes)
@@ -479,7 +479,7 @@ Cluster.prototype.initCoocurence =  function() {
                 .duration(self.duration)
                 .style("opacity", 0);
         })
-        .on("click", self.show_verbatims);
+        .on("click", function(d) { return self.show_verbatims(d, self.col)});
 
     this.node.append("circle")
 		.attr("r", function(d) {return d.radius || self.min_radius;})
@@ -563,7 +563,7 @@ Cluster.prototype.initCoocurence =  function() {
     this.update();
 };
 
-function intersection(x0, y0, r0, x1, y1, r1) {
+Cluster.prototype.intersection = function (x0, y0, r0, x1, y1, r1) {
         var a, dx, dy, d, h, rx, ry;
         var x2, y2;
 

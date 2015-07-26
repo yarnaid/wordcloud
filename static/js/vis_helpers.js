@@ -110,11 +110,30 @@ Rest.prototype.get_variable_codes = function(var_id) {
 };
 
 
-Rest.prototype.get_verbatims_on_link = function(link) {
+Rest.prototype.get_verbatims_on_link = function(link, col) {
+
+    var filter_params = eval('get_filter_params_'+col+'()');
+    var _filter_params = new Object();
+    
+    _filter_params.job= filter_params['job']; 
+    _filter_params.question = filter_params['question'];
+    _filter_params.csp_quota = filter_params['csp_quota'];
+    _filter_params.reg_quota = filter_params['reg_quota'];
+    _filter_params.sex = filter_params['sex'];
+    _filter_params.age_bands = filter_params['age_bands'];    
+    _filter_params.source = link.source.id;
+    _filter_params.target = link.target.id;
+
+    var _params='';
+    Object.keys(_filter_params).forEach(function(k,v) {
+        if(_filter_params[k]!=-1) {
+            _params += '&'+k+'='+_filter_params[k];
+        }
+    });
     var verbatims;
     $.ajax({
         async: false,
-        url: '/data/joint/?format=json&source='+link.source.id+'&target='+link.target.id,
+        url: '/data/joint/?format=json'+_params,
         success: function(vars) {
             verbatims = vars
         }
@@ -215,7 +234,7 @@ var display_table_with_verbatims = function(verbatims) {
         v.csp = v.variable.csp_quota;
         v.main_cell_text = v.variable.main_cell_text;
     });
-    verbatims = verbatims.filter(function(v) {return parseInt(v.variable.uid) >= 0;});
+    //verbatims = verbatims.filter(function(v) {return parseInt(v.variable.uid) >= 0;});
     bootbox.dialog({
         backdrop: false,
         message: '<table id="table-methods-table" data-search="true" data-show-refresh="true" data-show-toggle="true" data-show-export="true" data-pagination="true" data-show-columns="true" data-toggle="table">' +
@@ -254,8 +273,8 @@ var display_table_with_verbatims = function(verbatims) {
     });
 }
 
-var show_verbatims_on_link = function(d) {
-    var verbatims = new Rest().get_verbatims_on_link(d);
+var show_verbatims_on_link = function(d, index) {
+    var verbatims = new Rest().get_verbatims_on_link(d, index);
     display_table_with_verbatims(verbatims);
 }
 
@@ -373,7 +392,7 @@ var make_svg = function(vis_list, toggle_motion_id, svg_parent_id_, col) {
 
     function init(vis_) {
         var svg_parent_id = svg_parent_id_ || '#svg';
-        if(data.question.children.length>0) {
+        if(data.data.question.verbatim_count>0) {
             var cluster = new vis_list[vis_](svg_parent_id, data, col);
             if(singleton[svg_parent_id]) {
                 singleton[svg_parent_id].terminate();

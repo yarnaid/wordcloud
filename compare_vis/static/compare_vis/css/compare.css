@@ -15,7 +15,7 @@ select option {
 
 /* line 23, scss/compare.scss */
 #svg_1, #svg_4, #svg_3, #svg_2 {
-  min-height: 400px;
+  height: 500px;
 }
 
 /* line 27, scss/compare.scss */
@@ -70,6 +70,7 @@ a.btn.svg-menu-item {
   border-right: transparent-border;
   border-top: 1.5px solid #e3e3e3;
   border-bottom: 1.5px solid #e3e3e3;
+  background-color: white;
 }
 /* line 69, scss/compare.scss */
 .svg-menu-item.right {

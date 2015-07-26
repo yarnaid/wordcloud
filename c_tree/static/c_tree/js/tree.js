@@ -12,7 +12,7 @@ var Tree = function(_parent_id, _data, col,_event_handler) {
     var self = this;
     self.parent_id = _parent_id;
     self.col = col;
-    self.data = _data;
+    self.data = _data.data;
 
     self.event_handler = _event_handler;
     self.margin = {
@@ -319,12 +319,12 @@ Tree.prototype.make_lines_quadratic = function(attr) {
 		//var attr = (d3.select(d).attr("d"));
 		var regexp = /M(\S+),(\S+)C(\S+),(\S+) (\S+),(\S+) (\S+),(\S+)/
 		var match = regexp.exec(attr)
-		var x_1 = parseFloat(match[1])
+		var x_1 = parseFloat(match[1])+this.rect_width/2;
 		var y_1 = parseFloat(match[2])
-		var x_2 = parseFloat(match[7])
+		var x_2 = parseFloat(match[7]);
 		var y_2 = parseFloat(match[8])
 		console.log([x_1, y_1, x_2, y_2])
-		return "M"+x_1+","+y_1+"L"+((x_1+x_2)/2)+","+y_1+" L"+((x_1+x_2)/2)+","+y_2+" L"+x_2+","+y_2
+		return "M"+x_1+","+y_1+"C"+match[3]+","+match[4]+" "+match[5]+","+match[6]+" "+x_2+","+y_2
 }
 
 Tree.prototype.tooltip_html = tooltip_html;

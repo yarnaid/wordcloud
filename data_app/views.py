@@ -108,16 +108,20 @@ class JointVerbatims(generics.ListCreateAPIView):
     serializer_class = serializers.VerbatimSerializer
 
     def get_queryset(self):
-        target = self.request.query_params["target"]
-        source = self.request.query_params["source"]
+        params = self.request.query_params.dict()
+        target = params.pop("target",None)
+        source = params.pop("source",None)
+        q_id = params.pop('question',None)
+        job_id = params['job']
+        params.pop('format',None)
 
-        verbatims_source = models.Verbatim.objects.filter(parent_id=source)
-        
+        verbatims_source = models.Verbatim.objects.filter(parent_id=source, job_id=job_id, question_id=q_id)
         variables_source = verbatims_source.select_related('variable').values_list("variable_id", flat=True)
-        
-        verbatims_target = models.Verbatim.objects.filter(parent_id=target, variable_id__in=variables_source)
+        variables_source = models.Variable.objects.filter(id__in=variables_source, **params)
+        verbatims_target = models.Verbatim.objects.filter(parent_id=target, variable=variables_source, job_id=job_id, question_id=q_id)
         variables_target = verbatims_target.values_list('variable_id', flat=True)
-        verbatims_source = verbatims_source.filter(variable_id__in=variables_target)        
+        variables_target= models.Variable.objects.filter(id__in=variables_target, **params)
+        verbatims_source = verbatims_source.filter(variable_id=variables_target)        
         return verbatims_source | verbatims_target
 
 class CoocurrenceView(APIView):
