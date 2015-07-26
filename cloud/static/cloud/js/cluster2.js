@@ -45,16 +45,6 @@ var Cluster = function(_parent_id, _data, _eventHandler, _fps) {
 
     this.duration = 1000 / this.fps;
 
-    this.force = d3.layout.force()
-        .gravity(this.gravity)
-        .friction(this.friction)
-        .linkStrength(this.link_strength)
-        .linkDistance(function(link) {
-            return self.radius(link.source) + self.radius(link.target) - self.codes_overlap;
-        })
-        .charge(function(node) {
-            return -30 * self.radius(node);
-        });
 
     this.links = [];
     this.zoom = d3.behavior.zoom();
@@ -67,6 +57,17 @@ var Cluster = function(_parent_id, _data, _eventHandler, _fps) {
 
 Cluster.prototype.init = function() {
     var self = this;
+    delete self.force;
+    this.force = d3.layout.force()
+        .gravity(this.gravity)
+        .friction(this.friction)
+        .linkStrength(this.link_strength)
+        .linkDistance(function(link) {
+            return self.radius(link.source) + self.radius(link.target) - self.codes_overlap;
+        })
+        .charge(function(node) {
+            return -30 * self.radius(node);
+        });
     self.helpers_init();
 
     var zoom = function() {
@@ -74,6 +75,7 @@ Cluster.prototype.init = function() {
             'translate(' + self.zoom.translate() + ') scale(' + self.zoom.scale() + ')');
     };
 
+    d3.select(this.parent_id).selectAll('svg').remove()
     this.svg = d3.select(this.parent_id).append('svg')
         .attr('width', this.width)
         .attr('height', this.height)
@@ -143,6 +145,7 @@ Cluster.prototype.init = function() {
         .enter()
         .append('g')
         .attr('class', set_class)
+        .attr('id', function(d){return 'id'+d.id;})
         .call(this.force.drag)
         .on("mouseover", function(d) {
             self.tooltip_elem.transition()
@@ -165,9 +168,10 @@ Cluster.prototype.init = function() {
     // Resolves collisions between d and all other circles.
     var collide = function(alpha) {
         var quadtree = d3.geom.quadtree(self.nodes);
-        d3.select(self.parent_id).select("svg").selectAll(".intersection").remove();
+        d3.select(self.parent_id).select("svg").selectAll("g[class^='id_']").remove();
 
         return function(d) {
+            //d3.select(self.parent_id).select("svg").selectAll(".id_"+d.id).remove();
             var r = d.radius,
                 nx1 = d.x - r,
                 nx2 = d.x + r,
@@ -181,24 +185,29 @@ Cluster.prototype.init = function() {
                         r = d.radius + quad.point.radius,
                         real_r = d.radius + quad.point.radius
                     if (l < r) {
-                        l = (l - r) / l * alpha;
                         var pts = intersection(d.x, d.y, d.radius, quad.point.x,quad.point.y, quad.point.radius)
                         //d3.select(d).selectAll("path").remove()
+                           
+                        d3.select(self.parent_id).select("svg").select("g").select("g")
+                            .append("g").attr("class","id_"+d.id).append("path")
+                                .attr("d", "M"+pts[0]+" "+pts[1]+" A"+d.radius+" "+d.radius+" 0 0 0 "+pts[2]+" "+pts[3])
+                                .style('stroke', '#ffffff')
+                                .style("fill", "none")
 
-                            d3.select(self.parent_id).select("svg").select("g").select("g")
-                                .append("g").attr("class","intersection").append("path")
-                                    .attr("d", "M"+pts[0]+" "+pts[1]+" A"+d.radius+" "+d.radius+" 0 0 1 "+pts[2]+" "+pts[3])
-                                    .style('stroke', 'red')
-                            d3.select(self.parent_id).select("svg").select("g").select("g")
-                                .append("g").attr("class","intersection").append("path")
-                                    .attr("d", "M"+pts[0]+" "+pts[1]+" A"+d.radius+" "+d.radius+" 0 0 0 "+pts[2]+" "+pts[3])
-                                    .style('stroke', 'red')
+                        d3.select(self.parent_id).select("svg").select("g").select("g")
+                            .append("g").attr("class","id_"+d.id).append("path")
+                                .attr("d", "M"+pts[0]+" "+pts[1]+" A"+quad.point.radius+" "+quad.point.radius+" 0 0 1 "+pts[2]+" "+pts[3])
+                                .style('stroke', '#ffffff')
+                                .style("fill", "none")
+                            
+                        if(l < r-100) {
+                            l = (l - r) / l * alpha;
 
-
-                        d.x -= x *= l;
-                        d.y -= y *= l;
-                        quad.point.x += x;
-                        quad.point.y += y;
+                            d.x -= x *= l;
+                            d.y -= y *= l;
+                            quad.point.x += x;
+                            quad.point.y += y;
+                        }
                     }
                 }
                 return x1 > nx2 || x2 < nx1 || y1 > ny2 || y2 < ny1;
@@ -221,7 +230,7 @@ Cluster.prototype.init = function() {
             });
 
         self.node
-            .each(collide(0.5))
+            .each(collide(0.2))
             .attr('cx', function(d) {
                 if (d.x > self.width - d.radius) d.x -= 1;
                 else if (d.x < d.return) d.x += 1;
@@ -242,6 +251,7 @@ Cluster.prototype.init = function() {
         if ($(self.parent_id).hasClass('motion')) {
             setTimeout(function() {
                 self.force.start();
+
             }, self.duration);
         } else {
             self.force.stop();
@@ -432,3 +442,7 @@ Cluster.prototype.toggle_motion = function() {
         self.force.start();
     }
 };
+
+Cluster.prototype.terminate = function() {
+    delete this.force;
+}

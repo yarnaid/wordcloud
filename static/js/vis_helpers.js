@@ -278,6 +278,7 @@ var get_vis_data = function(job_id, question_name, col) {
     return res;
 };
 
+var singleton = {}
 
 var make_svg = function(vis_list, toggle_motion_id, svg_parent_id_, col) {
     var col = col || 1;
@@ -294,6 +295,12 @@ var make_svg = function(vis_list, toggle_motion_id, svg_parent_id_, col) {
     function init(vis_) {
         var svg_parent_id = svg_parent_id_ || '#svg';
         var cluster = new vis_list[vis_](svg_parent_id, data);
+        if(singleton[svg_parent_id]) {
+            singleton[svg_parent_id].terminate();
+            delete singleton[svg_parent_id];
+        }
+
+        singleton[svg_parent_id] = cluster
         if (toggle_motion_id) {
             $(toggle_motion_id).click(function() {
                 $(svg_parent_id).toggleClass('motion');
