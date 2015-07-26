@@ -139,9 +139,9 @@ Tree.prototype.update = function(source) {
             return d.id || (d.id = ++(self.i));
         });
 
-    function click(d) {
+    function click(d, index) {
         if (!d.children || !d._children) {
-            self.show_verbatims(d);
+            self.show_verbatims(d, index);
         }
 
         if (d.children) {
@@ -175,7 +175,7 @@ Tree.prototype.update = function(source) {
                 .duration(self.duration)
                 .style("opacity", 0);
         })
-        .on('click', click);
+        .on('click', function(d) { return click(d, self.col);});
 
     nodeEnter.append('rect')
         .attr('height', 1e-6) // function(d) {
