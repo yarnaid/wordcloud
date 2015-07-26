@@ -1,8 +1,9 @@
 'use strict';
 
-var Cluster = function(_parent_id, _data, _eventHandler, _fps) {
+var Cluster = function(_parent_id, _data, col, _eventHandler, _fps) {
     var self = this;
     this.parent_id = _parent_id;
+    this.col = col;
     this.data = _data;
     this.event_handler = _eventHandler;
     this.fps = _fps || 40;
@@ -159,7 +160,7 @@ Cluster.prototype.init = function() {
                 .duration(self.duration)
                 .style("opacity", 0);
         })
-        .on("click", self.show_verbatims);
+        .on("click", function(d) { return self.show_verbatims(d, self.col)} );
 
     this.subnode = this.svg.selectAll('.subnet')
     var svg_ = this.svg

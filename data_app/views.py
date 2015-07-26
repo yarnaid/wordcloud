@@ -50,11 +50,17 @@ class VariableFilter(filters.FilterSet):
 class VerbatimFilter(filters.FilterSet):
     queryset = models.Verbatim.objects.all().prefetch_related('question', 'variable', 'parent', 'job')
 
+    csp_quota = filters.NumberFilter(name= 'variable__csp_quota') 
+    age_bands = filters.NumberFilter(name= 'variable__age_bands')
+    reg_quota = filters.NumberFilter(name= 'variable__reg_quota') 
+    sex = filters.NumberFilter(name= 'variable__sex') 
+    
     variable = filters.RelatedFilter(VariableFilter)
 
     class Meta:
         model = models.Verbatim
-        fields = ('parent', 'question', 'variable')
+        fields = ('parent', 'question', 'variable', 'csp_quota', 'age_bands', 'reg_quota', 'sex')
+        
 
 
 class CodeFilter(filters.FilterSet):
@@ -139,12 +145,13 @@ class VerbatimsFilteredSet(APIView):
 
         overcodes_array = self.go_through_children(question, query_parameters_dict)
 
-        response_body['question']['children'] = overcodes_array
         for child in overcodes_array:
             response_body['question']['verbatim_count'] += child['verbatim_count']
             child['overcode'] = True
         for child in overcodes_array:
             child['total'] = child['verbatim_count'] / response_body['question']['verbatim_count']
+        
+        response_body['question']['children'] = overcodes_array
         return Response(response_body)
 
     def go_through_children(self, question, query_parameters_dict):
@@ -209,7 +216,6 @@ class VerbatimsFilteredSet(APIView):
             'question_id': question.id,
             'verbatim_count': count
         }
-
         codes = parent_code.get_children()
 
         if count == 0 and codes.count() == 0:
@@ -219,6 +225,7 @@ class VerbatimsFilteredSet(APIView):
         for code in codes:
             child = self.hierarchy_dfs(question, code, variables, depth+1)
             if child is not None:
+                #import ipdb; ipdb.set_trace()
                 children_list.append(child)
                 code_dict['verbatim_count'] += child['verbatim_count']
 

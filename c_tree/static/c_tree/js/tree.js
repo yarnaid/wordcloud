@@ -2,9 +2,10 @@
  * Created by yarnaid on 22/04/2015.
  */
 
-var Tree = function(_parent_id, _data, _event_handler) {
+var Tree = function(_parent_id, _data, col,_event_handler) {
     var self = this;
     self.parent_id = _parent_id;
+    self.col = col;
     self.data = _data;
     self.event_handler = _event_handler;
     self.margin = {
@@ -298,3 +299,4 @@ Tree.prototype.update = function(source) {
 Tree.prototype.tooltip_html = tooltip_html;
 Tree.prototype.show_verbatims = show_verbatims;
 Tree.prototype.helpers_init = helpers_init;
+Tree.prototype.terminate = function(){}
