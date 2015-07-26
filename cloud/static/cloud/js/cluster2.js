@@ -50,14 +50,6 @@ var Cluster = function(_parent_id, _data, _eventHandler, _fps) {
     this.zoom = d3.behavior.zoom();
     // this.venn = venn.VennDiagram();
     this.pack = d3.layout.pack().size([this.width, this.height]);
-
-    this.init();
-};
-
-
-Cluster.prototype.init = function() {
-    var self = this;
-    delete self.force;
     this.force = d3.layout.force()
         .gravity(this.gravity)
         .friction(this.friction)
@@ -68,6 +60,13 @@ Cluster.prototype.init = function() {
         .charge(function(node) {
             return -30 * self.radius(node);
         });
+
+    this.init();
+};
+
+
+Cluster.prototype.init = function() {
+    var self = this;
     self.helpers_init();
 
     var zoom = function() {
@@ -186,20 +185,19 @@ Cluster.prototype.init = function() {
                         real_r = d.radius + quad.point.radius
                     if (l < r) {
                         var pts = intersection(d.x, d.y, d.radius, quad.point.x,quad.point.y, quad.point.radius)
-                        //d3.select(d).selectAll("path").remove()
-                           
-                        d3.select(self.parent_id).select("svg").select("g").select("g")
-                            .append("g").attr("class","id_"+d.id).append("path")
-                                .attr("d", "M"+pts[0]+" "+pts[1]+" A"+d.radius+" "+d.radius+" 0 0 0 "+pts[2]+" "+pts[3])
-                                .style('stroke', '#ffffff')
-                                .style("fill", "none")
+                        if(pts[0] && pts[1] && pts[2] && pts[3]) {   
+                            d3.select(self.parent_id).select("svg").select("g").select("g")
+                                .append("g").attr("class","id_"+d.id).append("path")
+                                    .attr("d", "M"+pts[0]+" "+pts[1]+" A"+d.radius+" "+d.radius+" 0 0 0 "+pts[2]+" "+pts[3])
+                                    .style('stroke', '#ffffff')
+                                    .style("fill", "none")
 
-                        d3.select(self.parent_id).select("svg").select("g").select("g")
-                            .append("g").attr("class","id_"+d.id).append("path")
-                                .attr("d", "M"+pts[0]+" "+pts[1]+" A"+quad.point.radius+" "+quad.point.radius+" 0 0 1 "+pts[2]+" "+pts[3])
-                                .style('stroke', '#ffffff')
-                                .style("fill", "none")
-                            
+                            d3.select(self.parent_id).select("svg").select("g").select("g")
+                                .append("g").attr("class","id_"+d.id).append("path")
+                                    .attr("d", "M"+pts[0]+" "+pts[1]+" A"+quad.point.radius+" "+quad.point.radius+" 0 0 1 "+pts[2]+" "+pts[3])
+                                    .style('stroke', '#ffffff')
+                                    .style("fill", "none")
+                        }
                         if(l < r-100) {
                             l = (l - r) / l * alpha;
 
