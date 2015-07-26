@@ -1,7 +1,10 @@
+
 'use strict';
 /**
  * Created by yarnaid on 23/04/2015.
  */
+
+var singleton = {}
 
  var Rest = function() {
     var self = this;
@@ -124,16 +127,33 @@ Rest.prototype.get_last_question = function(job_id) {
 };
 
 
-Rest.prototype.get_verbatims = function(code_id, question_id) {
+Rest.prototype.get_verbatims = function(code_id, question_id, col) {
     var self = this;
+    var filter_params = eval('get_filter_params_'+col+'()');
+    var _filter_params = new Object();
+    
+    _filter_params.parent= code_id, 
+    _filter_params.question = question_id,
+    _filter_params.csp_quota = filter_params['csp_quota'],
+    _filter_params.reg_quota = filter_params['reg_quota'],
+    _filter_params.sex = filter_params['sex'],
+    _filter_params.age_bands = filter_params['age_bands']    
+    
+    var _params='';
+    Object.keys(_filter_params).forEach(function(k,v) {
+        if(_filter_params[k]!=-1) {
+            _params += '&'+k+'='+_filter_params[k];
+        }
+    });
     var verbatims;
     $.ajax({
         async: false,
-        url: '/data/verbatims/?format=json&parent=' + code_id + '&question=' + question_id,
+        url: '/data/verbatims/?format=json'+_params,
         success: function(v) {
             verbatims = v;
         }
     });
+
     return verbatims;
 };
 
@@ -148,13 +168,13 @@ var helpers_init = function() {
     this.inited = true;
 };
 
-var show_verbatims = function(d) {
+var show_verbatims = function(d, index) {
     if (d.overcode)
         return;
     else {
         var rest = new Rest();
 
-        if(d.children != null || d._children !=null) 
+        if((d.children != null && d.children.length!=0) || d._children !=null) 
         {//DIRTY HACK
             var code_tree = rest.get_all_verbatims_of_subnet(d.id, d.question_id);
             
@@ -177,7 +197,7 @@ var show_verbatims = function(d) {
             var verbatims = dfs(code_tree)
         }
         else {
-            var verbatims = rest.get_verbatims(d.id, d.question_id);
+            var verbatims = rest.get_verbatims(d.id, d.question_id, index);
             if (verbatims.length < 1) {
                 return;
             }
@@ -353,16 +373,24 @@ var make_svg = function(vis_list, toggle_motion_id, svg_parent_id_, col) {
 
     function init(vis_) {
         var svg_parent_id = svg_parent_id_ || '#svg';
-        var cluster = new vis_list[vis_](svg_parent_id, data);
-        if (toggle_motion_id) {
-            $(toggle_motion_id).click(function() {
-                $(svg_parent_id).toggleClass('motion');
-                if($(svg_parent_id).hasClass('motion')) {
-                    cluster.force.start();
-                } else {
-                    cluster.force.stop();
-                }
-            });
+        if(data.question.children.length>0) {
+            var cluster = new vis_list[vis_](svg_parent_id, data, col);
+            if(singleton[svg_parent_id]) {
+                singleton[svg_parent_id].terminate();
+                delete singleton[svg_parent_id];
+            }
+
+            singleton[svg_parent_id] = cluster
+            if (toggle_motion_id) {
+                $(toggle_motion_id).click(function() {
+                    $(svg_parent_id).toggleClass('motion');
+                    if($(svg_parent_id).hasClass('motion')) {
+                        cluster.force.start();
+                    } else {
+                        cluster.force.stop();
+                    }
+                });
+            }
         }
     };
 

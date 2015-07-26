@@ -8,10 +8,12 @@ d3.selection.prototype.moveToFront = function() {
   });
 };
 
-var Tree = function(_parent_id, _data, _event_handler) {
+var Tree = function(_parent_id, _data, col,_event_handler) {
     var self = this;
     self.parent_id = _parent_id;
-    self.data = _data.data;
+    self.col = col;
+    self.data = _data;
+
     self.event_handler = _event_handler;
     self.margin = {
         top: 10,
@@ -145,9 +147,9 @@ Tree.prototype.update = function(source) {
             return d.id || (d.id = ++(self.i));
         });
 
-    function click(d) {
+    function click(d, index) {
         if (!d.children || !d._children) {
-            self.show_verbatims(d);
+            self.show_verbatims(d, index);
         }
 
         if (d.children) {
@@ -181,7 +183,7 @@ Tree.prototype.update = function(source) {
                 .duration(self.duration)
                 .style("opacity", 0);
         })
-        .on('click', click);
+        .on('click', function(d) { return click(d, self.col);});
 
 
     nodeEnter.append('rect')
@@ -328,3 +330,4 @@ Tree.prototype.make_lines_quadratic = function(attr) {
 Tree.prototype.tooltip_html = tooltip_html;
 Tree.prototype.show_verbatims = show_verbatims;
 Tree.prototype.helpers_init = helpers_init;
+Tree.prototype.terminate = function(){}

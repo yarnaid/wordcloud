@@ -70,6 +70,7 @@
             $(event_handler).trigger('filter_menu_update');
         });
         $("select#sel-Job-{{ id }}").change(function(event) {
+            update_menu()
             $(event_handler).trigger('filter_menu_update');
         });
         $("select#sel-Question-{{ id }}").change(function(event) {
@@ -127,9 +128,6 @@
             update_variables(job_id);
         }
         update_menu();
-        $("#sel-Job-{{ id }}").change(function(event) {
-            update_menu();
-        });
 
     });
     </script>

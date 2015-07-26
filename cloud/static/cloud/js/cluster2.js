@@ -1,10 +1,12 @@
 'use strict'
 
-var Cluster = function(_parent_id, _data, _eventHandler, _fps) {
+var Cluster = function(_parent_id, _data, col, _eventHandler, _fps) {
     var self = this;
     this.parent_id = _parent_id;
+
     this.data = _data.data;
     this.coocurence = _data.data;
+
     this.event_handler = _eventHandler;
     this.fps = _fps || 40;
     this.gravity = 0.1;
@@ -12,10 +14,11 @@ var Cluster = function(_parent_id, _data, _eventHandler, _fps) {
     this.link_strength = 2;
     $(this.parent_id).addClass('motion');
 
-    this.padding = -5; // separation between same-color nodes
-    this.clusterPadding = 0.5; // separation between different-color nodes
+    this.padding = 0; // separation between same-color nodes
+    this.clusterPadding = 100; // separation between different-color nodes
+
     this.maxRadius = 300;
-    this.codes_overlap = 5;
+    this.codes_overlap = 10;
     this.margin = {
         top: 10,
         right: 0,
@@ -46,6 +49,11 @@ var Cluster = function(_parent_id, _data, _eventHandler, _fps) {
 
     this.duration = 1000 / this.fps;
 
+
+    this.links = [];
+    this.zoom = d3.behavior.zoom();
+    // this.venn = venn.VennDiagram();
+    this.pack = d3.layout.pack().size([this.width, this.height]);
     this.force = d3.layout.force()
         .gravity(this.gravity)
         .friction(this.friction)
@@ -85,6 +93,7 @@ Cluster.prototype.initUsual = function() {
     this.nodes = [];
     var b=d3.select(".bordered").node().getBoundingClientRect();
 
+    d3.select(this.parent_id).selectAll('svg').remove()
     this.svg = d3.select(this.parent_id).append('svg')
         .attr('width', b.width)
         .attr('height', b.height)
@@ -155,6 +164,7 @@ Cluster.prototype.initUsual = function() {
         .enter()
         .append('g')
         .attr('class', set_class)
+        .attr('id', function(d){return 'id'+d.id;})
         .call(this.force.drag)
         .on("mouseover", function(d) {
             self.tooltip_elem.transition()
@@ -169,16 +179,19 @@ Cluster.prototype.initUsual = function() {
                 .duration(self.duration)
                 .style("opacity", 0);
         })
-        .on("click", self.show_verbatims);
+        .on("click", function(d) { return self.show_verbatims(d, self.col)} );
 
     this.subnode = this.svg.selectAll('.subnet')
-
+    var svg_ = this.svg
 
     // Resolves collisions between d and all other circles.
     var collide = function(alpha) {
         var quadtree = d3.geom.quadtree(self.nodes);
+        d3.select(self.parent_id).select("svg").selectAll("g[class^='id_']").remove();
+
         return function(d) {
-            var r = d.radius + self.maxRadius + Math.max(self.padding, self.clusterPadding),
+            //d3.select(self.parent_id).select("svg").selectAll(".id_"+d.id).remove();
+            var r = d.radius,
                 nx1 = d.x - r,
                 nx2 = d.x + r,
                 ny1 = d.y - r,
@@ -188,13 +201,31 @@ Cluster.prototype.initUsual = function() {
                     var x = d.x - quad.point.x,
                         y = d.y - quad.point.y,
                         l = Math.sqrt(x * x + y * y),
-                        r = d.radius + quad.point.radius + (d.cluster === quad.point.cluster ? self.padding : self.clusterPadding);
+                        r = d.radius + quad.point.radius,
+                        real_r = d.radius + quad.point.radius
                     if (l < r) {
-                        l = (l - r) / l * alpha;
-                        d.x -= x *= l;
-                        d.y -= y *= l;
-                        quad.point.x += x;
-                        quad.point.y += y;
+                        var pts = intersection(d.x, d.y, d.radius, quad.point.x,quad.point.y, quad.point.radius)
+                        if(pts[0] && pts[1] && pts[2] && pts[3]) {   
+                            d3.select(self.parent_id).select("svg").select("g").select("g")
+                                .append("g").attr("class","id_"+d.id).append("path")
+                                    .attr("d", "M"+pts[0]+" "+pts[1]+" A"+d.radius+" "+d.radius+" 0 0 0 "+pts[2]+" "+pts[3])
+                                    .style('stroke', '#ffffff')
+                                    .style("fill", "none")
+
+                            d3.select(self.parent_id).select("svg").select("g").select("g")
+                                .append("g").attr("class","id_"+d.id).append("path")
+                                    .attr("d", "M"+pts[0]+" "+pts[1]+" A"+quad.point.radius+" "+quad.point.radius+" 0 0 1 "+pts[2]+" "+pts[3])
+                                    .style('stroke', '#ffffff')
+                                    .style("fill", "none")
+                        }
+                        if(l < r-100) {
+                            l = (l - r) / l * alpha;
+
+                            d.x -= x *= l;
+                            d.y -= y *= l;
+                            quad.point.x += x;
+                            quad.point.y += y;
+                        }
                     }
                 }
                 return x1 > nx2 || x2 < nx1 || y1 > ny2 || y2 < ny1;
@@ -217,7 +248,7 @@ Cluster.prototype.initUsual = function() {
             });
 
         self.node
-            .each(collide(0.5))
+            .each(collide(0.2))
             .attr('cx', function(d) {
                 if (d.x > self.width - d.radius) d.x -= 1;
                 else if (d.x < d.return) d.x += 1;
@@ -238,6 +269,7 @@ Cluster.prototype.initUsual = function() {
         if ($(self.parent_id).hasClass('motion')) {
             setTimeout(function() {
                 self.force.start();
+
             }, self.duration);
         } else {
             self.force.stop();
@@ -531,6 +563,62 @@ Cluster.prototype.initCoocurence =  function() {
     this.update();
 };
 
+function intersection(x0, y0, r0, x1, y1, r1) {
+        var a, dx, dy, d, h, rx, ry;
+        var x2, y2;
+
+        /* dx and dy are the vertical and horizontal distances between
+         * the circle centers.
+         */
+        dx = x1 - x0;
+        dy = y1 - y0;
+
+        /* Determine the straight-line distance between the centers. */
+        d = Math.sqrt((dy*dy) + (dx*dx));
+
+        /* Check for solvability. */
+        if (d > (r0 + r1)) {
+            /* no solution. circles do not intersect. */
+            return false;
+        }
+        if (d < Math.abs(r0 - r1)) {
+            /* no solution. one circle is contained in the other */
+            return false;
+        }
+
+        /* 'point 2' is the point where the line through the circle
+         * intersection points crosses the line between the circle
+         * centers.  
+         */
+
+        /* Determine the distance from point 0 to point 2. */
+        a = ((r0*r0) - (r1*r1) + (d*d)) / (2.0 * d) ;
+
+        /* Determine the coordinates of point 2. */
+        x2 = x0 + (dx * a/d);
+        y2 = y0 + (dy * a/d);
+
+        /* Determine the distance from point 2 to either of the
+         * intersection points.
+         */
+        h = Math.sqrt((r0*r0) - (a*a));
+
+        /* Now determine the offsets of the intersection points from
+         * point 2.
+         */
+        rx = -dy * (h/d);
+        ry = dx * (h/d);
+
+        /* Determine the absolute intersection points. */
+        var xi = x2 + rx;
+        var xi_prime = x2 - rx;
+        var yi = y2 + ry;
+        var yi_prime = y2 - ry;
+
+        return [xi, yi, xi_prime, yi_prime];
+    }
+
+
 Cluster.prototype.tooltip_html = tooltip_html;
 Cluster.prototype.coocurence_tooltip_html = coocurence_tooltip_html;
 
@@ -598,3 +686,7 @@ Cluster.prototype.toggle_motion = function() {
         self.force.start();
     }
 };
+
+Cluster.prototype.terminate = function() {
+    delete this.force;
+}
